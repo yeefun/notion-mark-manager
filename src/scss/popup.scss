@@ -1,0 +1,185 @@
+body {
+  margin: 0;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  color: rgb(55, 53, 47);
+  &.dark {
+    background-color: rgb(47, 52, 55);
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.navbar-nav {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nav-item {
+  width: 50%;
+  text-align: center;
+  font-size: 16px;
+  line-height: 28px;
+  transition: background-color 120ms ease-in;
+  cursor: pointer;
+  padding-top: 6px;
+  padding-bottom: 8px;
+  &:hover {
+    background-color: rgba(55, 53, 47, 0.08);
+  }
+  &:active {
+    background-color: rgba(55, 53, 47, 0.16);
+  }
+  &.active {
+    background-color: rgba(55, 53, 47, 0.08);
+  }
+}
+
+.comment {
+  &.active, &:hover {
+    background-color: rgba(55, 53, 47, 0.08);
+  }
+  &:active {
+    background-color: rgba(55, 53, 47, 0.16);
+  }
+}
+
+.container {
+  box-shadow: 0 -1px 0 rgba(55, 53, 47, 0.09);
+  width: 300px;
+  padding: 14px 8px;
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+
+.block {
+  padding: 6px 8px;
+  transition: background-color 120ms ease-in;
+  border-radius: 3px;
+  cursor: pointer;
+  & + .block {
+    margin-top: 10px;
+  }
+}
+
+.mark {
+  transition: box-shadow 120ms ease-in;
+}
+
+
+@mixin mark-color($theme, $type, $color, $value) {
+  @if $type == "font" {
+    & .font-#{$color} {
+      color: $value;
+      border-radius: 0;
+      &:hover, &.active {
+        @if $theme == "light" {
+          box-shadow: -8px 0 0 transparentize(darken($value, 12%), 0.4);
+        } @else {
+          box-shadow: -8px 0 0 transparentize(lighten($value, 12%), 0.4);
+        }
+      }
+      &:active {
+        @if $theme == "light" {
+          color: darken($value, 12%);
+        } @else {
+          color: lighten($value, 12%);
+        }
+      }
+    }
+  } @else {
+    & .background-#{$color} {
+      background-color: $value;
+      &:hover, &.active {
+        @if $theme == "light" {
+          box-shadow: 0 0 0 2.5px transparentize(darken($value, 24%), 0.4);
+        } @else {
+          box-shadow: 0 0 0 2.5px transparentize(lighten($value, 24%), 0.2);
+        }
+      }
+      &:active {
+        @if $theme == "light" {
+          background-color: darken($value, 6%);
+        } @else {
+          background-color: lighten($value, 6%);
+        }
+      }
+    }
+  }
+}
+
+
+.light {
+  // Color
+  @each $color, $value in (
+    gray: rgb(155, 154, 151),
+    brown: rgb(100, 71, 58),
+    orange: rgb(217, 115, 13),
+    yellow: rgb(223, 171, 1),
+    green: rgb(15, 123, 108),
+    blue: rgb(11, 110, 153),
+    purple: rgb(105, 64, 165),
+    pink: rgb(173, 26, 114),
+    red: rgb(224, 62, 62)
+  ) {
+    @include mark-color("light", "font", $color, $value);
+  }
+  // Background Color
+  @each $color, $value in (
+    gray: rgb(235, 236, 237),
+    brown: rgb(233, 229, 227),
+    orange: rgb(250, 235, 221),
+    yellow: rgb(251, 243, 219),
+    green: rgb(221, 237, 234),
+    blue: rgb(221, 235, 241),
+    purple: rgb(234, 228, 242),
+    pink: rgb(244, 223, 235),
+    red: rgb(251, 228, 228)
+  ) {
+    @include mark-color("light", "background", $color, $value);
+  }
+}
+
+.dark {
+  & .nav-item, & .comment {
+    &.active, &:hover {
+      background-color: rgb(71, 76, 80);
+    }
+    &:active {
+      background-color: rgb(63, 68, 71);
+    }
+  }
+  & .container {
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.07);
+  }
+  // Font Color
+  @each $color, $value in (
+    gray: rgba(151, 154, 155, 0.95),
+    brown: rgb(147, 114, 100),
+    orange: rgb(255, 163, 68),
+    yellow: rgb(255, 220, 73),
+    green: rgb(77, 171, 154),
+    blue: rgb(82, 156, 202),
+    purple: rgb(154, 109, 215),
+    pink: rgb(226, 85, 161),
+    red: rgb(255, 115, 105)
+  ) {
+    @include mark-color("dark", "font", $color, $value);
+  }
+  // Background Color
+  @each $color, $value in (
+    gray: rgb(69, 75, 78),
+    brown: rgb(67, 64, 64),
+    orange: rgb(89, 74, 58),
+    yellow: rgb(89, 86, 59),
+    green: rgb(53, 76, 75),
+    blue: rgb(54, 73, 84),
+    purple: rgb(68, 63, 87),
+    pink: rgb(83, 59, 76),
+    red: rgb(89, 65, 65)
+  ) {
+    @include mark-color("dark", "background", $color, $value);
+  }
+}

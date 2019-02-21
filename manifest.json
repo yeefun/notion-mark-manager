@@ -1,0 +1,39 @@
+{
+  "name": "Notion+ Mark Jump",
+  "short_name": "Mark Jump",
+  "description": "Jump to your marks in Notion.",
+  "author": "Yeefun",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "permissions": ["declarativeContent", "storage"],
+  "background": {
+    "scripts": ["dist/js/background.js"],
+    "persistent": false
+  },
+  "icons": {
+    "16": "img/icon16.png",
+    "32": "img/icon32.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
+  },
+  "page_action": {
+    "default_icon": {
+      "16": "img/icon16.png",
+      "32": "img/icon32.png",
+      "48": "img/icon48.png",
+      "128": "img/icon128.png"
+    },
+    "default_title": "Mark Jump",
+    "default_popup": "dist/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.notion.so/*", "https://www.notion.so/*/*"],
+      "js": ["dist/js/contentscript.js"]
+    }
+  ],
+  "options_ui": {
+    "page": "dist/options.html",
+    "open_in_tab": false
+  }
+}

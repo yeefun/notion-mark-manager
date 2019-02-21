@@ -1,0 +1,55 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title Notion+ Mark Jump Options
+    link(rel="stylesheet", href="css/options.css")
+  body
+    form#options-form
+      fieldset(style="margin-bottom: 18px;")
+        legend(style="margin-bottom: 10px;") Check the mark colors you want to get:
+        div
+          h5 font color
+          .color-options-wrapper
+            each color in ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
+              div
+                label(for= "font-"+color)
+                  input(id= "font-"+color, type="checkbox", value= "font-"+color)
+                  div
+                    div.checkbox
+                      svg.checked-icon(viewBox="0 0 14 14", style="width: 10px; height: 10px; fill: white;")
+                        polygon(points="5.5 11.9993304 14 3.49933039 12.5 2 5.5 8.99933039 1.5 4.9968652 0 6.49933039")
+                      svg.unchecked-icon(viewBox="0 0 16 16", style="width: 14px; height: 14px;")
+                        path(d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z")
+                  span= color
+        div(style="margin-top: 16px;")
+          h5 background color
+          .color-options-wrapper
+            each color in ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
+              div
+                label(for= "background-"+color)
+                  input(id= "background-"+color, type="checkbox", value= "background-"+color)
+                  div
+                    div.checkbox
+                      svg.checked-icon(viewBox="0 0 14 14", style="width: 10px; height: 10px; fill: white;")
+                        polygon(points="5.5 11.9993304 14 3.49933039 12.5 2 5.5 8.99933039 1.5 4.9968652 0 6.49933039")
+                      svg.unchecked-icon(viewBox="0 0 16 16", style="width: 14px; height: 14px;")
+                        path(d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z")
+                  span= color
+      fieldset(style="margin-bottom: 24px;")
+        legend(style="margin-bottom: 8px;") Show comments / marks tab first:
+        .tab-options-wrapeer
+          div
+            label(for="comments")
+              input#comments(type="radio", name="tab", value="comments")
+              span comments
+          div
+            label(for="marks")
+              input#marks(type="radio", name="tab", value="marks")
+              span marks
+      div.save-wrapper
+        button(type="submit") Save
+        .status#status
+    script(src="js/options.js")
