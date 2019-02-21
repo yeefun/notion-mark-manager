@@ -7,11 +7,11 @@ function readyToLoad() {
     isLightTheme = document.getElementById('notion-app').firstChild.classList.contains('notion-light-theme');
     if (isLightTheme) {
       chrome.storage.sync.set({
-        theme: 'light'
+        theme: 'light',
       });
     } else {
       chrome.storage.sync.set({
-        theme: 'dark'
+        theme: 'dark',
       });
     }
   }
@@ -227,8 +227,11 @@ function readyToLoad() {
     sendResponse(result);
   }
   function getMarkedText(prop, value, className, result) {
+    // var markedTextsDiv = getElementsByStyle('DIV', prop, value);
+    // var markedTextsSpan = getElementsByStyle('SPAN', prop, value);
+    // var markedTexts = markedTextsDiv.concat(markedTextsSpan);
     var markedTexts = getElementsByStyle('DIV', prop, value);
-    if (!markedTexts) {
+    if (!markedTexts.length) {
       return;
     }
     var blockIds = [];
@@ -250,7 +253,10 @@ function readyToLoad() {
       result[id].markHTML = markHTML;
     });
   }
-  function jumpToComemted(blockId) {
+
+
+  
+  function jumpToCommemted(blockId) {
     bodyEl.click();
     var commentedBlock = document.querySelector(`[data-block-id="${blockId}"]`);
     var intersectionObserver = new IntersectionObserver(function (entries) {
@@ -289,7 +295,7 @@ function readyToLoad() {
         loadMarkedText(sendResponse);
         break;
       case 'jump to commented':
-        jumpToComemted(message.id);
+        jumpToCommemted(message.id);
         break;
       case 'jump to marked':
         jumpToMarked(message.id);
