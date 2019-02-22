@@ -7,7 +7,7 @@
   "manifest_version": 2,
   "permissions": ["declarativeContent", "storage"],
   "background": {
-    "scripts": ["dist/js/background.js"],
+    "scripts": ["js/background.js"],
     "persistent": false
   },
   "icons": {
@@ -24,16 +24,16 @@
       "128": "img/icon128.png"
     },
     "default_title": "Mark Jump",
-    "default_popup": "dist/popup.html"
+    "default_popup": "popup.html"
   },
   "content_scripts": [
     {
       "matches": ["https://www.notion.so/*", "https://www.notion.so/*/*"],
-      "js": ["dist/js/contentscript.js"]
+      "js": ["js/contentscript.js"]
     }
   ],
   "options_ui": {
-    "page": "dist/options.html",
+    "page": "options.html",
     "open_in_tab": false
   }
 }

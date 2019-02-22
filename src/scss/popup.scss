@@ -38,9 +38,9 @@ body {
 }
 
 .comment {
-  &.active, &:hover {
-    background-color: rgba(55, 53, 47, 0.08);
-  }
+  // &.active, &:hover {
+  //   background-color: rgba(55, 53, 47, 0.08);
+  // }
   &:active {
     background-color: rgba(55, 53, 47, 0.16);
   }
@@ -59,9 +59,43 @@ body {
   transition: background-color 120ms ease-in;
   border-radius: 3px;
   cursor: pointer;
+  position: relative;
   & + .block {
     margin-top: 10px;
   }
+  & i {
+    position: absolute;
+    left: -15px;
+    color: rgba(55, 53, 47, 0.6);
+    font-size: 18px;
+    top: 2px;
+    // top: 50%;
+    opacity: 0;
+    // transform: translate(-12px, -50%);
+    transform: translateX(-8px);
+    transition: all 120ms ease-out;
+    // transition: all 120ms ease-in;
+  }
+  &:hover i, &.active i {
+    // & i {
+    opacity: 1;
+    // transform: translate(0px, -50%);
+    transform: translateX(0px);
+    // }
+  }
+  // &:hover {
+
+    // &:after {
+    //   // bottom: 0;
+    //   // right: 0;
+    //   width: 8px;
+    //   height: 8px;
+    //   top: 0;
+    //   left: 0;
+    //   border-bottom: 1px solid rgba(55, 53, 47, 0.8);
+    //   border-right: 1px solid rgba(55, 53, 47, 0.8);
+    // }
+  // }
 }
 
 .mark {
@@ -73,14 +107,14 @@ body {
   @if $type == "font" {
     & .font-#{$color} {
       color: $value;
-      border-radius: 0;
-      &:hover, &.active {
-        @if $theme == "light" {
-          box-shadow: -8px 0 0 transparentize(darken($value, 12%), 0.4);
-        } @else {
-          box-shadow: -8px 0 0 transparentize(lighten($value, 12%), 0.4);
-        }
-      }
+      // border-radius: 0;
+      // &:hover, &.active {
+      //   @if $theme == "light" {
+      //     box-shadow: -8px 0 0 transparentize(darken($value, 12%), 0.4);
+      //   } @else {
+      //     box-shadow: -8px 0 0 transparentize(lighten($value, 12%), 0.4);
+      //   }
+      // }
       &:active {
         @if $theme == "light" {
           color: darken($value, 12%);
@@ -92,13 +126,13 @@ body {
   } @else {
     & .background-#{$color} {
       background-color: $value;
-      &:hover, &.active {
-        @if $theme == "light" {
-          box-shadow: 0 0 0 2.5px transparentize(darken($value, 24%), 0.4);
-        } @else {
-          box-shadow: 0 0 0 2.5px transparentize(lighten($value, 24%), 0.2);
-        }
-      }
+      // &:hover, &.active {
+      //   @if $theme == "light" {
+      //     box-shadow: 0 0 0 2.5px transparentize(darken($value, 24%), 0.4);
+      //   } @else {
+      //     box-shadow: 0 0 0 2.5px transparentize(lighten($value, 24%), 0.2);
+      //   }
+      // }
       &:active {
         @if $theme == "light" {
           background-color: darken($value, 6%);

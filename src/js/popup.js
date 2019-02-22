@@ -50,7 +50,10 @@ function loadComments() {
       for (var commentId in commentObj) {
         var commentHTML = commentObj[commentId].commentHTML;
         result += `
-          <div class="block comment" data-id="${commentId}">${commentHTML}</div>
+          <div class="block comment" data-id="${commentId}">
+            <i class="icon-angle-double-right"></i>
+            ${commentHTML}
+          </div>
         `;
       }
       container.innerHTML = result;
@@ -70,7 +73,10 @@ function loadMarks() {
         var markHTML = markObj[markId].markHTML;
         var colorName = markObj[markId].colorName;
         result += `
-          <div class="block mark ${colorName}" data-id="${markId}">${markHTML}</div>
+          <div class="block mark ${colorName}" data-id="${markId}">
+            <i class="icon-angle-double-right"></i>
+            ${markHTML}
+          </div>
         `;
       }
       container.innerHTML = result;
