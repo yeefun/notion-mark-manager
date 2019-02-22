@@ -19,153 +19,153 @@ function readyToLoad() {
 
   var fontLightColors = [
     {
-      value: 'rgb\\(155,\\s*154,\\s*51\\)',
+      value: 'rgb(155, 154, 51)',
       name: 'font-gray',
     },
     {
-      value: 'rgb\\(100,\\s*71,\\s*58\\)',
+      value: 'rgb(100, 71, 58)',
       name: 'font-brown',
     },
     {
-      value: 'rgb\\(217,\\s*115,\\s*13\\)',
+      value: 'rgb(217, 115, 13)',
       name: 'font-orange',
     },
     {
-      value: 'rgb\\(223,\\s*171,\\s*1\\)',
+      value: 'rgb(223, 171, 1)',
       name: 'font-yellow',
     },
     {
-      value: 'rgb\\(15,\\s*123,\\s*108\\)',
+      value: 'rgb(15, 123, 108)',
       name: 'font-green',
     },
     {
-      value: 'rgb\\(11,\\s*110,\\s*153\\)',
+      value: 'rgb(11, 110, 153)',
       name: 'font-blue',
     },
     {
-      value: 'rgb\\(105,\\s*64,\\s*165\\)',
+      value: 'rgb(105, 64, 165)',
       name: 'font-purple',
     },
     {
-      value: 'rgb\\(173,\\s*26,\\s*114\\)',
+      value: 'rgb(173, 26, 114)',
       name: 'font-pink',
     },
     {
-      value: 'rgb\\(224,\\s*62,\\s*62\\)',
+      value: 'rgb(224, 62, 62)',
       name: 'font-red',
     }
   ];
   var fontDarkColors = [
     {
-      value: 'rgba(151,\\s*154,\\s*155,\\s*0.95\\)',
+      value: 'rgba(151, 154, 155, 0.95)',
       name: 'font-gray',
     },
     {
-      value: 'rgb\\(147,\\s*114,\\s*100\\)',
+      value: 'rgb(147, 114, 100)',
       name: 'font-brown',
     },
     {
-      value: 'rgb\\(255,\\s*163,\\s*68\\)',
+      value: 'rgb(255, 163, 68)',
       name: 'font-orange',
     },
     {
-      value: 'rgb\\(255,\\s*220,\\s*73\\)',
+      value: 'rgb(255, 220, 73)',
       name: 'font-yellow',
     },
     {
-      value: 'rgb\\(77,\\s*171,\\s*154\\)',
+      value: 'rgb(77, 171, 154)',
       name: 'font-green',
     },
     {
-      value: 'rgb\\(82,\\s*156,\\s*202\\)',
+      value: 'rgb(82, 156, 202)',
       name: 'font-blue',
     },
     {
-      value: 'rgb\\(154,\\s*109,\\s*215\\)',
+      value: 'rgb(154, 109, 215)',
       name: 'font-purple',
     },
     {
-      value: 'rgb\\(226,\\s*85,\\s*161\\)',
+      value: 'rgb(226, 85, 161)',
       name: 'font-pink',
     },
     {
-      value: 'rgb\\(255,\\s*115,\\s*105\\)',
+      value: 'rgb(255, 115, 105)',
       name: 'font-red',
     }
   ];
   var backgroundLightColors = [
     {
-      value: 'rgb\\(235,\\s*236,\\s*237\\)',
+      value: 'rgb(235, 236, 237)',
       name: 'background-gray',
     },
     {
-      value: 'rgb\\(233,\\s*229,\\s*227\\)',
+      value: 'rgb(233, 229, 227)',
       name: 'background-brown',
     },
     {
-      value: 'rgb\\(250,\\s*235,\\s*221\\)',
+      value: 'rgb(250, 235, 221)',
       name: 'background-orange',
     },
     {
-      value: 'rgb\\(251,\\s*243,\\s*219\\)',
+      value: 'rgb(251, 243, 219)',
       name: 'background-yellow',
     },
     {
-      value: 'rgb\\(221,\\s*237,\\s*234\\)',
+      value: 'rgb(221, 237, 234)',
       name: 'background-green',
     },
     {
-      value: 'rgb\\(221,\\s*235,\\s*241\\)',
+      value: 'rgb(221, 235, 241)',
       name: 'background-blue',
     },
     {
-      value: 'rgb\\(234,\\s*228,\\s*242\\)',
+      value: 'rgb(234, 228, 242)',
       name: 'background-purple',
     },
     {
-      value: 'rgb\\(244,\\s*223,\\s*235\\)',
+      value: 'rgb(244, 223, 235)',
       name: 'background-pink',
     },
     {
-      value: 'rgb\\(251,\\s*228,\\s*228\\)',
+      value: 'rgb(251, 228, 228)',
       name: 'background-red',
     }
   ];
   var backgroundDarkColors = [
     {
-      value: 'rgb\\(69,\\s*75,\\s*78\\)',
+      value: 'rgb(69, 75, 78)',
       name: 'background-gray',
     },
     {
-      value: 'rgb\\(67,\\s*64,\\s*64\\)',
+      value: 'rgb(67, 64, 64)',
       name: 'background-brown',
     },
     {
-      value: 'rgb\\(89,\\s*74,\\s*58\\)',
+      value: 'rgb(89, 74, 58)',
       name: 'background-orange',
     },
     {
-      value: 'rgb\\(89,\\s*86,\\s*59\\)',
+      value: 'rgb(89, 86, 59)',
       name: 'background-yellow',
     },
     {
-      value: 'rgb\\(53,\\s*76,\\s*75\\)',
+      value: 'rgb(53, 76, 75)',
       name: 'background-green',
     },
     {
-      value: 'rgb\\(54,\\s*73,\\s*84\\)',
+      value: 'rgb(54, 73, 84)',
       name: 'background-blue',
     },
     {
-      value: 'rgb\\(68,\\s*63,\\s*87\\)',
+      value: 'rgb(68, 63, 87)',
       name: 'background-purple',
     },
     {
-      value: 'rgb\\(83,\\s*59,\\s*76\\)',
+      value: 'rgb(83, 59, 76)',
       name: 'background-pink',
     },
     {
-      value: 'rgb\\(89,\\s*65,\\s*65\\)',
+      value: 'rgb(89, 65, 65)',
       name: 'background-red',
     }
   ];
@@ -173,16 +173,17 @@ function readyToLoad() {
 
 
 
-  var matchStyle = function (el, value) {
+  var getStyle = function (el, prop) {
+    return el.style[prop];
     // return window.getComputedStyle(el)[prop];
-    var re = new RegExp(value);
-    return re.test(el.getAttribute('style'));
+    // var re = new RegExp(value);
+    // return re.test(el.getAttribute('style'));
   }
   var getElementsByStyle = function (tag, prop, value) {
     var els = document.getElementsByTagName(tag || '*');
     return Array.prototype.filter.call(els, function (el) {
-      return matchStyle(el, value);
-      // return getStyle(el, prop) === value;
+      // return getStyle(el, value);
+      return getStyle(el, prop) === value;
     });
   }
   function closest(el, classSelector) {
@@ -271,10 +272,10 @@ function readyToLoad() {
       var target = entry.target;
       if (entry.isIntersecting) {
         setTimeout(function () {
-          var spans = commentedBlock.getElementsByTagName('SPAN');
-          var markedSpan = Array.prototype.find.call(spans, function (span) {
+          var spanEls = commentedBlock.getElementsByTagName('SPAN');
+          var markedSpan = Array.prototype.find.call(spanEls, function (spanEl) {
             // var commentColor = isLightTheme ? 'rgba(255, 212, 0, 0.14)' : 
-            return matchStyle(span, 'background-color') === 'rgba(255, 212, 0, 0.14)';
+            return getStyle(spanEl, 'background-color') === 'rgba(255, 212, 0, 0.14)';
           });
           markedSpan.click();
         }, 120);
