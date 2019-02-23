@@ -57,7 +57,7 @@ function loadComments() {
         `;
       }
       container.innerHTML = result;
-      bindClickEventForJump('.comment');
+      bindClickEventToJump('.comment');
     }
   );
 }
@@ -71,21 +71,22 @@ function loadMarks() {
       var result = '';
       for (var markId in markObj) {
         var markHTML = markObj[markId].markHTML;
+        var nodeName = markObj[markId].nodeName;
         var colorName = markObj[markId].colorName;
         result += `
-          <div class="block mark ${colorName}" data-id="${markId}">
+          <div class="block mark ${nodeName === 'DIV' ? colorName : ''}" data-id="${markId}">
             <i class="icon-angle-double-right"></i>
             ${markHTML}
           </div>
         `;
       }
       container.innerHTML = result;
-      bindClickEventForJump('.mark');
+      bindClickEventToJump('.mark');
     }
   );
 }
 
-function bindClickEventForJump(className) {
+function bindClickEventToJump(className) {
   var marks = document.querySelectorAll(className);
   var action = className === '.comment' ? 'jump to commented' : 'jump to marked';
   nodesForEach.call(marks, function (mark) {

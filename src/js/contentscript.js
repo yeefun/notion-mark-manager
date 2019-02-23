@@ -15,6 +15,7 @@ function readyToLoad() {
       });
     }
   }
+
   storeTheme();
 
   var fontLightColors = [
@@ -179,6 +180,7 @@ function readyToLoad() {
     // var re = new RegExp(value);
     // return re.test(el.getAttribute('style'));
   }
+
   var getElementsByStyle = function (tag, prop, value) {
     var els = document.getElementsByTagName(tag || '*');
     return Array.prototype.filter.call(els, function (el) {
@@ -186,15 +188,17 @@ function readyToLoad() {
       return getStyle(el, prop) === value;
     });
   }
+
   function closest(el, classSelector) {
     while (!el.classList.contains(classSelector)) {
       el = el.parentNode;
     }
     return el;
   }
+
   function loadCommentedText(sendResponse) {
     var commentIcons = document.querySelectorAll(commentIconSelector);
-    var result = {};
+    var results = {};
     var blockIds = [];
     var blocks = Array.prototype.map.call(commentIcons, function (icon) {
       return closest(icon, 'notion-selectable');
@@ -209,56 +213,102 @@ function readyToLoad() {
       commentHTML = commentHTML.replace(/contenteditable="true"/, '');
       commentHTML = commentHTML.replace(/-webkit-user-modify:\s*read-write-plaintext-only;/, '');
       commentHTML = commentHTML.replace(/padding:\s*3px 2px;/, '');
-      result[id] = {};
-      result[id].commentHTML = commentHTML;
+      var result = results[id] = {};
+      result.commentHTML = commentHTML;
     });
-    sendResponse(result);
+    sendResponse(results);
   }
+
+
+
   function loadMarkedText(sendResponse) {
     var fontColors = isLightTheme ? fontLightColors : fontDarkColors;
     var backgroundColors = isLightTheme ? backgroundLightColors : backgroundDarkColors;
-    var result = {};
+    var results = {};
     fontColors.forEach(function (color) {
       if (checkedColors.indexOf(color.name) !== -1) {
-        getMarkedText('color', color.value, color.name, result);
+        getMarkedText('color', color.value, color.name, results);
       }
     });
     backgroundColors.forEach(function (color) {
       if (checkedColors.indexOf(color.name) !== -1) {
-        getMarkedText('background-color', color.value, color.name, result);
+        getMarkedText('background-color', color.value, color.name, results);
       }
     });
-    sendResponse(result);
+    for (var markId in multiMarks) {
+      var multiMark = multiMarks[markId];
+      var result = results[markId];
+      result.nodeName = multiMark.nodeName;
+      result.colorName = multiMark.colorName;
+      result.markHTML = multiMark.markHTML;
+    }
+    sendResponse(results);
+    multiMarks = {};
   }
-  function getMarkedText(prop, value, className, result) {
+
+
+  var multiMarks = {};
+  function getMarkedText(prop, value, className, results) {
     var markedTextsDiv = getElementsByStyle('DIV', prop, value);
     var markedTextsSpan = getElementsByStyle('SPAN', prop, value);
     var markedTexts = markedTextsDiv.concat(markedTextsSpan);
-    // var markedTexts = getElementsByStyle('DIV', prop, value);
+    
     if (!markedTexts.length) {
       return;
     }
-    var blockIds = [];
-    var blocks = Array.prototype.map.call(markedTexts, function (text) {
+    
+    var markedNodes = [];
+    var blocks = Array.prototype.map.call(markedTexts, function (text, idx) {
+      markedNodes[idx] = text.nodeName;
       return closest(text, 'notion-selectable');
     });
-    // console.log(blocks);
-    
-    blocks = blocks.map(function (block, idx) {
+
+    var blockIds = [];
+    var blocksContent = blocks.map(function (block, idx) {
       blockIds[idx] = block.dataset.blockId;
       return block.querySelector('[contenteditable]');
     });
-    // console.log(blocks);
-    
-    blocks.forEach(function (block, idx) {
-      var id = blockIds[idx];
-      var markHTML = block.outerHTML;
-      markHTML = markHTML.replace(/contenteditable="true"/, '');
-      markHTML = markHTML.replace(/-webkit-user-modify:\s*read-write-plaintext-only;/, '');
-      markHTML = markHTML.replace(/padding:\s*3px 2px;/, '');
-      result[id] = {};
-      result[id].colorName = className;
-      result[id].markHTML = markHTML;
+
+    blocksContent.forEach(function (content, idx) {
+      var nodeName = markedNodes[idx];
+      var blockId = blockIds[idx];
+      var markHTML = content.innerHTML;
+
+      if (results[blockId]) {
+        if (results[blockId].nodeName !== 'DIV') {
+          results[blockId] = {}
+          if (nodeName === 'DIV') {
+            var mark = multiMarks[blockId];
+            if (!mark) {
+              mark = {}
+              mark.markHTML = markHTML;
+            }
+            mark.nodeName = nodeName;
+            mark.colorName = className;
+          }
+          if (!multiMarks[blockId]) {
+            var mark = multiMarks[blockId] = {}
+            mark.markHTML = markHTML;
+            mark.nodeName = nodeName;
+            mark.colorName = className;
+          }
+        } else {
+          var result = results[blockId];
+          var mark = multiMarks[blockId];
+          if (!mark) {
+            mark = {}
+            mark.markHTML = markHTML;
+          }
+          mark.nodeName = result.nodeName;
+          mark.colorName = result.className;
+          result = {};
+        }
+      } else {
+        var result = results[blockId] = {}
+        result.nodeName = nodeName;
+        result.colorName = className;
+        result.markHTML = markHTML;
+      }
     });
   }
 
@@ -291,9 +341,12 @@ function readyToLoad() {
     bodyEl.click();
     var markedBlock = document.querySelector(`[data-block-id="${blockId}"]`);
     markedBlock.scrollIntoView({
-      behavior: 'smooth'
+      // behavior: 'smooth'
     });
   }
+
+
+
   chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     switch (message.action) {
       case 'load comments':
@@ -312,6 +365,9 @@ function readyToLoad() {
         break;
     }
   });
+
+
+
   var mutationObserver = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
       if (mutation.attributeName === 'class') {
@@ -323,6 +379,8 @@ function readyToLoad() {
     attributes: true,
   });
 }
+
+
 
 var checkedColors = [];
 chrome.storage.sync.get(
