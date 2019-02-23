@@ -203,16 +203,13 @@ function readyToLoad() {
     var blocks = Array.prototype.map.call(commentIcons, function (icon) {
       return closest(icon, 'notion-selectable');
     });
-    blocks = blocks.map(function (block, idx) {
+    var blocksContent = blocks.map(function (block, idx) {
       blockIds[idx] = block.dataset.blockId;
       return block.querySelector('[contenteditable]');
     });
-    blocks.forEach(function (block, idx) {
+    blocksContent.forEach(function (content, idx) {
       var id = blockIds[idx];
-      var commentHTML = block.outerHTML;
-      commentHTML = commentHTML.replace(/contenteditable="true"/, '');
-      commentHTML = commentHTML.replace(/-webkit-user-modify:\s*read-write-plaintext-only;/, '');
-      commentHTML = commentHTML.replace(/padding:\s*3px 2px;/, '');
+      var commentHTML = content.innerHTML;
       var result = results[id] = {};
       result.commentHTML = commentHTML;
     });
@@ -237,7 +234,8 @@ function readyToLoad() {
     });
     for (var markId in multiMarks) {
       var multiMark = multiMarks[markId];
-      var result = results[markId];
+      delete results[markId];
+      var result = results[markId] = {};
       result.nodeName = multiMark.nodeName;
       result.colorName = multiMark.colorName;
       result.markHTML = multiMark.markHTML;
@@ -252,7 +250,7 @@ function readyToLoad() {
     var markedTextsDiv = getElementsByStyle('DIV', prop, value);
     var markedTextsSpan = getElementsByStyle('SPAN', prop, value);
     var markedTexts = markedTextsDiv.concat(markedTextsSpan);
-    
+
     if (!markedTexts.length) {
       return;
     }
@@ -274,7 +272,12 @@ function readyToLoad() {
       var blockId = blockIds[idx];
       var markHTML = content.innerHTML;
 
-      if (results[blockId]) {
+      if (!results[blockId]) {
+        var result = results[blockId] = {}
+        result.nodeName = nodeName;
+        result.colorName = className;
+        result.markHTML = markHTML;
+      } else {
         if (results[blockId].nodeName !== 'DIV') {
           results[blockId] = {}
           if (nodeName === 'DIV') {
@@ -303,11 +306,6 @@ function readyToLoad() {
           mark.colorName = result.className;
           result = {};
         }
-      } else {
-        var result = results[blockId] = {}
-        result.nodeName = nodeName;
-        result.colorName = className;
-        result.markHTML = markHTML;
       }
     });
   }
@@ -327,21 +325,23 @@ function readyToLoad() {
             // var commentColor = isLightTheme ? 'rgba(255, 212, 0, 0.14)' : 
             return getStyle(spanEl, 'background-color') === 'rgba(255, 212, 0, 0.14)';
           });
-          markedSpan.click();
+          if (markedSpan) {
+            markedSpan.click();
+          }
         }, 120);
         intersectionObserver.unobserve(target);
       }
     });
     intersectionObserver.observe(commentedBlock);
     commentedBlock.scrollIntoView({
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
   function jumpToMarked(blockId) {
     bodyEl.click();
     var markedBlock = document.querySelector(`[data-block-id="${blockId}"]`);
     markedBlock.scrollIntoView({
-      // behavior: 'smooth'
+      // behavior: 'smooth',
     });
   }
 
