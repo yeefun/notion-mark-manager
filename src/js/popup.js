@@ -1,5 +1,6 @@
 var nodesForEach = Array.prototype.forEach;
 var bodyEl = document.body;
+var htmlEl = document.documentElement;
 
 var container = document.getElementById('container');
 var navItems = document.querySelectorAll('.nav-item');
@@ -49,12 +50,13 @@ function loadComments() {
       var result = '';
       for (var commentId in commentObj) {
         var commentHTML = commentObj[commentId].commentHTML;
-        result += `
-          <div class="block comment" data-id="${commentId}">
-            <i class="icon-angle-double-right"></i>
-            ${commentHTML}
-          </div>
-        `;
+        // result += `
+        //   <div class="block comment" data-id="${commentId}">
+        //     <i class="icon-angle-double-right"></i>
+        //     ${commentHTML}
+        //   </div>
+        // `;
+        result += `<div class="block comment" data-id="${commentId}">${commentHTML}</div>`;
       }
       container.innerHTML = result;
       bindClickEventToJump('.comment');
@@ -73,12 +75,7 @@ function loadMarks() {
         var markHTML = markObj[markId].markHTML;
         var nodeName = markObj[markId].nodeName;
         var colorName = markObj[markId].colorName;
-        result += `
-          <div class="block mark ${nodeName === 'DIV' ? colorName : ''}" data-id="${markId}">
-            <i class="icon-angle-double-right"></i>
-            ${markHTML}
-          </div>
-        `;
+        result += `<div class="block mark ${nodeName === 'DIV' ? colorName : ''}" data-id="${markId}">${markHTML}</div>`;
       }
       container.innerHTML = result;
       bindClickEventToJump('.mark');
@@ -122,3 +119,16 @@ chrome.storage.sync.get(
     }
   }
 );
+
+const navbar = document.getElementById('navbar');
+let beforeScrollY = window.scrollY;
+window.addEventListener('scroll', function () {
+  const currentScrollY = this.scrollY;
+  const scrollDelta = currentScrollY - beforeScrollY;
+  if (scrollDelta > 0) {
+    navbar.classList.remove('show');
+  } else {
+    navbar.classList.add('show');
+  }
+  beforeScrollY = currentScrollY;
+});
