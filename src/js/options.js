@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function initOptions() {
     chrome.storage.sync.get(
-      ['checkedColors', 'tabFirstShow'],
+      ['checkedColors', 'tabFirstShow', 'displayTimes'],
       function (items) {
         if (items.checkedColors) {
           checkedColors = items.checkedColors;
@@ -23,6 +23,13 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           document.getElementById('comments').checked = true;
         }
+
+        const displayTimes = items.displayTimes;
+        if (displayTimes) {
+          document.getElementById(displayTimes).checked = true;
+        } else {
+          document.getElementById('once').checked = true;
+        }
       }
     );
   }
@@ -38,15 +45,17 @@ document.addEventListener('DOMContentLoaded', function () {
     evt.preventDefault();
     let checkedColors = [];
     const checkedboxes = document.querySelectorAll('[type="checkbox"]:checked');
-    const checkedRadio = document.querySelector('[type="radio"]:checked').value;
+    const checkedTab = document.querySelector('[name="tab"]:checked').value;
+    const checkedTimes = document.querySelector('[name="times"]:checked').value;
     Array.prototype.forEach.call(checkedboxes, function (checkedbox) {
       checkedColors.push(checkedbox.value);
     });
 
     chrome.storage.sync.set(
       {
-        checkedColors: checkedColors,
-        tabFirstShow: checkedRadio,
+        checkedColors,
+        tabFirstShow: checkedTab,
+        displayTimes: checkedTimes,
       },
       function () {
         status.textContent = 'Your options have been saved!';

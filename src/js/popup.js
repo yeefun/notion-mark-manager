@@ -50,12 +50,6 @@ function loadComments() {
       let result = '';
       for (let commentId in commentObj) {
         let commentHTML = commentObj[commentId].commentHTML;
-        // result += `
-        //   <div class="block comment" data-id="${commentId}">
-        //     <i class="icon-angle-double-right"></i>
-        //     ${commentHTML}
-        //   </div>
-        // `;
         result += `<div class="block comment" data-id="${commentId}">${commentHTML}</div>`;
       }
       container.innerHTML = result;
@@ -104,7 +98,7 @@ function bindClickEventToJump(className) {
 chrome.storage.sync.get(
   ['tabFirstShow'],
   function (items) {
-    var tabFirstShowName = items.tabFirstShow;
+    const tabFirstShowName = items.tabFirstShow;
     if (tabFirstShowName) {
       if (tabFirstShowName === 'comments') {
         loadComments();

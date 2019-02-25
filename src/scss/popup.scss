@@ -43,31 +43,18 @@ nav {
   padding-top: 6px;
   padding-bottom: 8px;
   &:hover, &.active {
-    // background-color: rgba(55, 53, 47, 0.08);
-    background-color: rgb(239, 239, 239);
+    background-color: rgb(239, 239, 239); // == background-color: rgba(55, 53, 47, 0.08);
   }
   &:active {
-    // background-color: rgba(55, 53, 47, 0.16);
-    background-color: rgb(223, 223, 222);
+    background-color: rgb(223, 223, 222); // ==background-color: rgba(55, 53, 47, 0.16);
   }
 }
 
-// .comment {
-  // &.active, &:hover {
-  //   background-color: rgba(55, 53, 47, 0.08);
-  // }
-  // &:active {
-  //   background-color: rgba(55, 53, 47, 0.16);
-  // }
-// }
-
 .container {
-  // box-shadow: 0 -1px 0 rgba(55, 53, 47, 0.09);
   width: 300px;
   padding: 56px 8px 14px 8px;
   box-sizing: border-box;
   line-height: 1.5;
-  // padding-top: 56px;
 }
 
 .block {
@@ -79,82 +66,29 @@ nav {
   & + .block {
     margin-top: 10px;
   }
-  // &:hover {
-  //   box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.08);
-  // }
-  // & i {
-  //   position: absolute;
-  //   left: -15px;
-  //   color: rgba(55, 53, 47, 0.6);
-  //   font-size: 18px;
-  //   top: 2px;
-  //   opacity: 0;
-  //   transform: translateX(-8px);
-  //   transition: all 120ms ease-out;
-  // }
-  // &:hover i, &.active i {
-  //   opacity: 1;
-  //   transform: translateX(0px);
-  // }
+  &:hover, &.active {
+    box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.16);
+  }
+  &:active {
+    box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.32);
+  }
 }
-
-// .mark {
-//   transition: box-shadow 120ms ease-in;
-// }
 
 
 @mixin mark-color($type, $color, $value) {
   @if $type == "font" {
     & .font-#{$color} {
       color: $value;
-      // border-radius: 0;
-      // &:hover, &.active {
-      //   @if $theme == "light" {
-      //     box-shadow: -8px 0 0 transparentize(darken($value, 12%), 0.4);
-      //   } @else {
-      //     box-shadow: -8px 0 0 transparentize(lighten($value, 12%), 0.4);
-      //   }
-      // }
-      // &:active {
-      //   @if $theme == "light" {
-      //     color: darken($value, 12%);
-      //   } @else {
-      //     color: lighten($value, 12%);
-      //   }
-      // }
     }
   } @else {
     & .background-#{$color} {
       background-color: $value;
-      // &:hover, &.active {
-      //   @if $theme == "light" {
-      //     box-shadow: 0 0 0 2.5px transparentize(darken($value, 24%), 0.4);
-      //   } @else {
-      //     box-shadow: 0 0 0 2.5px transparentize(lighten($value, 24%), 0.2);
-      //   }
-      // }
-      // &:active {
-      //   @if $theme == "light" {
-      //     box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.16);
-      //     // background-color: darken($value, 6%);
-      //   } @else {
-      //     // background-color: lighten($value, 6%);
-      //   }
-      // }
     }
   }
 }
 
 
 .light {
-  & .block {
-    &:hover, &.active {
-      box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.16);
-    }
-    &:active {
-      box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.32);
-    }
-  }
   // Color
   @each $color, $value in (
     gray: rgb(155, 154, 151),
@@ -186,7 +120,6 @@ nav {
 }
 
 .dark {
-  // & .nav-item, & .comment {
   & .block {
     &:hover, &.active {
       box-shadow: 0 0 16px 1px rgb(71, 76, 80);
@@ -207,9 +140,6 @@ nav {
       background-color: rgb(63, 68, 71);
     }
   }
-  // & .container {
-  //   box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.07);
-  // }
   // Font Color
   @each $color, $value in (
     gray: rgba(151, 154, 155, 0.95),

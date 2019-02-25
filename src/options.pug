@@ -8,17 +8,17 @@ html(lang="en")
     link(rel="stylesheet", href="css/options.css")
   body
     form#options-form
-      fieldset(style="margin-bottom: 18px;")
-        legend(style="margin-bottom: 10px;") Check the TEXT colors you want to get:
+      fieldset
+        legend(style="margin-bottom: 10px;") Choose the TEXT colors you want to load:
         div
           h5 font color
-          .color-options-wrapper
-            each color in ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
-              div
+          .options-wrapper.options-wrapper--color
+            each color, idx in ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
+              div(class= idx < 3 ? "mt-0" : "")
                 label(for= "font-"+color)
                   input(id= "font-"+color, type="checkbox", value= "font-"+color)
                   div
-                    div.checkbox
+                    .checkbox
                       svg.checked-icon(viewBox="0 0 14 14", style="width: 10px; height: 10px; fill: white;")
                         polygon(points="5.5 11.9993304 14 3.49933039 12.5 2 5.5 8.99933039 1.5 4.9968652 0 6.49933039")
                       svg.unchecked-icon(viewBox="0 0 16 16", style="width: 14px; height: 14px;")
@@ -26,21 +26,21 @@ html(lang="en")
                   span= color
         div(style="margin-top: 16px;")
           h5 background color
-          .color-options-wrapper
+          .options-wrapper.options-wrapper--color
             each color in ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
               div
                 label(for= "background-"+color)
                   input(id= "background-"+color, type="checkbox", value= "background-"+color)
                   div
-                    div.checkbox
+                    .checkbox
                       svg.checked-icon(viewBox="0 0 14 14", style="width: 10px; height: 10px; fill: white;")
                         polygon(points="5.5 11.9993304 14 3.49933039 12.5 2 5.5 8.99933039 1.5 4.9968652 0 6.49933039")
                       svg.unchecked-icon(viewBox="0 0 16 16", style="width: 14px; height: 14px;")
                         path(d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z")
                   span= color
-      fieldset(style="margin-bottom: 24px;")
-        legend(style="margin-bottom: 8px;") Show “Comments” / “Texts” tab first:
-        .tab-options-wrapeer
+      fieldset
+        legend(style="margin-bottom: 8px;") Choose the tab you want to show first:
+        .options-wrapper
           div
             label(for="comments")
               input#comments(type="radio", name="tab", value="comments")
@@ -49,6 +49,17 @@ html(lang="en")
             label(for="marks")
               input#marks(type="radio", name="tab", value="marks")
               span Texts
+      fieldset
+        legend(style="margin-bottom: 8px;") If a block contains two or more text colors, display this block...
+        .options-wrapper
+          div
+            label(for="once")
+              input#once(type="radio", name="times", value="once")
+              span only once
+          div(style="flex-basis: calc(100% / 3 * 2);")
+            label(for="more")
+              input#more(type="radio", name="times", value="more")
+              span two or more times
       div.save-wrapper
         button(type="submit") Save
         .status#status

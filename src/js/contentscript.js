@@ -174,16 +174,16 @@ function readyToLoad() {
 
 
 
-  function getStyle(el, prop) {
-    return el.style[prop];
-  }
+  // function getStyle(el, prop) {
+  //   return el.style[prop];
+  // }
 
-  function getElementsByStyle(tag = '*', prop, value) {
-    const els = document.getElementsByTagName(tag);
-    return Array.prototype.filter.call(els, function (el) {
-      return getStyle(el, prop) === value;
-    });
-  }
+  // function getElementsByStyle(tag = '*', prop, value) {
+  //   const els = document.getElementsByTagName(tag);
+  //   return Array.prototype.filter.call(els, function (el) {
+  //     return getStyle(el, prop) === value;
+  //   });
+  // }
 
   function closest(el, classSelector) {
     while (!el.classList.contains(classSelector)) {
@@ -242,26 +242,30 @@ function readyToLoad() {
         getMarkedText('background-color', color.value, color.name, results);
       }
     });
-    // for (var markId in multiMarks) {
-    //   var multiMark = multiMarks[markId];
-    //   delete results[markId];
-    //   var result = results[markId] = {};
-    //   result.nodeName = multiMark.nodeName;
-    //   result.colorName = multiMark.colorName;
-    //   result.markHTML = multiMark.markHTML;
-    // }
+    if (displayTimes === 'once') {
+      for (let markId in repeatedMarks) {
+        const repeatedMark = repeatedMarks[markId];
+        delete results[markId];
+        const result = results[markId] = {};
+        result.nodeName = repeatedMark.nodeName;
+        result.colorName = repeatedMark.colorName;
+        result.markHTML = repeatedMark.markHTML;
+      }
+    }
     sendResponse(results);
-    // multiMarks = {};
-    repeatedMarks = {}
+    repeatedMarks = {};
+    // repeatedMarks = {}
   }
 
 
-  // var multiMarks = {};
   let repeatedMarks = {};
   function getMarkedText(prop, value, className, results) {
-    const markedTextsDiv = getElementsByStyle('DIV', prop, value);
-    const markedTextsSpan = getElementsByStyle('SPAN', prop, value);
-    const markedTexts = markedTextsDiv.concat(markedTextsSpan);
+    // const markedTextsDiv = getElementsByStyle('DIV', prop, value);
+    // const markedTextsSpan = getElementsByStyle('SPAN', prop, value);
+    // const markedTexts = markedTextsDiv.concat(markedTextsSpan);
+    const markedTextsDiv = document.querySelectorAll(`div[style*="${value}"]`);
+    const markedTextsSpan = document.querySelectorAll(`span[style*="${value.replace(/, /g, ',')}"]`);
+    const markedTexts = [...markedTextsDiv, ...markedTextsSpan];
 
     if (!markedTexts.length) {
       return;
@@ -293,26 +297,28 @@ function readyToLoad() {
         result.nodeName = nodeName;
         result.colorName = className;
         result.markHTML = markHTML;
-      } else {
+        return;
+      }
+
+      function displayMoreTimes() {
         if (!repeatedMarks[blockId]) {
           repeatedMarks[blockId] = [];
         }
-        const multiMarkIds = repeatedMarks[blockId];
+        const repeatedMarkIds = repeatedMarks[blockId];
         const prefixId = `${blockId}{{${className}-${idx}}}`;
         const prefixResult = results[prefixId] = {}
-
         if (results[blockId].nodeName !== 'DIV') {
           if (nodeName === 'DIV') {
             let result = results[blockId];
             result.nodeName = nodeName;
             result.colorName = className;
-            multiMarkIds.forEach(function (markId) {
-              const result = results[markId];
+            repeatedMarkIds.forEach(function (markId) {
+              const result = results[markId] = {};
               result.nodeName = nodeName;
               result.colorName = className;
             });
           }
-          multiMarkIds.push(prefixId);
+          repeatedMarkIds.push(prefixId);
           prefixResult.nodeName = nodeName;
           prefixResult.colorName = className;
         } else {
@@ -321,45 +327,42 @@ function readyToLoad() {
         }
         prefixResult.markHTML = markHTML;
       }
-      // var nodeName = markedNodes[idx];
-      // var blockId = blockIds[idx];
-      // var markHTML = content.innerHTML;
+      function displayOnce() {
+        if (results[blockId].nodeName !== 'DIV') {
+          results[blockId] = {}
+          if (nodeName === 'DIV') {
+            let repeatedMark = repeatedMarks[blockId];
+            if (!repeatedMark) {
+              repeatedMark = {}
+              repeatedMark.markHTML = markHTML;
+            }
+            repeatedMark.nodeName = nodeName;
+            repeatedMark.colorName = className;
+          }
+          if (!repeatedMarks[blockId]) {
+            const repeatedMark = repeatedMarks[blockId] = {}
+            repeatedMark.markHTML = markHTML;
+            repeatedMark.nodeName = nodeName;
+            repeatedMark.colorName = className;
+          }
+        } else {
+          let result = results[blockId];
+          var repeatedMark = repeatedMarks[blockId];
+          if (!repeatedMark) {
+            repeatedMark = {}
+            repeatedMark.markHTML = markHTML;
+          }
+          repeatedMark.nodeName = result.nodeName;
+          repeatedMark.colorName = result.className;
+          result = {};
+        }
+      }
 
-      // if (!results[blockId]) {
-      //   var result = results[blockId] = {}
-      //   result.nodeName = nodeName;
-      //   result.colorName = className;
-      //   result.markHTML = markHTML;
-      // } else {
-      //   if (results[blockId].nodeName !== 'DIV') {
-      //     results[blockId] = {}
-      //     if (nodeName === 'DIV') {
-      //       var mark = multiMarks[blockId];
-      //       if (!mark) {
-      //         mark = {}
-      //         mark.markHTML = markHTML;
-      //       }
-      //       mark.nodeName = nodeName;
-      //       mark.colorName = className;
-      //     }
-      //     if (!multiMarks[blockId]) {
-      //       var mark = multiMarks[blockId] = {}
-      //       mark.markHTML = markHTML;
-      //       mark.nodeName = nodeName;
-      //       mark.colorName = className;
-      //     }
-      //   } else {
-      //     var result = results[blockId];
-      //     var mark = multiMarks[blockId];
-      //     if (!mark) {
-      //       mark = {}
-      //       mark.markHTML = markHTML;
-      //     }
-      //     mark.nodeName = result.nodeName;
-      //     mark.colorName = result.className;
-      //     result = {};
-      //   }
-      // }
+      if (displayTimes === 'once') {
+        displayOnce();
+      } else {
+        displayMoreTimes();
+      }
     });
   }
 
@@ -376,7 +379,7 @@ function readyToLoad() {
           const spanEls = commentedBlock.getElementsByTagName('SPAN');
           const markedSpan = Array.prototype.find.call(spanEls, function (spanEl) {
             // return getStyle(spanEl, 'background-color') === 'rgba(255, 212, 0, 0.14)';
-            return getStyle(spanEl, 'border-bottom') === '2px solid rgb(255, 212, 0)';
+            return spanEl.style['border-bottom'] === '2px solid rgb(255, 212, 0)';
           });
           if (markedSpan) {
             markedSpan.click();
@@ -439,14 +442,16 @@ function readyToLoad() {
 
 
 
-let checkedColors = [];
+let checkedColors = ['font-gray', 'font-brown', 'font-orange', 'font-yellow', 'font-green', 'font-blue', 'font-purple', 'font-pink', 'font-red', 'background-gray', 'background-brown', 'background-orange', 'background-yellow', 'background-green', 'background-blue', 'background-purple', 'background-pink', 'background-red'];
+let displayTimes = 'once';
 chrome.storage.sync.get(
-  ['checkedColors'],
+  ['checkedColors', 'displayTimes'],
   function (items) {
     if (items.checkedColors) {
       checkedColors = items.checkedColors;
-    } else {
-      checkedColors = ['font-gray', 'font-brown', 'font-orange', 'font-yellow', 'font-green', 'font-blue', 'font-purple', 'font-pink', 'font-red', 'background-gray', 'background-brown', 'background-orange', 'background-yellow', 'background-green', 'background-blue', 'background-purple', 'background-pink', 'background-red'];
+    }
+    if (items.displayTimes) {
+      displayTimes = items.displayTimes;
     }
     readyToLoad();
   }
