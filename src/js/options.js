@@ -1,8 +1,8 @@
-var checkedColors = [];
+let checkedColors = [];
 
 document.addEventListener('DOMContentLoaded', function () {
-  var form = document.getElementById('options-form');
-  var status = document.getElementById('status');
+  const form = document.getElementById('options-form');
+  const status = document.getElementById('status');
 
   function initOptions() {
     chrome.storage.sync.get(
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
           constructOption(color);
         });
 
-        var tabFirstShowName = items.tabFirstShow;
+        const tabFirstShowName = items.tabFirstShow;
         if (tabFirstShowName) {
           document.getElementById(tabFirstShowName).checked = true;
         } else {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function constructOption(checkedColor) {
-    var inputCheckbox = document.getElementById(checkedColor);
+    const inputCheckbox = document.getElementById(checkedColor);
     inputCheckbox.checked = true;
   }
 
@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    var checkedColors = [];
-    var checkedboxes = document.querySelectorAll('[type="checkbox"]:checked');
-    var checkedRadio = document.querySelector('[type="radio"]:checked').value;
+    let checkedColors = [];
+    const checkedboxes = document.querySelectorAll('[type="checkbox"]:checked');
+    const checkedRadio = document.querySelector('[type="radio"]:checked').value;
     Array.prototype.forEach.call(checkedboxes, function (checkedbox) {
       checkedColors.push(checkedbox.value);
     });

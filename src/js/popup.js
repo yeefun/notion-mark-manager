@@ -1,9 +1,9 @@
-var nodesForEach = Array.prototype.forEach;
-var bodyEl = document.body;
-var htmlEl = document.documentElement;
+const nodesForEach = Array.prototype.forEach;
+const bodyEl = document.body;
+const htmlEl = document.documentElement;
 
-var container = document.getElementById('container');
-var navItems = document.querySelectorAll('.nav-item');
+const container = document.getElementById('container');
+const navItems = document.querySelectorAll('.nav-item');
 
 chrome.storage.sync.get(['theme'], function (result) {
   if (result.theme === 'light') {
@@ -46,10 +46,10 @@ function loadComments() {
       action: 'load comments',
     },
     function (response) {
-      var commentObj = response;
-      var result = '';
-      for (var commentId in commentObj) {
-        var commentHTML = commentObj[commentId].commentHTML;
+      const commentObj = response;
+      let result = '';
+      for (let commentId in commentObj) {
+        let commentHTML = commentObj[commentId].commentHTML;
         // result += `
         //   <div class="block comment" data-id="${commentId}">
         //     <i class="icon-angle-double-right"></i>
@@ -69,12 +69,12 @@ function loadMarks() {
       action: 'load marks',
     },
     function (response) {
-      var markObj = response;
-      var result = '';
-      for (var markId in markObj) {
-        var markHTML = markObj[markId].markHTML;
-        var nodeName = markObj[markId].nodeName;
-        var colorName = markObj[markId].colorName;
+      const markObj = response;
+      let result = '';
+      for (let markId in markObj) {
+        const markHTML = markObj[markId].markHTML;
+        const nodeName = markObj[markId].nodeName;
+        const colorName = markObj[markId].colorName;
         result += `<div class="block mark ${nodeName === 'DIV' ? colorName : ''}" data-id="${markId}">${markHTML}</div>`;
       }
       container.innerHTML = result;
@@ -84,13 +84,13 @@ function loadMarks() {
 }
 
 function bindClickEventToJump(className) {
-  var marks = document.querySelectorAll(className);
-  var action = className === '.comment' ? 'jump to commented' : 'jump to marked';
+  const marks = document.querySelectorAll(className);
+  const action = className === '.comment' ? 'jump to commented' : 'jump to marked';
   nodesForEach.call(marks, function (mark) {
     mark.addEventListener('click', function () {
-      var blockId = this.dataset.id;
+      const blockId = this.dataset.id;
       sendMessageToContentScript({
-        action: action,
+        action,
         id: blockId,
       });
       nodesForEach.call(marks, function (mark) {

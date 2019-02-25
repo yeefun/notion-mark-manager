@@ -9,7 +9,7 @@ html(lang="en")
   body
     form#options-form
       fieldset(style="margin-bottom: 18px;")
-        legend(style="margin-bottom: 10px;") Check the mark colors you want to get:
+        legend(style="margin-bottom: 10px;") Check the TEXT colors you want to get:
         div
           h5 font color
           .color-options-wrapper
@@ -39,16 +39,16 @@ html(lang="en")
                         path(d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z")
                   span= color
       fieldset(style="margin-bottom: 24px;")
-        legend(style="margin-bottom: 8px;") Show comments / marks tab first:
+        legend(style="margin-bottom: 8px;") Show “Comments” / “Texts” tab first:
         .tab-options-wrapeer
           div
             label(for="comments")
               input#comments(type="radio", name="tab", value="comments")
-              span comments
+              span Comments
           div
             label(for="marks")
               input#marks(type="radio", name="tab", value="marks")
-              span marks
+              span Texts
       div.save-wrapper
         button(type="submit") Save
         .status#status

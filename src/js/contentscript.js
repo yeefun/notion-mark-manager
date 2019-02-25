@@ -192,6 +192,15 @@ function readyToLoad() {
     return el;
   }
 
+  function unwrap(wrapper) {
+    const docFrag = document.createDocumentFragment();
+    while (wrapper.firstChild) {
+      const child = wrapper.removeChild(wrapper.firstChild);
+      docFrag.appendChild(child);
+    }
+    wrapper.parentNode.replaceChild(docFrag, wrapper);
+  }
+
   function loadCommentedText(sendResponse) {
     const commentIcons = document.querySelectorAll(commentIconSelector);
     let results = {};
@@ -204,8 +213,13 @@ function readyToLoad() {
       return block.querySelector('[contenteditable]');
     });
     blocksContent.forEach(function (content, idx) {
+      const clonedContent = content.cloneNode(true);
+      let marks = clonedContent.querySelectorAll('span:not([style*="border-bottom"])');
+      marks.forEach(function (mark) {
+        unwrap(mark);
+      });
       const id = blockIds[idx];
-      const commentHTML = content.innerHTML;
+      const commentHTML = clonedContent.innerHTML;
       const result = results[id] = {};
       result.commentHTML = commentHTML;
     });
@@ -252,15 +266,19 @@ function readyToLoad() {
     if (!markedTexts.length) {
       return;
     }
-    
+
     let markedNodes = [];
     const blocks = Array.prototype.map.call(markedTexts, function (text, idx) {
       markedNodes[idx] = text.nodeName;
       return closest(text, 'notion-selectable');
     });
 
+    const uniqueBlocks = blocks.filter(function (block, idx, arr) {
+      return arr.indexOf(block) === idx;
+    });
+
     let blockIds = [];
-    const blocksContent = blocks.map(function (block, idx) {
+    const blocksContent = uniqueBlocks.map(function (block, idx) {
       blockIds[idx] = block.dataset.blockId;
       return block.querySelector('[contenteditable]');
     });
@@ -294,17 +312,12 @@ function readyToLoad() {
               result.colorName = className;
             });
           }
-
           multiMarkIds.push(prefixId);
-          // var result = results[prefixId] = {}
           prefixResult.nodeName = nodeName;
           prefixResult.colorName = className;
-          // result.markHTML = markHTML;
         } else {
-          // var result = results[prefixId] = {}
           prefixResult.nodeName = results[blockId].nodeName;
           prefixResult.colorName = results[blockId].colorName;
-          // result.markHTML = markHTML;
         }
         prefixResult.markHTML = markHTML;
       }
@@ -362,7 +375,8 @@ function readyToLoad() {
         setTimeout(function () {
           const spanEls = commentedBlock.getElementsByTagName('SPAN');
           const markedSpan = Array.prototype.find.call(spanEls, function (spanEl) {
-            return getStyle(spanEl, 'background-color') === 'rgba(255, 212, 0, 0.14)';
+            // return getStyle(spanEl, 'background-color') === 'rgba(255, 212, 0, 0.14)';
+            return getStyle(spanEl, 'border-bottom') === '2px solid rgb(255, 212, 0)';
           });
           if (markedSpan) {
             markedSpan.click();
