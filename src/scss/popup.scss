@@ -1,3 +1,7 @@
+*::selection {
+  background-color: rgba(45, 170, 219, 0.3);
+}
+
 body {
   margin: 0;
   font-size: 14px;
@@ -42,6 +46,7 @@ nav {
   cursor: pointer;
   padding-top: 6px;
   padding-bottom: 8px;
+  user-select: none;
   &:hover, &.active {
     background-color: rgb(239, 239, 239); // == background-color: rgba(55, 53, 47, 0.08);
   }
@@ -59,15 +64,22 @@ nav {
 
 .block {
   padding: 6px 8px;
-  transition: box-shadow 120ms ease-in;
+  transition: box-shadow 120ms ease-in, color 120ms ease-out;
   border-radius: 3px;
   cursor: pointer;
   position: relative;
+  color: rgba(55, 53, 47, 0.16);
+  & span {
+    color: rgb(55, 53, 47);
+  }
   & + .block {
     margin-top: 10px;
   }
   &:hover, &.active {
     box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.16);
+  }
+  &:hover {
+    color: rgb(55, 53, 47);
   }
   &:active {
     box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.32);
@@ -78,11 +90,15 @@ nav {
 @mixin mark-color($type, $color, $value) {
   @if $type == "font" {
     & .font-#{$color} {
-      color: $value;
+      color: $value !important;
+      & span {
+        color: $value;
+      }
     }
   } @else {
     & .background-#{$color} {
       background-color: $value;
+      color: rgb(55, 53, 47);
     }
   }
 }
@@ -121,8 +137,15 @@ nav {
 
 .dark {
   & .block {
+    color: rgb(71, 76, 80);
+    & span {
+      color: rgba(255, 255, 255, 0.9);
+    }
     &:hover, &.active {
       box-shadow: 0 0 16px 1px rgb(71, 76, 80);
+    }
+    &:hover {
+      color: rgba(255, 255, 255, 0.9);
     }
     &:active {
       box-shadow: 0 0 16px 1px rgb(63, 68, 71);

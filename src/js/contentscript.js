@@ -234,12 +234,12 @@ function readyToLoad() {
     let results = {};
     fontColors.forEach(function (color) {
       if (checkedColors.indexOf(color.name) !== -1) {
-        getMarkedText('color', color.value, color.name, results);
+        getMarkedText(color.value, color.name, results);
       }
     });
     backgroundColors.forEach(function (color) {
       if (checkedColors.indexOf(color.name) !== -1) {
-        getMarkedText('background-color', color.value, color.name, results);
+        getMarkedText(color.value, color.name, results);
       }
     });
     if (displayTimes === 'once') {
@@ -254,12 +254,11 @@ function readyToLoad() {
     }
     sendResponse(results);
     repeatedMarks = {};
-    // repeatedMarks = {}
   }
 
 
   let repeatedMarks = {};
-  function getMarkedText(prop, value, className, results) {
+  function getMarkedText(value, className, results) {
     // const markedTextsDiv = getElementsByStyle('DIV', prop, value);
     // const markedTextsSpan = getElementsByStyle('SPAN', prop, value);
     // const markedTexts = markedTextsDiv.concat(markedTextsSpan);
@@ -270,6 +269,7 @@ function readyToLoad() {
     if (!markedTexts.length) {
       return;
     }
+    
 
     let markedNodes = [];
     const blocks = Array.prototype.map.call(markedTexts, function (text, idx) {
@@ -277,12 +277,13 @@ function readyToLoad() {
       return closest(text, 'notion-selectable');
     });
 
+    // 移除同一顏色的重複區塊
     const uniqueBlocks = blocks.filter(function (block, idx, arr) {
       return arr.indexOf(block) === idx;
     });
 
     let blockIds = [];
-    const blocksContent = uniqueBlocks.map(function (block, idx) {
+    let blocksContent = uniqueBlocks.map(function (block, idx) {
       blockIds[idx] = block.dataset.blockId;
       return block.querySelector('[contenteditable]');
     });
@@ -300,6 +301,7 @@ function readyToLoad() {
         return;
       }
 
+      // 顯示與色彩數量同樣多次
       function displayMoreTimes() {
         if (!repeatedMarks[blockId]) {
           repeatedMarks[blockId] = [];
@@ -327,6 +329,7 @@ function readyToLoad() {
         }
         prefixResult.markHTML = markHTML;
       }
+      // 只顯示一次
       function displayOnce() {
         if (results[blockId].nodeName !== 'DIV') {
           results[blockId] = {}
@@ -384,14 +387,12 @@ function readyToLoad() {
           if (markedSpan) {
             markedSpan.click();
           }
-        }, 120);
+        }, 80);
         intersectionObserver.unobserve(target);
       }
     });
     intersectionObserver.observe(commentedBlock);
-    commentedBlock.scrollIntoView({
-      behavior: 'smooth',
-    });
+    commentedBlock.scrollIntoView();
   }
 
 
@@ -400,9 +401,7 @@ function readyToLoad() {
     const blockIdRemovePrefix = blockId.replace(/\{\{.*\}\}/, '');
     bodyEl.click();
     const markedBlock = document.querySelector(`[data-block-id="${blockIdRemovePrefix}"]`);
-    markedBlock.scrollIntoView({
-      behavior: 'smooth',
-    });
+    markedBlock.scrollIntoView();
   }
 
 
