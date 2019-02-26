@@ -1,7 +1,8 @@
 {
-  "name": "Notion+ Mark Jump",
-  "short_name": "Mark Jump",
-  "description": "Jump to your marks in Notion.",
+  "name": "__MSG_name__",
+  "short_name": "__MSG_shortName__",
+  "default_locale": "en",
+  "description": "__MSG_description__",
   "author": "Yeefun",
   "version": "1.0.0",
   "manifest_version": 2,
@@ -23,7 +24,7 @@
       "48": "img/icon48.png",
       "128": "img/icon128.png"
     },
-    "default_title": "Mark Jump",
+    "default_title": "__MSG_shortName__",
     "default_popup": "popup.html"
   },
   "content_scripts": [
@@ -35,5 +36,6 @@
   "options_ui": {
     "page": "options.html",
     "open_in_tab": false
-  }
+  },
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'"
 }

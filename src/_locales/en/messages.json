@@ -1,0 +1,11 @@
+{
+  "name": {
+    "message": "Notion+ Mark Manager"
+  },
+  "shortName": {
+    "message": "Mark Manager"
+  },
+  "description": {
+    "message": "Manage your colored texts & comments in Notion."
+  }
+}

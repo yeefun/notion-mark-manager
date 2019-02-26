@@ -1,0 +1,11 @@
+{
+  "name": {
+    "message": "Notion+ 標記管理器"
+  },
+  "shortName": {
+    "message": "管理標記"
+  },
+  "description": {
+    "message": "管理你在 Notion 的顏色文字與註解。"
+  }
+}

@@ -65,7 +65,11 @@ gulp.task('babel', () => {
     .pipe(gulp.dest('./dist/js/'));
 });
 
-
+gulp.task('i18n', () => {
+  return gulp.src('./src/_locales/**/*.json')
+    .pipe($.plumber())
+    .pipe(gulp.dest('./dist/_locales/'));
+});
 
 gulp.task('img', () => {
   return gulp.src('./img/**/*.png')
@@ -75,18 +79,18 @@ gulp.task('img', () => {
 
 
 
-gulp.task('webfont', () => {
-  return gulp.src('./src/assets/webfont/**/*')
-    .pipe($.plumber())
-    .pipe(gulp.dest('./dist/webfont/'));
-});
+// gulp.task('webfont', () => {
+//   return gulp.src('./src/assets/webfont/**/*')
+//     .pipe($.plumber())
+//     .pipe(gulp.dest('./dist/webfont/'));
+// });
 
-gulp.task('webfont-css-min', () => {
-  return gulp.src('./src/assets/webfont/css/*.css')
-    .pipe($.plumber())
-    .pipe($.cleanCss())
-    .pipe(gulp.dest('./dist/webfont/css/'));
-});
+// gulp.task('webfont-css-min', () => {
+//   return gulp.src('./src/assets/webfont/css/*.css')
+//     .pipe($.plumber())
+//     .pipe($.cleanCss())
+//     .pipe(gulp.dest('./dist/webfont/css/'));
+// });
 
 gulp.task('manifest', () => {
   return gulp.src('./manifest.json')
@@ -101,12 +105,15 @@ gulp.task('watch', () => {
   gulp.watch('./src/**/*.pug', ['pug']);
   gulp.watch('./src/scss/**/*.scss', ['sass']);
   gulp.watch('./src/js/**/*.js', ['babel']);
-  gulp.watch('./src/assets/webfont/css/*.css', ['webfont-css']);
+  gulp.watch('./src/_locales/**/*.json', ['i18n']);
+  gulp.watch('./img/**/*.png', ['img']);
+  gulp.watch('./manifest.json', ['manifest']);
+  // gulp.watch('./src/assets/webfont/css/*.css', ['webfont-css']);
 });
 
 
 // 開發流程
-gulp.task('default', ['pug', 'sass', 'babel', 'webfont', 'watch']);
+gulp.task('default', ['pug', 'sass', 'babel', 'i18n', 'img', 'manifest', 'watch']);
 
 // 發布流程
-gulp.task('build', gulpSequence('clean', 'pug', 'sass', 'babel', 'img', 'webfont', 'webfont-css-min', 'manifest'));
+gulp.task('build', gulpSequence('clean', 'pug', 'sass', 'babel', 'i18n', 'img', 'manifest'));
