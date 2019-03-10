@@ -14,7 +14,6 @@ ga('send', 'pageview', '/popup.html');
 
 const nodesForEach = Array.prototype.forEach;
 const bodyEl = document.body;
-const htmlEl = document.documentElement;
 
 const container = document.getElementById('container');
 const navItems = document.querySelectorAll('.nav-item');
@@ -33,11 +32,14 @@ nodesForEach.call(navItems, function (item) {
       item.classList.remove('active');
     });
     this.classList.add('active');
-    if (this.dataset.tab === 'comments') {
+    const tabName = this.dataset.tab;
+    if (tabName === 'comments') {
       loadComments();
     } else {
-      loadMarks();
+      loadColoredTexts();
     }
+    // GA: 'comments' 與 'colored texts' tab 各被按幾次？
+    ga('send', 'event', 'Tabs', 'Click', `[Notion+ Mark Manager] [${tabName}]`);
   });
 });
 
@@ -62,49 +64,51 @@ function loadComments() {
     function (response) {
       const commentObj = response;
       let result = '';
-      for (let commentId in commentObj) {
-        let commentHTML = commentObj[commentId].commentHTML;
-        result += `<div class="block comment" data-id="${commentId}">${commentHTML}</div>`;
+      for (let commentID in commentObj) {
+        let commentHTML = commentObj[commentID].commentHTML;
+        result += `<div class="block comment" data-id="${commentID}">${commentHTML}</div>`;
       }
       container.innerHTML = result;
-      bindClickEventToJump('.comment');
+      bindClickEventToScrollInto('.comment');
     }
   );
 }
 
-function loadMarks() {
+function loadColoredTexts() {
   sendMessageToContentScript({
-      action: 'load marks',
+      action: 'load colored texts',
     },
     function (response) {
-      const markObj = response;
+      const coloredTextObj = response;
       let result = '';
-      for (let markId in markObj) {
-        const markHTML = markObj[markId].markHTML;
-        const nodeName = markObj[markId].nodeName;
-        const colorName = markObj[markId].colorName;
-        result += `<div class="block mark ${nodeName === 'DIV' ? colorName : ''}" data-id="${markId}">${markHTML}</div>`;
+      for (let colorTextID in coloredTextObj) {
+        const coloredTextHTML = coloredTextObj[colorTextID].coloredTextHTML;
+        const nodeName = coloredTextObj[colorTextID].nodeName;
+        const colorName = coloredTextObj[colorTextID].colorName;
+        result += `<div class="block colored-text ${nodeName === 'DIV' ? colorName : ''}" data-id="${colorTextID}">${coloredTextHTML}</div>`;
       }
       container.innerHTML = result;
-      bindClickEventToJump('.mark');
+      bindClickEventToScrollInto('.colored-text');
     }
   );
 }
 
-function bindClickEventToJump(className) {
+function bindClickEventToScrollInto(className) {
   const marks = document.querySelectorAll(className);
-  const action = className === '.comment' ? 'jump to commented' : 'jump to marked';
+  const action = className === '.comment' ? 'scroll into comment' : 'scroll into colored text';
   nodesForEach.call(marks, function (mark) {
     mark.addEventListener('click', function () {
-      const blockId = this.dataset.id;
+      const blockID = this.dataset.id;
       sendMessageToContentScript({
         action,
-        id: blockId,
+        id: blockID,
       });
       nodesForEach.call(marks, function (mark) {
         mark.classList.remove('active');
       });
       this.classList.add('active');
+      // GA: scroll into 'comment' 與 'colored text' 各被觸發幾次？
+      ga('send', 'event', 'Marks', 'Scroll Into', `[Notion+ Mark Manager] [${action.split('scroll into ')[1]}]`);
     });
   });
 }
@@ -118,8 +122,8 @@ chrome.storage.sync.get(
         loadComments();
         document.querySelector('[data-tab="comments"]').classList.add('active');
       } else {
-        loadMarks();
-        document.querySelector('[data-tab="marks"]').classList.add('active');
+        loadColoredTexts();
+        document.querySelector('[data-tab="colored texts"]').classList.add('active');
       }
     } else {
       loadComments();

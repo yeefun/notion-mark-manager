@@ -87,7 +87,7 @@ nav {
 }
 
 
-@mixin mark-color($type, $color, $value) {
+@mixin colored-text-color($type, $color, $value) {
   @if $type == "font" {
     & .font-#{$color} {
       color: $value !important;
@@ -117,7 +117,7 @@ nav {
     pink: rgb(173, 26, 114),
     red: rgb(224, 62, 62)
   ) {
-    @include mark-color("font", $color, $value);
+    @include colored-text-color("font", $color, $value);
   }
   // Background Color
   @each $color, $value in (
@@ -131,7 +131,7 @@ nav {
     pink: rgb(244, 223, 235),
     red: rgb(251, 228, 228)
   ) {
-    @include mark-color("background", $color, $value);
+    @include colored-text-color("background", $color, $value);
   }
 }
 
@@ -175,7 +175,7 @@ nav {
     pink: rgb(226, 85, 161),
     red: rgb(255, 115, 105)
   ) {
-    @include mark-color("font", $color, $value);
+    @include colored-text-color("font", $color, $value);
   }
   // Background Color
   @each $color, $value in (
@@ -189,6 +189,6 @@ nav {
     pink: rgb(83, 59, 76),
     red: rgb(89, 65, 65)
   ) {
-    @include mark-color("background", $color, $value);
+    @include colored-text-color("background", $color, $value);
   }
 }

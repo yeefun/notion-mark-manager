@@ -185,12 +185,12 @@ function readyToLoad() {
   //   });
   // }
 
-  function closest(el, classSelector) {
-    while (!el.classList.contains(classSelector)) {
-      el = el.parentNode;
-    }
-    return el;
-  }
+  // function closest(el, classSelector) {
+  //   while (!el.classList.contains(classSelector)) {
+  //     el = el.parentNode;
+  //   }
+  //   return el;
+  // }
 
   function unwrap(wrapper) {
     const docFrag = document.createDocumentFragment();
@@ -201,24 +201,25 @@ function readyToLoad() {
     wrapper.parentNode.replaceChild(docFrag, wrapper);
   }
 
-  function loadCommentedText(sendResponse) {
+  function loadComments(sendResponse) {
     const commentIcons = document.querySelectorAll(commentIconSelector);
     let results = {};
-    const blockIds = [];
+    const blockIDs = [];
     const blocks = Array.prototype.map.call(commentIcons, function (icon) {
-      return closest(icon, 'notion-selectable');
+      // return closest(icon, 'notion-selectable');
+      return icon.closest('.notion-selectable');
     });
     const blocksContent = blocks.map(function (block, idx) {
-      blockIds[idx] = block.dataset.blockId;
+      blockIDs[idx] = block.dataset.blockId;
       return block.querySelector('[contenteditable]');
     });
     blocksContent.forEach(function (content, idx) {
       const clonedContent = content.cloneNode(true);
-      let marks = clonedContent.querySelectorAll('span:not([style*="border-bottom"])');
-      marks.forEach(function (mark) {
+      let otherMarks = clonedContent.querySelectorAll('span:not([style*="border-bottom"])');
+      otherMarks.forEach(function (mark) {
         unwrap(mark);
       });
-      const id = blockIds[idx];
+      const id = blockIDs[idx];
       const commentHTML = clonedContent.innerHTML;
       const result = results[id] = {};
       result.commentHTML = commentHTML;
@@ -228,53 +229,54 @@ function readyToLoad() {
 
 
 
-  function loadMarkedText(sendResponse) {
+  function loadColoredTexts(sendResponse) {
     const fontColors = isLightTheme ? fontLightColors : fontDarkColors;
     const backgroundColors = isLightTheme ? backgroundLightColors : backgroundDarkColors;
     let results = {};
     fontColors.forEach(function (color) {
       if (checkedColors.indexOf(color.name) !== -1) {
-        getMarkedText(color.value, color.name, results);
+        getColoredText(color.value, color.name, results);
       }
     });
     backgroundColors.forEach(function (color) {
       if (checkedColors.indexOf(color.name) !== -1) {
-        getMarkedText(color.value, color.name, results);
+        getColoredText(color.value, color.name, results);
       }
     });
     if (displayTimes === 'once') {
-      for (let markId in repeatedMarks) {
-        const repeatedMark = repeatedMarks[markId];
-        delete results[markId];
-        const result = results[markId] = {};
-        result.nodeName = repeatedMark.nodeName;
-        result.colorName = repeatedMark.colorName;
-        result.markHTML = repeatedMark.markHTML;
+      for (let coloredTextID in repeatedColoredTexts) {
+        const repeatedColoredText = repeatedColoredTexts[coloredTextID];
+        delete results[coloredTextID];
+        const result = results[coloredTextID] = {};
+        result.nodeName = repeatedColoredText.nodeName;
+        result.colorName = repeatedColoredText.colorName;
+        result.coloredTextHTML = repeatedColoredText.coloredTextHTML;
       }
     }
     sendResponse(results);
-    repeatedMarks = {};
+    repeatedColoredTexts = {};
   }
 
 
-  let repeatedMarks = {};
-  function getMarkedText(value, className, results) {
-    // const markedTextsDiv = getElementsByStyle('DIV', prop, value);
-    // const markedTextsSpan = getElementsByStyle('SPAN', prop, value);
-    // const markedTexts = markedTextsDiv.concat(markedTextsSpan);
-    const markedTextsDiv = document.querySelectorAll(`div[style*="${value}"]`);
-    const markedTextsSpan = document.querySelectorAll(`span[style*="${value.replace(/, /g, ',')}"]`);
-    const markedTexts = [...markedTextsDiv, ...markedTextsSpan];
+  let repeatedColoredTexts = {};
+  function getColoredText(value, className, results) {
+    // const coloredTextsDiv = getElementsByStyle('DIV', prop, value);
+    // const coloredTextsSpan = getElementsByStyle('SPAN', prop, value);
+    // const coloredTexts = coloredTextsDiv.concat(coloredTextsSpan);
+    const coloredTextsDiv = document.querySelectorAll(`div[style*="${value}"]`);
+    const coloredTextsSpan = document.querySelectorAll(`span[style*="${value.replace(/, /g, ',')}"]`);
+    const coloredTexts = [...coloredTextsDiv, ...coloredTextsSpan];
 
-    if (!markedTexts.length) {
+    if (!coloredTexts.length) {
       return;
     }
     
 
-    let markedNodes = [];
-    const blocks = Array.prototype.map.call(markedTexts, function (text, idx) {
-      markedNodes[idx] = text.nodeName;
-      return closest(text, 'notion-selectable');
+    let coloredTextNodes = [];
+    const blocks = Array.prototype.map.call(coloredTexts, function (text, idx) {
+      coloredTextNodes[idx] = text.nodeName;
+      // return closest(text, 'notion-selectable');
+      return text.closest('.notion-selectable');
     });
 
     // 移除同一顏色的重複區塊
@@ -282,81 +284,81 @@ function readyToLoad() {
       return arr.indexOf(block) === idx;
     });
 
-    let blockIds = [];
+    let blockIDs = [];
     let blocksContent = uniqueBlocks.map(function (block, idx) {
-      blockIds[idx] = block.dataset.blockId;
+      blockIDs[idx] = block.dataset.blockId;
       return block.querySelector('[contenteditable]');
     });
 
     blocksContent.forEach(function (content, idx) {
-      const nodeName = markedNodes[idx];
-      const blockId = blockIds[idx];
-      const markHTML = content.innerHTML;
+      const nodeName = coloredTextNodes[idx];
+      const blockID = blockIDs[idx];
+      const coloredTextHTML = content.innerHTML;
 
-      if (!results[blockId]) {
-        const result = results[blockId] = {}
+      if (!results[blockID]) {
+        const result = results[blockID] = {}
         result.nodeName = nodeName;
         result.colorName = className;
-        result.markHTML = markHTML;
+        result.coloredTextHTML = coloredTextHTML;
         return;
       }
 
       // 顯示與色彩數量同樣多次
       function displayMoreTimes() {
-        if (!repeatedMarks[blockId]) {
-          repeatedMarks[blockId] = [];
+        if (!repeatedColoredTexts[blockID]) {
+          repeatedColoredTexts[blockID] = [];
         }
-        const repeatedMarkIds = repeatedMarks[blockId];
-        const prefixId = `${blockId}{{${className}-${idx}}}`;
-        const prefixResult = results[prefixId] = {}
-        if (results[blockId].nodeName !== 'DIV') {
+        const repeatedColoredTextIDs = repeatedColoredTexts[blockID];
+        const prefixID = `${blockID}{{${className}-${idx}}}`;
+        const prefixResult = results[prefixID] = {}
+        if (results[blockID].nodeName !== 'DIV') {
           if (nodeName === 'DIV') {
-            let result = results[blockId];
+            let result = results[blockID];
             result.nodeName = nodeName;
             result.colorName = className;
-            repeatedMarkIds.forEach(function (markId) {
-              const result = results[markId] = {};
+            repeatedColoredTextIDs.forEach(function (coloredTextID) {
+              const result = results[coloredTextID] = {};
               result.nodeName = nodeName;
               result.colorName = className;
             });
           }
-          repeatedMarkIds.push(prefixId);
+          repeatedColoredTextIDs.push(prefixID);
           prefixResult.nodeName = nodeName;
           prefixResult.colorName = className;
         } else {
-          prefixResult.nodeName = results[blockId].nodeName;
-          prefixResult.colorName = results[blockId].colorName;
+          prefixResult.nodeName = results[blockID].nodeName;
+          prefixResult.colorName = results[blockID].colorName;
         }
-        prefixResult.markHTML = markHTML;
+        prefixResult.coloredTextHTML = coloredTextHTML;
       }
       // 只顯示一次
       function displayOnce() {
-        if (results[blockId].nodeName !== 'DIV') {
-          results[blockId] = {}
+        if (results[blockID].nodeName !== 'DIV') {
+          results[blockID] = {}
           if (nodeName === 'DIV') {
-            let repeatedMark = repeatedMarks[blockId];
-            if (!repeatedMark) {
-              repeatedMark = {}
-              repeatedMark.markHTML = markHTML;
+            let repeatedColoredText = repeatedColoredTexts[blockID];
+            if (!repeatedColoredText) {
+              repeatedColoredText = {}
+              repeatedColoredText.coloredTextHTML = coloredTextHTML;
             }
-            repeatedMark.nodeName = nodeName;
-            repeatedMark.colorName = className;
+            repeatedColoredText.nodeName = nodeName;
+            repeatedColoredText.colorName = className;
           }
-          if (!repeatedMarks[blockId]) {
-            const repeatedMark = repeatedMarks[blockId] = {}
-            repeatedMark.markHTML = markHTML;
-            repeatedMark.nodeName = nodeName;
-            repeatedMark.colorName = className;
+          if (!repeatedColoredTexts[blockID]) {
+            const repeatedColoredText = repeatedColoredTexts[blockID] = {}
+            repeatedColoredText.coloredTextHTML = coloredTextHTML;
+            repeatedColoredText.nodeName = nodeName;
+            repeatedColoredText.colorName = className;
           }
         } else {
-          let result = results[blockId];
-          var repeatedMark = repeatedMarks[blockId];
-          if (!repeatedMark) {
-            repeatedMark = {}
-            repeatedMark.markHTML = markHTML;
+          let result = results[blockID];
+          var repeatedColoredText = repeatedColoredTexts[blockID];
+          if (!repeatedColoredText) {
+            repeatedColoredText = {}
+            repeatedColoredText.coloredTextHTML = coloredTextHTML;
           }
-          repeatedMark.nodeName = result.nodeName;
-          repeatedMark.colorName = result.className;
+          repeatedColoredText.nodeName = result.nodeName;
+          repeatedColoredText.colorName = result.className;
           result = {};
         }
       }
@@ -371,21 +373,21 @@ function readyToLoad() {
 
 
   
-  function jumpToCommemted(blockId) {
+  function scrollIntoCommemt(blockID) {
     bodyEl.click();
-    const commentedBlock = document.querySelector(`[data-block-id="${blockId}"]`);
+    const commentedBlock = document.querySelector(`[data-block-id="${blockID}"]`);
     const intersectionObserver = new IntersectionObserver(function (entries) {
       const entry = entries[0];
       const target = entry.target;
       if (entry.isIntersecting) {
         setTimeout(function () {
           const spanEls = commentedBlock.getElementsByTagName('SPAN');
-          const markedSpan = Array.prototype.find.call(spanEls, function (spanEl) {
+          const commentedSpan = Array.prototype.find.call(spanEls, function (spanEl) {
             // return getStyle(spanEl, 'background-color') === 'rgba(255, 212, 0, 0.14)';
             return spanEl.style['border-bottom'] === '2px solid rgb(255, 212, 0)';
           });
-          if (markedSpan) {
-            markedSpan.click();
+          if (commentedSpan) {
+            commentedSpan.click();
           }
         }, 80);
         intersectionObserver.unobserve(target);
@@ -397,11 +399,11 @@ function readyToLoad() {
 
 
   
-  function jumpToMarked(blockId) {
-    const blockIdRemovePrefix = blockId.replace(/\{\{.*\}\}/, '');
+  function scrollIntoColoredText(blockID) {
+    const blockIDRemovePrefix = blockID.replace(/\{\{.*\}\}/, '');
     bodyEl.click();
-    const markedBlock = document.querySelector(`[data-block-id="${blockIdRemovePrefix}"]`);
-    markedBlock.scrollIntoView();
+    const coloredTextBlock = document.querySelector(`[data-block-id="${blockIDRemovePrefix}"]`);
+    coloredTextBlock.scrollIntoView();
   }
 
 
@@ -409,16 +411,16 @@ function readyToLoad() {
   chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     switch (message.action) {
       case 'load comments':
-        loadCommentedText(sendResponse);
+        loadComments(sendResponse);
         break;
-      case 'load marks':
-        loadMarkedText(sendResponse);
+      case 'load colored texts':
+        loadColoredTexts(sendResponse);
         break;
-      case 'jump to commented':
-        jumpToCommemted(message.id);
+      case 'scroll into comment':
+        scrollIntoCommemt(message.id);
         break;
-      case 'jump to marked':
-        jumpToMarked(message.id);
+      case 'scroll into colored text':
+        scrollIntoColoredText(message.id);
         break;
       default:
         break;
