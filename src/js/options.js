@@ -12,7 +12,7 @@ ga('send', 'pageview', '/options.html');
 
 
 
-let checkedColors = [];
+let originColors = [];
 let originTab = '';
 let originTimes = '';
 
@@ -22,21 +22,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function initOptions() {
     chrome.storage.sync.get(
-      ['checkedColors', 'tabFirstShow', 'displayTimes'],
+      ['textColors', 'tabFirstShow', 'displayTimes'],
       function (items) {
-        if (items.checkedColors) {
-          checkedColors = items.checkedColors;
-        } else {
-          checkedColors = ['font-gray', 'font-brown', 'font-orange', 'font-yellow', 'font-green', 'font-blue', 'font-purple', 'font-pink', 'font-red', 'background-gray', 'background-brown', 'background-orange', 'background-yellow', 'background-green', 'background-blue', 'background-purple', 'background-pink', 'background-red'];
-        }
-        checkedColors.forEach(function (color) {
+        originColors = items.textColors || ['font-gray', 'font-brown', 'font-orange', 'font-yellow', 'font-green', 'font-blue', 'font-purple', 'font-pink', 'font-red', 'background-gray', 'background-brown', 'background-orange', 'background-yellow', 'background-green', 'background-blue', 'background-purple', 'background-pink', 'background-red'];
+        originColors.forEach(function (color) {
           constructOption(color);
         });
 
-        originTab = items.tabFirstShow ? items.tabFirstShow : 'comments';
+        originTab = items.tabFirstShow || 'colored-texts';
         document.getElementById(originTab).checked = true;
 
-        originTimes = items.displayTimes ? items.displayTimes : 'once';
+        originTimes = items.displayTimes || 'once';
         document.getElementById(originTimes).checked = true;
       }
     );
@@ -61,31 +57,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
     chrome.storage.sync.set(
       {
-        checkedColors,
+        textColors: checkedColors,
         tabFirstShow: checkedTab,
         displayTimes: checkedTimes,
       },
       function () {
-        const checkedFontColors = [];
-        const checkedBackgroundColors = [];
+        let checkedFontColors = [];
+        let checkedBackgroundColors = [];
         checkedColors.forEach(function (color) {
           if (color.indexOf('font-') !== -1) {
-            checkedFontColors.push(color.split('font-')[1]);
+            checkedFontColors.push(color);
           } else {
-            checkedBackgroundColors.push(color.split('background-')[1]);
+            checkedBackgroundColors.push(color);
           }
         });
         status.textContent = 'Your options have been saved!';
-        // GA
-        ga('send', 'event', 'Options', 'Save');
-        // ga('send', 'event', 'Options', 'Check', `[Notion+ Mark Manager] [font color] [${checkedFontColors.join()}]`, checkedFontColors.length);
-        // ga('send', 'event', 'Options', 'Check', `[Notion+ Mark Manager] [background color] [${checkedBackgroundColors.join()}]`, checkedBackgroundColors.length);
-        if (checkedTab !== originTab) {
-          ga('send', 'event', 'Options', 'Select', `[Notion+ Mark Manager] [tab first show] [${checkedTab}]`);
-        }
-        if (checkedTimes !== originTimes) {
-          ga('send', 'event', 'Options', 'Select', `[Notion+ Mark Manager] [display times] [${checkedTimes}]`);
-        }
+
+        const originColorsStr = originColors.join();
+        const originFontColors = originColorsStr.substring(originColorsStr.indexOf(',background-'), 0);
+        const originBackgroundColors = originColorsStr.substring(originColorsStr.indexOf(',background-') + 1);
+        checkedFontColors = checkedFontColors.join();
+        checkedBackgroundColors = checkedBackgroundColors.join();
+        const isFontColorsEqual = checkedFontColors === originFontColors;
+        const isBackgroundColorsEqual = checkedBackgroundColors === originBackgroundColors;
+        
+        // GA: 按 'Save' 儲存選項幾次？ 
+        ga('send', 'event', 'Options', 'Save', '[Notion+ Mark Manager]');
+        // GA: 讓哪個 tab 先顯示？這次儲存是否有更改到此選項（[origin]）？
+        ga('send', 'event', 'Options', 'Select', `[Notion+ Mark Manager] [tab first show] [${checkedTab}]${checkedTab === originTab ? ' [origin]' : ''}`);
+        // GA: 選了哪項顯示次數？這次儲存是否有更改到此選項（[origin]）？
+        ga('send', 'event', 'Options', 'Select', `[Notion+ Mark Manager] [display times] [${checkedTimes}]${checkedTimes === originTimes ? ' [origin]' : ''}`);
+        // GA: 選了哪些顏色（font）？這次儲存是否有更改到此選項（[origin]）？
+        ga('send', 'event', 'Options', 'Check', `[Notion+ Mark Manager] [font color] [${checkedFontColors.replace(/font-/g, '')}]${isFontColorsEqual ? ' [origin]' : ''}`, checkedFontColors.length);
+        // GA: 選了哪些顏色（background）？這次儲存是否有更改到此選項（[origin]）？
+        ga('send', 'event', 'Options', 'Check', `[Notion+ Mark Manager] [background color] [${checkedBackgroundColors.replace(/background-/g, '')}]${isBackgroundColorsEqual ? ' [origin]' : ''}`, checkedBackgroundColors.length);
+        originColors = checkedColors;
+        originTab = checkedTab;
+        originTimes = checkedTimes;
 
         setTimeout(function () {
           status.textContent = '';

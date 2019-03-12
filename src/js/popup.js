@@ -10,8 +10,6 @@ ga('set', 'checkProtocolTask', function () {});
 ga('require', 'displayfeatures');
 ga('send', 'pageview', '/popup.html');
 
-
-
 const nodesForEach = Array.prototype.forEach;
 const bodyEl = document.body;
 
@@ -81,14 +79,32 @@ function loadColoredTexts() {
     function (response) {
       const coloredTextObj = response;
       let result = '';
+      let colorNames = [];
       for (let colorTextID in coloredTextObj) {
         const coloredTextHTML = coloredTextObj[colorTextID].coloredTextHTML;
         const nodeName = coloredTextObj[colorTextID].nodeName;
         const colorName = coloredTextObj[colorTextID].colorName;
+        colorNames.push(colorName);
         result += `<div class="block colored-text ${nodeName === 'DIV' ? colorName : ''}" data-id="${colorTextID}">${coloredTextHTML}</div>`;
       }
       container.innerHTML = result;
       bindClickEventToScrollInto('.colored-text');
+
+      const loadedFontColors = [];
+      const loadedBackgroundColors = [];
+      colorNames.forEach(function (color, idx, arr) {
+        if (arr.indexOf(color) === idx) {
+          if (color.indexOf('font-') !== -1) {
+            loadedFontColors.push(color.split('font-')[1]);
+          } else {
+            loadedBackgroundColors.push(color.split('background-')[1]);
+          }
+        }
+      });
+      // GA: 有哪些顏色文字（font）被載入？
+      ga('send', 'event', 'Marks', 'Load', `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`, loadedFontColors.length);
+      // GA: 有哪些顏色文字（background）被載入？
+      ga('send', 'event', 'Marks', 'Load', `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`, loadedBackgroundColors.length);
     }
   );
 }
@@ -107,7 +123,7 @@ function bindClickEventToScrollInto(className) {
         mark.classList.remove('active');
       });
       this.classList.add('active');
-      // GA: scroll into 'comment' 與 'colored text' 各被觸發幾次？
+      // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
       ga('send', 'event', 'Marks', 'Scroll Into', `[Notion+ Mark Manager] [${action.split('scroll into ')[1]}]`);
     });
   });
@@ -116,15 +132,10 @@ function bindClickEventToScrollInto(className) {
 chrome.storage.sync.get(
   ['tabFirstShow'],
   function (items) {
-    const tabFirstShowName = items.tabFirstShow;
-    if (tabFirstShowName) {
-      if (tabFirstShowName === 'comments') {
-        loadComments();
-        document.querySelector('[data-tab="comments"]').classList.add('active');
-      } else {
-        loadColoredTexts();
-        document.querySelector('[data-tab="colored texts"]').classList.add('active');
-      }
+    const tabFirstShowName = items.tabFirstShow || 'colored-texts';
+    if (tabFirstShowName === 'colored-texts') {
+      loadColoredTexts();
+      document.querySelector('[data-tab="colored texts"]').classList.add('active');
     } else {
       loadComments();
       document.querySelector('[data-tab="comments"]').classList.add('active');

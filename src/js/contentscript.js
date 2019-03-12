@@ -446,10 +446,10 @@ function readyToLoad() {
 let checkedColors = ['font-gray', 'font-brown', 'font-orange', 'font-yellow', 'font-green', 'font-blue', 'font-purple', 'font-pink', 'font-red', 'background-gray', 'background-brown', 'background-orange', 'background-yellow', 'background-green', 'background-blue', 'background-purple', 'background-pink', 'background-red'];
 let displayTimes = 'once';
 chrome.storage.sync.get(
-  ['checkedColors', 'displayTimes'],
+  ['textColors', 'displayTimes'],
   function (items) {
-    if (items.checkedColors) {
-      checkedColors = items.checkedColors;
+    if (items.textColors) {
+      checkedColors = items.textColors;
     }
     if (items.displayTimes) {
       displayTimes = items.displayTimes;
