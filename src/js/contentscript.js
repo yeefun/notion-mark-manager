@@ -373,7 +373,7 @@ function readyToLoad() {
 
 
   
-  function scrollIntoCommemt(blockID) {
+  function scrollToCommemt(blockID) {
     bodyEl.click();
     const commentedBlock = document.querySelector(`[data-block-id="${blockID}"]`);
     const intersectionObserver = new IntersectionObserver(function (entries) {
@@ -394,16 +394,22 @@ function readyToLoad() {
       }
     });
     intersectionObserver.observe(commentedBlock);
-    commentedBlock.scrollIntoView();
+    commentedBlock.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   }
 
 
   
-  function scrollIntoColoredText(blockID) {
+  function scrollToColoredText(blockID) {
     const blockIDRemovePrefix = blockID.replace(/\{\{.*\}\}/, '');
     bodyEl.click();
     const coloredTextBlock = document.querySelector(`[data-block-id="${blockIDRemovePrefix}"]`);
-    coloredTextBlock.scrollIntoView();
+    coloredTextBlock.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   }
 
 
@@ -416,11 +422,11 @@ function readyToLoad() {
       case 'load colored texts':
         loadColoredTexts(sendResponse);
         break;
-      case 'scroll into comment':
-        scrollIntoCommemt(message.id);
+      case 'scroll to comment':
+        scrollToCommemt(message.id);
         break;
-      case 'scroll into colored text':
-        scrollIntoColoredText(message.id);
+      case 'scroll to colored text':
+        scrollToColoredText(message.id);
         break;
       default:
         break;

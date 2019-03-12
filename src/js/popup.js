@@ -67,7 +67,7 @@ function loadComments() {
         result += `<div class="block comment" data-id="${commentID}">${commentHTML}</div>`;
       }
       container.innerHTML = result;
-      bindClickEventToScrollInto('.comment');
+      bindClickEventToScrollTo('.comment');
     }
   );
 }
@@ -88,7 +88,7 @@ function loadColoredTexts() {
         result += `<div class="block colored-text ${nodeName === 'DIV' ? colorName : ''}" data-id="${colorTextID}">${coloredTextHTML}</div>`;
       }
       container.innerHTML = result;
-      bindClickEventToScrollInto('.colored-text');
+      bindClickEventToScrollTo('.colored-text');
 
       const loadedFontColors = [];
       const loadedBackgroundColors = [];
@@ -109,9 +109,9 @@ function loadColoredTexts() {
   );
 }
 
-function bindClickEventToScrollInto(className) {
+function bindClickEventToScrollTo(className) {
   const marks = document.querySelectorAll(className);
-  const action = className === '.comment' ? 'scroll into comment' : 'scroll into colored text';
+  const action = className === '.comment' ? 'scroll to comment' : 'scroll to colored text';
   nodesForEach.call(marks, function (mark) {
     mark.addEventListener('click', function () {
       const blockID = this.dataset.id;
@@ -124,7 +124,7 @@ function bindClickEventToScrollInto(className) {
       });
       this.classList.add('active');
       // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
-      ga('send', 'event', 'Marks', 'Scroll Into', `[Notion+ Mark Manager] [${action.split('scroll into ')[1]}]`);
+      ga('send', 'event', 'Marks', 'Scroll To', `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`);
     });
   });
 }

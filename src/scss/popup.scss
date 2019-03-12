@@ -64,7 +64,8 @@ nav {
 
 .block {
   padding: 6px 8px;
-  transition: box-shadow 120ms ease-in, color 120ms ease-out;
+  // transition: box-shadow 120ms ease-in, color 30ms ease-out;
+  transition: all 60ms ease-in;
   border-radius: 3px;
   cursor: pointer;
   position: relative;
