@@ -1,4 +1,4 @@
-[繁體中文](README-zh.md)
+[繁體中文](./README-zh.md)
 
 # Notion+ Mark Manager
 
