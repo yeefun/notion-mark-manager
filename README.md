@@ -1,6 +1,10 @@
+[繁體中文](README-zh.md)
+
 # Notion+ Mark Manager
 
 > Manage your colored texts and comments effectively in Notion.
+
+![](./promotion/img/跑馬燈_En.png)
 
 (UNOFFICIAL EXTENSION)
 
