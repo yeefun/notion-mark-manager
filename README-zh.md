@@ -6,6 +6,8 @@
 
 ![](./promotion/img/跑馬燈_En.png)
 
+![](./video/demo.gif)
+
 （非官方插件）
 
 [Notion](https://www.notion.so/) 的顏色文字（colored text）與註解（comment）用途多樣，能劃重點、做筆記、留言……但這些標記日後卻難以查找，只淪為畫面上的點綴。
