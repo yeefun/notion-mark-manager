@@ -1,13 +1,13 @@
 {
-  "name": "notion-mark-jump",
+  "name": "notion-mark-manager",
   "version": "1.0.0",
-  "description": "jump to your marks in Notion",
+  "description": "Manage your colored texts and comments effectively in Notion.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Yeefun",
-  "license": "ISC",
+  "license": "GPL",
   "dependencies": {
     "@babel/core": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
