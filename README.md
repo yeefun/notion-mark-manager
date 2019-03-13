@@ -6,6 +6,8 @@
 
 ![](./promotion/img/跑馬燈_En.png)
 
+![](./video/demo.gif)
+
 (UNOFFICIAL EXTENSION)
 
 [Notion](https://www.notion.so/)'s colored text and comment are multifunctional tools, which are capable of highlighting texts, taking notes, leaving a message, etc. However, these marks are difficult to organize and file.
