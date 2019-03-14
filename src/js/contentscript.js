@@ -209,10 +209,18 @@ function readyToLoad() {
       // return closest(icon, 'notion-selectable');
       return icon.closest('.notion-selectable');
     });
-    const blocksContent = blocks.map(function (block, idx) {
+    let blocksContent = [];
+    blocks.forEach(function (block, idx) {
       blockIDs[idx] = block.dataset.blockId;
-      return block.querySelector('[contenteditable]');
+      // embed 圖片上也有註釋 icon，移除此類 block
+      if (block.textContent.indexOf('Caption') === -1) {
+        const content = block.querySelector('[contenteditable]');
+        if (content) {
+          blocksContent.push(content);
+        }
+      }
     });
+    
     blocksContent.forEach(function (content, idx) {
       const clonedContent = content.cloneNode(true);
       let otherMarks = clonedContent.querySelectorAll('span:not([style*="border-bottom"])');
@@ -263,14 +271,13 @@ function readyToLoad() {
     // const coloredTextsDiv = getElementsByStyle('DIV', prop, value);
     // const coloredTextsSpan = getElementsByStyle('SPAN', prop, value);
     // const coloredTexts = coloredTextsDiv.concat(coloredTextsSpan);
-    const coloredTextsDiv = document.querySelectorAll(`div[style*="${value}"]`);
-    const coloredTextsSpan = document.querySelectorAll(`span[style*="${value.replace(/, /g, ',')}"]`);
-    const coloredTexts = [...coloredTextsDiv, ...coloredTextsSpan];
-
+    // const coloredTextsDiv = document.querySelectorAll(`div[style*="${value}"]`);
+    // const coloredTextsSpan = document.querySelectorAll(`span[style*="${value.replace(/, /g, ',')}"]`);
+    // const coloredTexts = [...coloredTextsDiv, ...coloredTextsSpan];
+    const coloredTexts = document.querySelectorAll(`[style*="${value}"], [style*="${value.replace(/, /g, ',')}"]`);
     if (!coloredTexts.length) {
       return;
     }
-    
 
     let coloredTextNodes = [];
     const blocks = Array.prototype.map.call(coloredTexts, function (text, idx) {

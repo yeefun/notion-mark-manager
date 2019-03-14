@@ -1,6 +1,6 @@
 {
   "name": "notion-mark-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Manage your colored texts and comments effectively in Notion.",
   "main": "index.js",
   "scripts": {
