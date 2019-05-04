@@ -275,9 +275,7 @@ function readyToLoad() {
     // const coloredTextsSpan = document.querySelectorAll(`span[style*="${value.replace(/, /g, ',')}"]`);
     // const coloredTexts = [...coloredTextsDiv, ...coloredTextsSpan];
     const coloredTexts = document.querySelectorAll(`[style*="${value}"], [style*="${value.replace(/, /g, ',')}"]`);
-    if (!coloredTexts.length) {
-      return;
-    }
+    if (!coloredTexts.length) return;
 
     let coloredTextNodes = [];
     const blocks = Array.prototype.map.call(coloredTexts, function (text, idx) {
@@ -292,11 +290,16 @@ function readyToLoad() {
     });
 
     let blockIDs = [];
-    let blocksContent = uniqueBlocks.map(function (block, idx) {
+    let blocksContent = [];
+    uniqueBlocks.map(function (block, idx) {
       blockIDs[idx] = block.dataset.blockId;
-      return block.querySelector('[contenteditable]');
+      const editedContent = block.querySelector('[contenteditable]');
+      // 解除加上顏色的 Table of Contents 功能的錯誤（雖然是顏色文字，但子元素並沒 contenteditable 屬性）
+      if (editedContent) {
+        blocksContent.push(editedContent);
+      }
     });
-
+    
     blocksContent.forEach(function (content, idx) {
       const nodeName = coloredTextNodes[idx];
       const blockID = blockIDs[idx];
