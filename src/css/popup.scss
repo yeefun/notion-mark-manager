@@ -9,6 +9,7 @@ body {
     'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
   color: rgb(55, 53, 47);
   position: relative;
+
   &.dark {
     background-color: rgb(47, 52, 55);
     color: rgba(255, 255, 255, 0.9);
@@ -24,9 +25,10 @@ nav {
   transform: translateY(-42px);
   opacity: 0;
   transition: all 200ms ease-out;
+
   &.show {
     opacity: 1;
-    transform: translateY(0px);
+    transform: translateY(0);
   }
 }
 
@@ -48,51 +50,51 @@ nav {
   padding-top: 6px;
   padding-bottom: 8px;
   user-select: none;
+
   &:hover,
   &.active {
-    background-color: rgb(
-      239,
-      239,
-      239
-    ); // == background-color: rgba(55, 53, 47, 0.08);
+    // = background-color: rgba(55, 53, 47, 0.08);
+    background-color: rgb(239, 239, 239);
   }
+
   &:active {
-    background-color: rgb(
-      223,
-      223,
-      222
-    ); // ==background-color: rgba(55, 53, 47, 0.16);
+    // = background-color: rgba(55, 53, 47, 0.16);
+    background-color: rgb(223, 223, 222);
   }
 }
 
 .container {
   width: 300px;
-  padding: 56px 8px 14px 8px;
+  padding: 56px 8px 14px;
   box-sizing: border-box;
   line-height: 1.5;
 }
 
 .block {
   padding: 6px 8px;
-  // transition: box-shadow 120ms ease-in, color 30ms ease-out;
   transition: all 60ms ease-in;
   border-radius: 3px;
   cursor: pointer;
   position: relative;
   color: rgba(55, 53, 47, 0.16);
-  & span {
+
+  span {
     color: rgb(55, 53, 47);
   }
-  & + .block {
+
+  + .block {
     margin-top: 10px;
   }
+
   &:hover,
   &.active {
     box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.16);
   }
+
   &:hover {
     color: rgb(55, 53, 47);
   }
+
   &:active {
     box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.32);
   }
@@ -100,14 +102,15 @@ nav {
 
 @mixin colored-text-color($type, $color, $value) {
   @if $type == 'font' {
-    & .font-#{$color} {
+    .font-#{$color} {
       color: $value !important;
-      & span {
+
+      span {
         color: $value;
       }
     }
   } @else {
-    & .background-#{$color} {
+    .background-#{$color} {
       background-color: $value;
       color: rgb(55, 53, 47);
     }
@@ -116,103 +119,101 @@ nav {
 
 .light {
   // Color
-  @each $color,
-    $value
-      in (
-        gray: rgb(155, 154, 151),
-        brown: rgb(100, 71, 58),
-        orange: rgb(217, 115, 13),
-        yellow: rgb(223, 171, 1),
-        green: rgb(15, 123, 108),
-        blue: rgb(11, 110, 153),
-        purple: rgb(105, 64, 165),
-        pink: rgb(173, 26, 114),
-        red: rgb(224, 62, 62)
-      )
-  {
+  @each $color, $value in (
+    gray: rgb(155, 154, 151),
+    brown: rgb(100, 71, 58),
+    orange: rgb(217, 115, 13),
+    yellow: rgb(223, 171, 1),
+    green: rgb(15, 123, 108),
+    blue: rgb(11, 110, 153),
+    purple: rgb(105, 64, 165),
+    pink: rgb(173, 26, 114),
+    red: rgb(224, 62, 62)
+  ) {
     @include colored-text-color('font', $color, $value);
   }
+
   // Background Color
-  @each $color,
-    $value
-      in (
-        gray: rgb(235, 236, 237),
-        brown: rgb(233, 229, 227),
-        orange: rgb(250, 235, 221),
-        yellow: rgb(251, 243, 219),
-        green: rgb(221, 237, 234),
-        blue: rgb(221, 235, 241),
-        purple: rgb(234, 228, 242),
-        pink: rgb(244, 223, 235),
-        red: rgb(251, 228, 228)
-      )
-  {
+  @each $color, $value in (
+    gray: rgb(235, 236, 237),
+    brown: rgb(233, 229, 227),
+    orange: rgb(250, 235, 221),
+    yellow: rgb(251, 243, 219),
+    green: rgb(221, 237, 234),
+    blue: rgb(221, 235, 241),
+    purple: rgb(234, 228, 242),
+    pink: rgb(244, 223, 235),
+    red: rgb(251, 228, 228)
+  ) {
     @include colored-text-color('background', $color, $value);
   }
 }
 
 .dark {
-  & .block {
+  .block {
     color: rgb(71, 76, 80);
-    & span {
+
+    span {
       color: rgba(255, 255, 255, 0.9);
     }
+
     &:hover,
     &.active {
       box-shadow: 0 0 16px 1px rgb(71, 76, 80);
     }
+
     &:hover {
       color: rgba(255, 255, 255, 0.9);
     }
+
     &:active {
       box-shadow: 0 0 16px 1px rgb(63, 68, 71);
     }
   }
-  & nav {
+
+  nav {
     background-color: rgb(47, 52, 55);
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07);
   }
-  & .nav-item {
+
+  .nav-item {
     &.active,
     &:hover {
       background-color: rgb(71, 76, 80);
     }
+
     &:active {
       background-color: rgb(63, 68, 71);
     }
   }
+
   // Font Color
-  @each $color,
-    $value
-      in (
-        gray: rgba(151, 154, 155, 0.95),
-        brown: rgb(147, 114, 100),
-        orange: rgb(255, 163, 68),
-        yellow: rgb(255, 220, 73),
-        green: rgb(77, 171, 154),
-        blue: rgb(82, 156, 202),
-        purple: rgb(154, 109, 215),
-        pink: rgb(226, 85, 161),
-        red: rgb(255, 115, 105)
-      )
-  {
+  @each $color, $value in (
+    gray: rgba(151, 154, 155, 0.95),
+    brown: rgb(147, 114, 100),
+    orange: rgb(255, 163, 68),
+    yellow: rgb(255, 220, 73),
+    green: rgb(77, 171, 154),
+    blue: rgb(82, 156, 202),
+    purple: rgb(154, 109, 215),
+    pink: rgb(226, 85, 161),
+    red: rgb(255, 115, 105)
+  ) {
     @include colored-text-color('font', $color, $value);
   }
+
   // Background Color
-  @each $color,
-    $value
-      in (
-        gray: rgb(69, 75, 78),
-        brown: rgb(67, 64, 64),
-        orange: rgb(89, 74, 58),
-        yellow: rgb(89, 86, 59),
-        green: rgb(53, 76, 75),
-        blue: rgb(54, 73, 84),
-        purple: rgb(68, 63, 87),
-        pink: rgb(83, 59, 76),
-        red: rgb(89, 65, 65)
-      )
-  {
+  @each $color, $value in (
+    gray: rgb(69, 75, 78),
+    brown: rgb(67, 64, 64),
+    orange: rgb(89, 74, 58),
+    yellow: rgb(89, 86, 59),
+    green: rgb(53, 76, 75),
+    blue: rgb(54, 73, 84),
+    purple: rgb(68, 63, 87),
+    pink: rgb(83, 59, 76),
+    red: rgb(89, 65, 65)
+  ) {
     @include colored-text-color('background', $color, $value);
   }
 }

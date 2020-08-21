@@ -1,0 +1,7 @@
+{
+  "extends": "stylelint-config-sass-guidelines",
+  "rules": {
+    "max-nesting-depth": [2, { "ignore": ["pseudo-classes"] }],
+    "order/properties-alphabetical-order": null
+  }
+}
