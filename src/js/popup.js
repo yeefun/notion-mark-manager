@@ -1,8 +1,23 @@
 // https://davidsimpson.me/2014/05/27/add-googles-universal-analytics-tracking-chrome-extension/
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+(function (i, s, o, g, r, a, m) {
+  i['GoogleAnalyticsObject'] = r;
+  (i[r] =
+    i[r] ||
+    function () {
+      (i[r].q = i[r].q || []).push(arguments);
+    }),
+    (i[r].l = 1 * new Date());
+  (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+  a.async = 1;
+  a.src = g;
+  m.parentNode.insertBefore(a, m);
+})(
+  window,
+  document,
+  'script',
+  'https://www.google-analytics.com/analytics.js',
+  'ga'
+);
 
 ga('create', 'UA-134635576-1', 'auto');
 // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
@@ -53,10 +68,9 @@ function sendMessageToContentScript(message, responseCallback) {
   );
 }
 
-
-
 function loadComments() {
-  sendMessageToContentScript({
+  sendMessageToContentScript(
+    {
       action: 'load comments',
     },
     function (response) {
@@ -73,7 +87,8 @@ function loadComments() {
 }
 
 function loadColoredTexts() {
-  sendMessageToContentScript({
+  sendMessageToContentScript(
+    {
       action: 'load colored texts',
     },
     function (response) {
@@ -85,7 +100,9 @@ function loadColoredTexts() {
         const nodeName = coloredTextObj[colorTextID].nodeName;
         const colorName = coloredTextObj[colorTextID].colorName;
         colorNames.push(colorName);
-        result += `<div class="block colored-text ${nodeName === 'DIV' ? colorName : ''}" data-id="${colorTextID}">${coloredTextHTML}</div>`;
+        result += `<div class="block colored-text ${
+          nodeName === 'DIV' ? colorName : ''
+        }" data-id="${colorTextID}">${coloredTextHTML}</div>`;
       }
       container.innerHTML = result;
       bindClickEventToScrollTo('.colored-text');
@@ -102,16 +119,31 @@ function loadColoredTexts() {
         }
       });
       // GA: 有哪些顏色文字（font）被載入？
-      ga('send', 'event', 'Marks', 'Load', `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`, loadedFontColors.length);
+      ga(
+        'send',
+        'event',
+        'Marks',
+        'Load',
+        `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`,
+        loadedFontColors.length
+      );
       // GA: 有哪些顏色文字（background）被載入？
-      ga('send', 'event', 'Marks', 'Load', `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`, loadedBackgroundColors.length);
+      ga(
+        'send',
+        'event',
+        'Marks',
+        'Load',
+        `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`,
+        loadedBackgroundColors.length
+      );
     }
   );
 }
 
 function bindClickEventToScrollTo(className) {
   const marks = document.querySelectorAll(className);
-  const action = className === '.comment' ? 'scroll to comment' : 'scroll to colored text';
+  const action =
+    className === '.comment' ? 'scroll to comment' : 'scroll to colored text';
   nodesForEach.call(marks, function (mark) {
     mark.addEventListener('click', function () {
       const blockID = this.dataset.id;
@@ -124,24 +156,29 @@ function bindClickEventToScrollTo(className) {
       });
       this.classList.add('active');
       // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
-      ga('send', 'event', 'Marks', 'Scroll To', `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`);
+      ga(
+        'send',
+        'event',
+        'Marks',
+        'Scroll To',
+        `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`
+      );
     });
   });
 }
 
-chrome.storage.sync.get(
-  ['tabFirstShow'],
-  function (items) {
-    const tabFirstShowName = items.tabFirstShow || 'colored-texts';
-    if (tabFirstShowName === 'colored-texts') {
-      loadColoredTexts();
-      document.querySelector('[data-tab="colored texts"]').classList.add('active');
-    } else {
-      loadComments();
-      document.querySelector('[data-tab="comments"]').classList.add('active');
-    }
+chrome.storage.sync.get(['tabFirstShow'], function (items) {
+  const tabFirstShowName = items.tabFirstShow || 'colored-texts';
+  if (tabFirstShowName === 'colored-texts') {
+    loadColoredTexts();
+    document
+      .querySelector('[data-tab="colored texts"]')
+      .classList.add('active');
+  } else {
+    loadComments();
+    document.querySelector('[data-tab="comments"]').classList.add('active');
   }
-);
+});
 
 const navbar = document.getElementById('navbar');
 let beforeScrollY = window.scrollY;

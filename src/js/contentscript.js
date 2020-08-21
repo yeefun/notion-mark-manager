@@ -4,7 +4,9 @@ function readyToLoad() {
   let isLightTheme = true;
 
   function storeTheme() {
-    isLightTheme = document.getElementById('notion-app').firstChild.classList.contains('notion-light-theme');
+    isLightTheme = document
+      .getElementById('notion-app')
+      .firstChild.classList.contains('notion-light-theme');
     if (isLightTheme) {
       chrome.storage.sync.set({
         theme: 'light',
@@ -54,7 +56,7 @@ function readyToLoad() {
     {
       value: 'rgb(224, 62, 62)',
       name: 'font-red',
-    }
+    },
   ];
   const fontDarkColors = [
     {
@@ -92,7 +94,7 @@ function readyToLoad() {
     {
       value: 'rgb(255, 115, 105)',
       name: 'font-red',
-    }
+    },
   ];
   const backgroundLightColors = [
     {
@@ -130,7 +132,7 @@ function readyToLoad() {
     {
       value: 'rgb(251, 228, 228)',
       name: 'background-red',
-    }
+    },
   ];
   const backgroundDarkColors = [
     {
@@ -168,11 +170,10 @@ function readyToLoad() {
     {
       value: 'rgb(89, 65, 65)',
       name: 'background-red',
-    }
+    },
   ];
-  const commentIconSelector = 'path[d="M0.913134,0.920639 C1.49851,0.331726 2.29348,0 3.12342,0 L10.8766,0 C11.7065,0 12.5015,0.331725 13.0869,0.920639 C13.6721,1.50939 14,2.30689 14,3.13746 L14,7.62943 C13.9962,8.01443 13.9059,8.47125 13.7629,8.82852 C13.6128,9.183 13.3552,9.57088 13.0869,9.84625 C12.813,10.1163 12.4265,10.3761 12.0734,10.5274 C11.7172,10.6716 11.2607,10.763 10.8766,10.7669 L10.1234,10.7669 L10.1234,12.5676 L10.1209,12.5676 C10.1204,12.793 10.0633,13.0792 9.97807,13.262 C9.8627,13.466 9.61158,13.7198 9.40818,13.8382 L9.40662,13.8391 L9.40539,13.8398 C9.22962,13.9255 8.94505,13.9951 8.75059,14 L8.74789,14 C8.35724,13.9963 7.98473,13.8383 7.71035,13.5617 L5.39553,10.7669 L3.12342,10.7669 C2.29348,10.7669 1.49851,10.4352 0.913134,9.84625 C0.644826,9.57089 0.387187,9.183 0.23711,8.82852 C0.0941235,8.47125 0.00379528,8.01443 0,7.62943 L0,3.13746 C0,2.30689 0.327915,1.50939 0.913134,0.920639 Z M3.12342,1.59494 C2.71959,1.59494 2.33133,1.75628 2.04431,2.04503 C1.75713,2.33395 1.59494,2.72681 1.59494,3.13746 L1.59494,7.62943 C1.59114,7.85901 1.62114,8.01076 1.71193,8.22129 C1.79563,8.4346 1.88065,8.56264 2.04431,8.72185 C2.33133,9.01061 2.71959,9.17195 3.12342,9.17195 L5.72383,9.17195 C5.93413,9.17195 6.13592,9.25502 6.28527,9.40308 L8.52848,12.1269 L8.52848,9.96942 C8.52848,9.52899 8.88552,9.17195 9.32595,9.17195 L10.8766,9.17195 C11.1034,9.17583 11.2517,9.14614 11.4599,9.05518 C11.6712,8.97132 11.7976,8.88635 11.9557,8.72185 C12.1193,8.56264 12.2044,8.4346 12.2881,8.22129 C12.3789,8.01076 12.4089,7.85901 12.4051,7.62943 L12.4051,3.13746 C12.4051,2.72681 12.2429,2.33394 11.9557,2.04503 C11.6687,1.75628 11.2804,1.59494 10.8766,1.59494 L3.12342,1.59494 Z"]';
-
-
+  const commentIconSelector =
+    'path[d="M0.913134,0.920639 C1.49851,0.331726 2.29348,0 3.12342,0 L10.8766,0 C11.7065,0 12.5015,0.331725 13.0869,0.920639 C13.6721,1.50939 14,2.30689 14,3.13746 L14,7.62943 C13.9962,8.01443 13.9059,8.47125 13.7629,8.82852 C13.6128,9.183 13.3552,9.57088 13.0869,9.84625 C12.813,10.1163 12.4265,10.3761 12.0734,10.5274 C11.7172,10.6716 11.2607,10.763 10.8766,10.7669 L10.1234,10.7669 L10.1234,12.5676 L10.1209,12.5676 C10.1204,12.793 10.0633,13.0792 9.97807,13.262 C9.8627,13.466 9.61158,13.7198 9.40818,13.8382 L9.40662,13.8391 L9.40539,13.8398 C9.22962,13.9255 8.94505,13.9951 8.75059,14 L8.74789,14 C8.35724,13.9963 7.98473,13.8383 7.71035,13.5617 L5.39553,10.7669 L3.12342,10.7669 C2.29348,10.7669 1.49851,10.4352 0.913134,9.84625 C0.644826,9.57089 0.387187,9.183 0.23711,8.82852 C0.0941235,8.47125 0.00379528,8.01443 0,7.62943 L0,3.13746 C0,2.30689 0.327915,1.50939 0.913134,0.920639 Z M3.12342,1.59494 C2.71959,1.59494 2.33133,1.75628 2.04431,2.04503 C1.75713,2.33395 1.59494,2.72681 1.59494,3.13746 L1.59494,7.62943 C1.59114,7.85901 1.62114,8.01076 1.71193,8.22129 C1.79563,8.4346 1.88065,8.56264 2.04431,8.72185 C2.33133,9.01061 2.71959,9.17195 3.12342,9.17195 L5.72383,9.17195 C5.93413,9.17195 6.13592,9.25502 6.28527,9.40308 L8.52848,12.1269 L8.52848,9.96942 C8.52848,9.52899 8.88552,9.17195 9.32595,9.17195 L10.8766,9.17195 C11.1034,9.17583 11.2517,9.14614 11.4599,9.05518 C11.6712,8.97132 11.7976,8.88635 11.9557,8.72185 C12.1193,8.56264 12.2044,8.4346 12.2881,8.22129 C12.3789,8.01076 12.4089,7.85901 12.4051,7.62943 L12.4051,3.13746 C12.4051,2.72681 12.2429,2.33394 11.9557,2.04503 C11.6687,1.75628 11.2804,1.59494 10.8766,1.59494 L3.12342,1.59494 Z"]';
 
   // function getStyle(el, prop) {
   //   return el.style[prop];
@@ -220,26 +221,28 @@ function readyToLoad() {
         }
       }
     });
-    
+
     blocksContent.forEach(function (content, idx) {
       const clonedContent = content.cloneNode(true);
-      let otherMarks = clonedContent.querySelectorAll('span:not([style*="border-bottom"])');
+      let otherMarks = clonedContent.querySelectorAll(
+        'span:not([style*="border-bottom"])'
+      );
       otherMarks.forEach(function (mark) {
         unwrap(mark);
       });
       const id = blockIDs[idx];
       const commentHTML = clonedContent.innerHTML;
-      const result = results[id] = {};
+      const result = (results[id] = {});
       result.commentHTML = commentHTML;
     });
     sendResponse(results);
   }
 
-
-
   function loadColoredTexts(sendResponse) {
     const fontColors = isLightTheme ? fontLightColors : fontDarkColors;
-    const backgroundColors = isLightTheme ? backgroundLightColors : backgroundDarkColors;
+    const backgroundColors = isLightTheme
+      ? backgroundLightColors
+      : backgroundDarkColors;
     let results = {};
     fontColors.forEach(function (color) {
       if (checkedColors.indexOf(color.name) !== -1) {
@@ -255,7 +258,7 @@ function readyToLoad() {
       for (let coloredTextID in repeatedColoredTexts) {
         const repeatedColoredText = repeatedColoredTexts[coloredTextID];
         delete results[coloredTextID];
-        const result = results[coloredTextID] = {};
+        const result = (results[coloredTextID] = {});
         result.nodeName = repeatedColoredText.nodeName;
         result.colorName = repeatedColoredText.colorName;
         result.coloredTextHTML = repeatedColoredText.coloredTextHTML;
@@ -265,7 +268,6 @@ function readyToLoad() {
     repeatedColoredTexts = {};
   }
 
-
   let repeatedColoredTexts = {};
   function getColoredText(value, className, results) {
     // const coloredTextsDiv = getElementsByStyle('DIV', prop, value);
@@ -274,7 +276,9 @@ function readyToLoad() {
     // const coloredTextsDiv = document.querySelectorAll(`div[style*="${value}"]`);
     // const coloredTextsSpan = document.querySelectorAll(`span[style*="${value.replace(/, /g, ',')}"]`);
     // const coloredTexts = [...coloredTextsDiv, ...coloredTextsSpan];
-    const coloredTexts = document.querySelectorAll(`[style*="${value}"], [style*="${value.replace(/, /g, ',')}"]`);
+    const coloredTexts = document.querySelectorAll(
+      `[style*="${value}"], [style*="${value.replace(/, /g, ',')}"]`
+    );
     if (!coloredTexts.length) return;
 
     let coloredTextNodes = [];
@@ -299,14 +303,14 @@ function readyToLoad() {
         blocksContent.push(editedContent);
       }
     });
-    
+
     blocksContent.forEach(function (content, idx) {
       const nodeName = coloredTextNodes[idx];
       const blockID = blockIDs[idx];
       const coloredTextHTML = content.innerHTML;
 
       if (!results[blockID]) {
-        const result = results[blockID] = {}
+        const result = (results[blockID] = {});
         result.nodeName = nodeName;
         result.colorName = className;
         result.coloredTextHTML = coloredTextHTML;
@@ -320,14 +324,14 @@ function readyToLoad() {
         }
         const repeatedColoredTextIDs = repeatedColoredTexts[blockID];
         const prefixID = `${blockID}{{${className}-${idx}}}`;
-        const prefixResult = results[prefixID] = {}
+        const prefixResult = (results[prefixID] = {});
         if (results[blockID].nodeName !== 'DIV') {
           if (nodeName === 'DIV') {
             let result = results[blockID];
             result.nodeName = nodeName;
             result.colorName = className;
             repeatedColoredTextIDs.forEach(function (coloredTextID) {
-              const result = results[coloredTextID] = {};
+              const result = (results[coloredTextID] = {});
               result.nodeName = nodeName;
               result.colorName = className;
             });
@@ -344,18 +348,18 @@ function readyToLoad() {
       // 只顯示一次
       function displayOnce() {
         if (results[blockID].nodeName !== 'DIV') {
-          results[blockID] = {}
+          results[blockID] = {};
           if (nodeName === 'DIV') {
             let repeatedColoredText = repeatedColoredTexts[blockID];
             if (!repeatedColoredText) {
-              repeatedColoredText = {}
+              repeatedColoredText = {};
               repeatedColoredText.coloredTextHTML = coloredTextHTML;
             }
             repeatedColoredText.nodeName = nodeName;
             repeatedColoredText.colorName = className;
           }
           if (!repeatedColoredTexts[blockID]) {
-            const repeatedColoredText = repeatedColoredTexts[blockID] = {}
+            const repeatedColoredText = (repeatedColoredTexts[blockID] = {});
             repeatedColoredText.coloredTextHTML = coloredTextHTML;
             repeatedColoredText.nodeName = nodeName;
             repeatedColoredText.colorName = className;
@@ -364,7 +368,7 @@ function readyToLoad() {
           let result = results[blockID];
           var repeatedColoredText = repeatedColoredTexts[blockID];
           if (!repeatedColoredText) {
-            repeatedColoredText = {}
+            repeatedColoredText = {};
             repeatedColoredText.coloredTextHTML = coloredTextHTML;
           }
           repeatedColoredText.nodeName = result.nodeName;
@@ -381,20 +385,24 @@ function readyToLoad() {
     });
   }
 
-
-  
   function scrollToCommemt(blockID) {
     bodyEl.click();
-    const commentedBlock = document.querySelector(`[data-block-id="${blockID}"]`);
+    const commentedBlock = document.querySelector(
+      `[data-block-id="${blockID}"]`
+    );
     const intersectionObserver = new IntersectionObserver(function (entries) {
       const entry = entries[0];
       const target = entry.target;
       if (entry.isIntersecting) {
         setTimeout(function () {
           const spanEls = commentedBlock.getElementsByTagName('SPAN');
-          const commentedSpan = Array.prototype.find.call(spanEls, function (spanEl) {
+          const commentedSpan = Array.prototype.find.call(spanEls, function (
+            spanEl
+          ) {
             // return getStyle(spanEl, 'background-color') === 'rgba(255, 212, 0, 0.14)';
-            return spanEl.style['border-bottom'] === '2px solid rgb(255, 212, 0)';
+            return (
+              spanEl.style['border-bottom'] === '2px solid rgb(255, 212, 0)'
+            );
           });
           if (commentedSpan) {
             commentedSpan.click();
@@ -410,21 +418,23 @@ function readyToLoad() {
     });
   }
 
-
-  
   function scrollToColoredText(blockID) {
     const blockIDRemovePrefix = blockID.replace(/\{\{.*\}\}/, '');
     bodyEl.click();
-    const coloredTextBlock = document.querySelector(`[data-block-id="${blockIDRemovePrefix}"]`);
+    const coloredTextBlock = document.querySelector(
+      `[data-block-id="${blockIDRemovePrefix}"]`
+    );
     coloredTextBlock.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     });
   }
 
-
-
-  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  chrome.runtime.onMessage.addListener(function (
+    message,
+    sender,
+    sendResponse
+  ) {
     switch (message.action) {
       case 'load comments':
         loadComments(sendResponse);
@@ -443,8 +453,6 @@ function readyToLoad() {
     }
   });
 
-
-
   const mutationObserver = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
       if (mutation.attributeName === 'class') {
@@ -457,19 +465,33 @@ function readyToLoad() {
   });
 }
 
-
-
-let checkedColors = ['font-gray', 'font-brown', 'font-orange', 'font-yellow', 'font-green', 'font-blue', 'font-purple', 'font-pink', 'font-red', 'background-gray', 'background-brown', 'background-orange', 'background-yellow', 'background-green', 'background-blue', 'background-purple', 'background-pink', 'background-red'];
+let checkedColors = [
+  'font-gray',
+  'font-brown',
+  'font-orange',
+  'font-yellow',
+  'font-green',
+  'font-blue',
+  'font-purple',
+  'font-pink',
+  'font-red',
+  'background-gray',
+  'background-brown',
+  'background-orange',
+  'background-yellow',
+  'background-green',
+  'background-blue',
+  'background-purple',
+  'background-pink',
+  'background-red',
+];
 let displayTimes = 'once';
-chrome.storage.sync.get(
-  ['textColors', 'displayTimes'],
-  function (items) {
-    if (items.textColors) {
-      checkedColors = items.textColors;
-    }
-    if (items.displayTimes) {
-      displayTimes = items.displayTimes;
-    }
-    readyToLoad();
+chrome.storage.sync.get(['textColors', 'displayTimes'], function (items) {
+  if (items.textColors) {
+    checkedColors = items.textColors;
   }
-);
+  if (items.displayTimes) {
+    displayTimes = items.displayTimes;
+  }
+  readyToLoad();
+});

@@ -6,12 +6,12 @@ chrome.runtime.onInstalled.addListener(function () {
           new chrome.declarativeContent.PageStateMatcher({
             pageUrl: {
               hostEquals: 'www.notion.so',
-              schemes: ['https']
-            }
-          })
+              schemes: ['https'],
+            },
+          }),
         ],
         actions: [new chrome.declarativeContent.ShowPageAction()],
-      }
+      },
     ]);
   });
 });

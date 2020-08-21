@@ -2,7 +2,12 @@
   "name": "notion-mark-manager",
   "version": "2.0.0",
   "description": "Manage your colored texts and comments effectively in Notion.",
-  "keywords": ["chrome", "extension", "notion", "productivity"],
+  "keywords": [
+    "chrome",
+    "extension",
+    "notion",
+    "productivity"
+  ],
   "author": "Yeefun Lin",
   "private": true,
   "scripts": {
