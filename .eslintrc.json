@@ -8,5 +8,8 @@
     "ecmaVersion": 11,
     "sourceType": "module"
   },
+  "globals": {
+    "chrome": "readonly"
+  },
   "rules": {}
 }

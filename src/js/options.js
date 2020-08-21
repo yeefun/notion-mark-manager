@@ -19,11 +19,11 @@
   'ga'
 );
 
-ga('create', 'UA-134635576-1', 'auto');
+window.ga('create', 'UA-134635576-1', 'auto');
 // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
-ga('set', 'checkProtocolTask', function () {});
-ga('require', 'displayfeatures');
-ga('send', 'pageview', '/options.html');
+window.ga('set', 'checkProtocolTask', function () {});
+window.ga('require', 'displayfeatures');
+window.ga('send', 'pageview', '/options.html');
 
 let originColors = [];
 let originTab = '';
@@ -120,9 +120,9 @@ document.addEventListener('DOMContentLoaded', function () {
           checkedBackgroundColors === originBackgroundColors;
 
         // GA: 按 'Save' 儲存選項幾次？
-        ga('send', 'event', 'Options', 'Save', '[Notion+ Mark Manager]');
+        window.ga('send', 'event', 'Options', 'Save', '[Notion+ Mark Manager]');
         // GA: 讓哪個 tab 先顯示？這次儲存是否有更改到此選項（[origin]）？
-        ga(
+        window.ga(
           'send',
           'event',
           'Options',
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }`
         );
         // GA: 選了哪項顯示次數？這次儲存是否有更改到此選項（[origin]）？
-        ga(
+        window.ga(
           'send',
           'event',
           'Options',
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }`
         );
         // GA: 選了哪些顏色（font）？這次儲存是否有更改到此選項（[origin]）？
-        ga(
+        window.ga(
           'send',
           'event',
           'Options',
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
           checkedFontColors.length
         );
         // GA: 選了哪些顏色（background）？這次儲存是否有更改到此選項（[origin]）？
-        ga(
+        window.ga(
           'send',
           'event',
           'Options',
