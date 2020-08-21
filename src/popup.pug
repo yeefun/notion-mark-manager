@@ -1,0 +1,15 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title Notion+ Mark Manager Popup
+    link(rel="stylesheet", href="css/popup.scss")
+  body
+    nav#navbar.show
+      ul.navbar-nav
+        li.nav-item(data-tab="colored texts", style="border-top-left-radius: 3px;") Colored Texts
+        li.nav-item(data-tab="comments", style="border-top-right-radius: 3px;") Comments
+    section#container.container
+    script(src="js/popup.js")

@@ -1,0 +1,24 @@
+{
+  "name": "notion-mark-manager",
+  "version": "2.0.0",
+  "description": "Manage your colored texts and comments effectively in Notion.",
+  "keywords": ["chrome", "extension", "notion", "productivity"],
+  "author": "Yeefun Lin",
+  "private": true,
+  "scripts": {
+    "dev": "parcel watch src/*.pug --no-source-maps",
+    "prebuild": "rimraf dist",
+    "build": "parcel build src/* src/**/* --no-content-hash",
+    "postbuild": "cp -r static/* dist/"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "prettier": "2.0.5",
+    "pug": "^3.0.0",
+    "rimraf": "^3.0.2",
+    "sass": "^1.26.10"
+  },
+  "engines": {
+    "node": ">= 12"
+  }
+}
