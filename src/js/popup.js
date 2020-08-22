@@ -1,7 +1,14 @@
-import { loadGa, sendPageview } from './utils/ga.js';
+import {
+  inProdEnv,
+  loadGa,
+  sendGaPageview,
+  sendGaEvent,
+} from './utils/index.js';
 
-loadGa();
-sendPageview('/popup.html');
+if (inProdEnv) {
+  loadGa();
+  sendGaPageview('/popup.html');
+}
 
 const nodesForEach = Array.prototype.forEach;
 const bodyEl = document.body;
@@ -30,13 +37,7 @@ nodesForEach.call(navItems, function (item) {
       loadColoredTexts();
     }
     // GA: 'comments' 與 'colored texts' tab 各被按幾次？
-    window.ga(
-      'send',
-      'event',
-      'Tabs',
-      'Click',
-      `[Notion+ Mark Manager] [${tabName}]`
-    );
+    sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tabName}]`);
   });
 });
 
@@ -102,19 +103,16 @@ function loadColoredTexts() {
           }
         }
       });
+
       // GA: 有哪些顏色文字（font）被載入？
-      window.ga(
-        'send',
-        'event',
+      sendGaEvent(
         'Marks',
         'Load',
         `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`,
         loadedFontColors.length
       );
       // GA: 有哪些顏色文字（background）被載入？
-      window.ga(
-        'send',
-        'event',
+      sendGaEvent(
         'Marks',
         'Load',
         `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`,
@@ -139,10 +137,9 @@ function bindClickEventToScrollTo(className) {
         mark.classList.remove('active');
       });
       this.classList.add('active');
+
       // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
-      window.ga(
-        'send',
-        'event',
+      sendGaEvent(
         'Marks',
         'Scroll To',
         `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`

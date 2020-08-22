@@ -1,4 +1,4 @@
-export { loadGa, sendPageview };
+export { loadGa, sendGaPageview, sendGaEvent };
 
 function loadGa() {
   // References: https://davidsimpson.me/2014/05/27/add-googles-universal-analytics-tracking-chrome-extension/
@@ -23,10 +23,18 @@ function loadGa() {
   );
 }
 
-function sendPageview(page) {
+function sendGaPageview(page) {
   window.ga('create', 'UA-134635576-1', 'auto');
   // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
   window.ga('set', 'checkProtocolTask', function () {});
   window.ga('require', 'displayfeatures');
   window.ga('send', 'pageview', page);
+}
+
+function sendGaEvent(category, action, label, value = 1) {
+  if (!window.ga) {
+    return;
+  }
+
+  window.ga('send', 'event', category, action, label, value);
 }

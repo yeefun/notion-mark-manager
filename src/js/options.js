@@ -1,7 +1,14 @@
-import { loadGa, sendPageview } from './utils/ga.js';
+import {
+  inProdEnv,
+  loadGa,
+  sendGaPageview,
+  sendGaEvent,
+} from './utils/index.js';
 
-loadGa();
-sendPageview('/options.html');
+if (inProdEnv) {
+  loadGa();
+  sendGaPageview('/options.html');
+}
 
 let originColors = [];
 let originTab = '';
@@ -98,11 +105,9 @@ document.addEventListener('DOMContentLoaded', function () {
           checkedBackgroundColors === originBackgroundColors;
 
         // GA: 按 'Save' 儲存選項幾次？
-        window.ga('send', 'event', 'Options', 'Save', '[Notion+ Mark Manager]');
+        sendGaEvent('Options', 'Save', '[Notion+ Mark Manager]');
         // GA: 讓哪個 tab 先顯示？這次儲存是否有更改到此選項（[origin]）？
-        window.ga(
-          'send',
-          'event',
+        sendGaEvent(
           'Options',
           'Select',
           `[Notion+ Mark Manager] [tab first show] [${checkedTab}]${
@@ -110,9 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }`
         );
         // GA: 選了哪項顯示次數？這次儲存是否有更改到此選項（[origin]）？
-        window.ga(
-          'send',
-          'event',
+        sendGaEvent(
           'Options',
           'Select',
           `[Notion+ Mark Manager] [display times] [${checkedTimes}]${
@@ -120,9 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }`
         );
         // GA: 選了哪些顏色（font）？這次儲存是否有更改到此選項（[origin]）？
-        window.ga(
-          'send',
-          'event',
+        sendGaEvent(
           'Options',
           'Check',
           `[Notion+ Mark Manager] [font color] [${checkedFontColors.replace(
@@ -132,9 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
           checkedFontColors.length
         );
         // GA: 選了哪些顏色（background）？這次儲存是否有更改到此選項（[origin]）？
-        window.ga(
-          'send',
-          'event',
+        sendGaEvent(
           'Options',
           'Check',
           `[Notion+ Mark Manager] [background color] [${checkedBackgroundColors.replace(
@@ -143,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
           )}]${isBackgroundColorsEqual ? ' [origin]' : ''}`,
           checkedBackgroundColors.length
         );
+
         originColors = checkedColors;
         originTab = checkedTab;
         originTimes = checkedTimes;
