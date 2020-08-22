@@ -11,10 +11,13 @@
   "author": "Yeefun Lin",
   "private": true,
   "scripts": {
-    "dev": "parcel watch src/*.pug --no-source-maps",
+    "predev": "rimraf dist && mkdir dist && cp -R static/* dist/",
+    "dev": "parcel watch src/* src/**/* --no-source-maps --no-hmr",
+
     "prebuild": "rimraf dist",
     "build": "parcel build src/* src/**/* --no-content-hash",
-    "postbuild": "cp -r static/* dist/",
+    "postbuild": "cp -R static/* dist/",
+
     "lint": "eslint --ignore-path .gitignore .",
     "lints": "stylelint 'src/css/*.{css,scss}' --fix"
   },
