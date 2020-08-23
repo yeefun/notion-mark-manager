@@ -11,7 +11,7 @@ if (inProdEnv) {
 }
 
 const container = document.getElementById('container');
-const navItems = document.querySelectorAll('.nav-item');
+const navs = document.querySelectorAll('.nav-item');
 
 chrome.storage.sync.get(['theme'], setTheme);
 
@@ -19,9 +19,11 @@ function setTheme(result) {
   document.body.classList.add(result.theme);
 }
 
-bindClickEvtListeners(navItems, function () {
-  navItems.forEach(function (item) {
-    item.classList.remove('active');
+bindClickEvtListeners(navs, handleClickNavs);
+
+function handleClickNavs() {
+  navs.forEach(function (nav) {
+    nav.classList.remove('active');
   });
   this.classList.add('active');
   const tabName = this.dataset.tab;
@@ -32,7 +34,7 @@ bindClickEvtListeners(navItems, function () {
   }
   // GA: 'comments' 與 'colored texts' tab 各被按幾次？
   sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tabName}]`);
-});
+}
 
 function sendMessageToContentScript(message, responseCallback) {
   chrome.tabs.query(
