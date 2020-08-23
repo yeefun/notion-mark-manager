@@ -35,40 +35,33 @@ function handleClickNavs() {
   sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tabName}]`);
 }
 
-function sendMessageToContentScript(message, responseCallback) {
-  chrome.tabs.query(
-    {
-      active: true,
-      currentWindow: true,
-    },
-    function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, message, responseCallback);
-    }
-  );
+function loadComments() {
+  sendMessageToContentscript({ action: 'get comments' }, handleResponse);
+
+  function handleResponse(response) {
+    const commentsHtml = constructCommentsHtml(response);
+    setHtml(container, commentsHtml);
+
+    bindClickEventToScrollTo('.comment');
+  }
 }
 
-function loadComments() {
-  sendMessageToContentScript(
-    {
-      action: 'load comments',
-    },
-    function (response) {
-      const commentObj = response;
-      let result = '';
-      for (let commentID in commentObj) {
-        let commentHTML = commentObj[commentID].commentHTML;
-        result += `<div class="block comment" data-id="${commentID}">${commentHTML}</div>`;
-      }
-      container.innerHTML = result;
-      bindClickEventToScrollTo('.comment');
-    }
-  );
+function constructCommentsHtml(contentHtmls) {
+  return contentHtmls.map(constructCommentHtml).join('');
+
+  function constructCommentHtml({ id, html }) {
+    return `<div class="block comment" data-id="${id}">${html}</div>`;
+  }
+}
+
+function setHtml(elem, html) {
+  elem.innerHTML = html;
 }
 
 function loadColoredTexts() {
-  sendMessageToContentScript(
+  sendMessageToContentscript(
     {
-      action: 'load colored texts',
+      action: 'get colored texts',
     },
     function (response) {
       const coloredTextObj = response;
@@ -123,7 +116,7 @@ function bindClickEventToScrollTo(selectors) {
 
   bindClickEvtListeners(marks, function () {
     const blockID = this.dataset.id;
-    sendMessageToContentScript({
+    sendMessageToContentscript({
       action,
       id: blockID,
     });
@@ -165,6 +158,14 @@ window.addEventListener('scroll', function () {
   }
   beforeScrollY = currentScrollY;
 });
+
+function sendMessageToContentscript(message, handleResponse) {
+  chrome.tabs.query({ active: true, currentWindow: true }, handleQueriedTabs);
+
+  function handleQueriedTabs(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, message, handleResponse);
+  }
+}
 
 function bindClickEvtListeners(eles, callback) {
   {
