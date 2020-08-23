@@ -1,3 +1,5 @@
+import DEFAULT_OPTIONS from './data/default-options.js';
+
 import {
   COLORS_LIGHT_FONTS,
   COLORS_LIGHT_BACKGROUNDS,
@@ -81,16 +83,16 @@ function readyToLoad() {
       : COLORS_DARK_BACKGROUNDS;
     let results = {};
     fontColors.forEach(function (color) {
-      if (checkedColors.indexOf(color.name) !== -1) {
+      if (options.checkedColors.indexOf(color.name) !== -1) {
         getColoredText(color.value, color.name, results);
       }
     });
     backgroundColors.forEach(function (color) {
-      if (checkedColors.indexOf(color.name) !== -1) {
+      if (options.checkedColors.indexOf(color.name) !== -1) {
         getColoredText(color.value, color.name, results);
       }
     });
-    if (displayTimes === 'once') {
+    if (options.displayTimes === 'once') {
       for (let coloredTextID in repeatedColoredTexts) {
         const repeatedColoredText = repeatedColoredTexts[coloredTextID];
         delete results[coloredTextID];
@@ -206,7 +208,7 @@ function readyToLoad() {
         }
       }
 
-      if (displayTimes === 'once') {
+      if (options.displayTimes === 'once') {
         displayOnce();
       } else {
         displayMoreTimes();
@@ -293,33 +295,15 @@ function readyToLoad() {
   });
 }
 
-let checkedColors = [
-  'font-gray',
-  'font-brown',
-  'font-orange',
-  'font-yellow',
-  'font-green',
-  'font-blue',
-  'font-purple',
-  'font-pink',
-  'font-red',
-  'background-gray',
-  'background-brown',
-  'background-orange',
-  'background-yellow',
-  'background-green',
-  'background-blue',
-  'background-purple',
-  'background-pink',
-  'background-red',
-];
-let displayTimes = 'once';
-chrome.storage.sync.get(['textColors', 'displayTimes'], function (items) {
-  if (items.textColors) {
-    checkedColors = items.textColors;
-  }
-  if (items.displayTimes) {
-    displayTimes = items.displayTimes;
-  }
+let options = {};
+
+chrome.storage.sync.get(['checkedColors', 'displayTimes'], function (
+  userOptions
+) {
+  options = {
+    ...DEFAULT_OPTIONS,
+    ...userOptions,
+  };
+
   readyToLoad();
 });

@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function initOptions() {
     chrome.storage.sync.get(
-      ['textColors', 'tabFirstShow', 'displayTimes'],
+      ['checkedColors', 'tabFirstShow', 'displayTimes'],
       function (items) {
-        originColors = items.textColors || [
+        originColors = items.checkedColors || [
           'font-gray',
           'font-brown',
           'font-orange',
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     chrome.storage.sync.set(
       {
-        textColors: checkedColors,
+        checkedColors,
         tabFirstShow: checkedTab,
         displayTimes: checkedTimes,
       },
