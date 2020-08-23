@@ -22,10 +22,9 @@ function setTheme(result) {
 bindClickEvtListeners(navs, handleClickNavs);
 
 function handleClickNavs() {
-  navs.forEach(function (nav) {
-    nav.classList.remove('active');
-  });
-  this.classList.add('active');
+  removeAllActiveClass(navs);
+  addActiveClass(this);
+
   const tabName = this.dataset.tab;
   if (tabName === 'comments') {
     loadComments();
@@ -128,10 +127,9 @@ function bindClickEventToScrollTo(selectors) {
       action,
       id: blockID,
     });
-    marks.forEach(function (mark) {
-      mark.classList.remove('active');
-    });
-    this.classList.add('active');
+
+    removeAllActiveClass(marks);
+    addActiveClass(this);
 
     // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
     sendGaEvent(
@@ -178,4 +176,14 @@ function bindClickEvtListeners(eles, callback) {
   function bindClickEvtListener(ele) {
     ele.addEventListener('click', callback);
   }
+}
+
+function removeAllActiveClass(eles) {
+  eles.forEach((ele) => {
+    ele.classList.remove('active');
+  });
+}
+
+function addActiveClass(ele) {
+  ele.classList.add('active');
 }
