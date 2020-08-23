@@ -11,7 +11,7 @@ if (inProdEnv) {
 }
 
 const container = document.getElementById('container');
-const navItems = getEleArray('.nav-item');
+const navItems = document.querySelectorAll('.nav-item');
 
 chrome.storage.sync.get(['theme'], setTheme);
 
@@ -116,7 +116,7 @@ function loadColoredTexts() {
 }
 
 function bindClickEventToScrollTo(selectors) {
-  const marks = getEleArray(selectors);
+  const marks = document.querySelectorAll(selectors);
   const action =
     selectors === '.comment' ? 'scroll to comment' : 'scroll to colored text';
 
@@ -166,12 +166,12 @@ window.addEventListener('scroll', function () {
   beforeScrollY = currentScrollY;
 });
 
-function getEleArray(selectors) {
-  return Array.from(document.querySelectorAll(selectors));
-}
-
 function bindClickEvtListeners(eles, callback) {
-  eles.forEach(bindClickEvtListener);
+  {
+    let eleArr = Array.from(eles);
+
+    eleArr.forEach(bindClickEvtListener);
+  }
 
   function bindClickEvtListener(ele) {
     ele.addEventListener('click', callback);
