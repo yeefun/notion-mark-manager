@@ -11,18 +11,15 @@ if (inProdEnv) {
 }
 
 const nodesForEach = Array.prototype.forEach;
-const bodyEl = document.body;
 
 const container = document.getElementById('container');
 const navItems = document.querySelectorAll('.nav-item');
 
-chrome.storage.sync.get(['theme'], function (result) {
-  if (result.theme === 'light') {
-    bodyEl.classList.add('light');
-  } else {
-    bodyEl.classList.add('dark');
-  }
-});
+chrome.storage.sync.get(['theme'], setTheme);
+
+function setTheme(result) {
+  document.body.classList.add(result.theme);
+}
 
 nodesForEach.call(navItems, function (item) {
   item.addEventListener('click', function () {
