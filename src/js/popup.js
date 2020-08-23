@@ -19,21 +19,19 @@ function setTheme(result) {
   document.body.classList.add(result.theme);
 }
 
-navItems.forEach(function (item) {
-  item.addEventListener('click', function () {
-    navItems.forEach(function (item) {
-      item.classList.remove('active');
-    });
-    this.classList.add('active');
-    const tabName = this.dataset.tab;
-    if (tabName === 'comments') {
-      loadComments();
-    } else {
-      loadColoredTexts();
-    }
-    // GA: 'comments' 與 'colored texts' tab 各被按幾次？
-    sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tabName}]`);
+bindClickEvtListeners(navItems, function () {
+  navItems.forEach(function (item) {
+    item.classList.remove('active');
   });
+  this.classList.add('active');
+  const tabName = this.dataset.tab;
+  if (tabName === 'comments') {
+    loadComments();
+  } else {
+    loadColoredTexts();
+  }
+  // GA: 'comments' 與 'colored texts' tab 各被按幾次？
+  sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tabName}]`);
 });
 
 function sendMessageToContentScript(message, responseCallback) {
@@ -121,25 +119,24 @@ function bindClickEventToScrollTo(selectors) {
   const marks = getEleArray(selectors);
   const action =
     selectors === '.comment' ? 'scroll to comment' : 'scroll to colored text';
-  marks.forEach(function (mark) {
-    mark.addEventListener('click', function () {
-      const blockID = this.dataset.id;
-      sendMessageToContentScript({
-        action,
-        id: blockID,
-      });
-      marks.forEach(function (mark) {
-        mark.classList.remove('active');
-      });
-      this.classList.add('active');
 
-      // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
-      sendGaEvent(
-        'Marks',
-        'Scroll To',
-        `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`
-      );
+  bindClickEvtListeners(marks, function () {
+    const blockID = this.dataset.id;
+    sendMessageToContentScript({
+      action,
+      id: blockID,
     });
+    marks.forEach(function (mark) {
+      mark.classList.remove('active');
+    });
+    this.classList.add('active');
+
+    // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
+    sendGaEvent(
+      'Marks',
+      'Scroll To',
+      `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`
+    );
   });
 }
 
@@ -171,4 +168,12 @@ window.addEventListener('scroll', function () {
 
 function getEleArray(selectors) {
   return Array.from(document.querySelectorAll(selectors));
+}
+
+function bindClickEvtListeners(eles, callback) {
+  eles.forEach(bindClickEvtListener);
+
+  function bindClickEvtListener(ele) {
+    ele.addEventListener('click', callback);
+  }
 }
