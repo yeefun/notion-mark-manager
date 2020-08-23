@@ -10,8 +10,6 @@ if (inProdEnv) {
   sendGaPageview('/popup.html');
 }
 
-const nodesForEach = Array.prototype.forEach;
-
 const container = document.getElementById('container');
 const navItems = document.querySelectorAll('.nav-item');
 
@@ -21,9 +19,9 @@ function setTheme(result) {
   document.body.classList.add(result.theme);
 }
 
-nodesForEach.call(navItems, function (item) {
+Array.from(navItems).forEach(function (item) {
   item.addEventListener('click', function () {
-    nodesForEach.call(navItems, function (item) {
+    Array.from(navItems).forEach(function (item) {
       item.classList.remove('active');
     });
     this.classList.add('active');
@@ -123,14 +121,14 @@ function bindClickEventToScrollTo(className) {
   const marks = document.querySelectorAll(className);
   const action =
     className === '.comment' ? 'scroll to comment' : 'scroll to colored text';
-  nodesForEach.call(marks, function (mark) {
+  Array.from(marks).forEach(function (mark) {
     mark.addEventListener('click', function () {
       const blockID = this.dataset.id;
       sendMessageToContentScript({
         action,
         id: blockID,
       });
-      nodesForEach.call(marks, function (mark) {
+      Array.from(marks).forEach(function (mark) {
         mark.classList.remove('active');
       });
       this.classList.add('active');
