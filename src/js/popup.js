@@ -167,24 +167,20 @@ function sendMessageToContentscript(message, handleResponse) {
   }
 }
 
-function bindClickEvtListeners(eles, callback) {
-  {
-    let eleArr = Array.from(eles);
+function bindClickEvtListeners(elems, handleClick) {
+  elems.forEach(bindClickEvtListener);
 
-    eleArr.forEach(bindClickEvtListener);
-  }
-
-  function bindClickEvtListener(ele) {
-    ele.addEventListener('click', callback);
+  function bindClickEvtListener(elem) {
+    elem.addEventListener('click', handleClick);
   }
 }
 
-function removeAllActiveClass(eles) {
-  eles.forEach((ele) => {
-    ele.classList.remove('active');
+function removeAllActiveClass(elems) {
+  elems.forEach((elem) => {
+    elem.classList.remove('active');
   });
 }
 
-function addActiveClass(ele) {
-  ele.classList.add('active');
+function addActiveClass(elem) {
+  elem.classList.add('active');
 }

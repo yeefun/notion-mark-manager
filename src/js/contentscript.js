@@ -155,7 +155,7 @@ function readyToLoad() {
     });
   }
 
-  function scrollToCommemt(blockID) {
+  function scrollToComment(blockID) {
     bodyEl.click();
     const commentedBlock = document.querySelector(
       `[data-block-id="${blockID}"]`
@@ -217,7 +217,7 @@ function readyToLoad() {
       }
 
       case 'scroll to comment':
-        scrollToCommemt(message.id);
+        scrollToComment(message.id);
         break;
       case 'scroll to colored text':
         scrollToColoredText(message.id);
