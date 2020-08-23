@@ -10,24 +10,9 @@ import {
 function readyToLoad() {
   const bodyEl = document.body;
   const notionApp = document.querySelector('.notion-app-inner');
-  let isLightTheme = true;
+  const isLightTheme = Boolean(document.querySelector('.notion-light-theme'));
 
-  function storeTheme() {
-    isLightTheme = document
-      .getElementById('notion-app')
-      .firstChild.classList.contains('notion-light-theme');
-    if (isLightTheme) {
-      chrome.storage.sync.set({
-        theme: 'light',
-      });
-    } else {
-      chrome.storage.sync.set({
-        theme: 'dark',
-      });
-    }
-  }
-
-  storeTheme();
+  storeCurrentTheme(isLightTheme);
 
   const commentIconSelector =
     'path[d="M0.913134,0.920639 C1.49851,0.331726 2.29348,0 3.12342,0 L10.8766,0 C11.7065,0 12.5015,0.331725 13.0869,0.920639 C13.6721,1.50939 14,2.30689 14,3.13746 L14,7.62943 C13.9962,8.01443 13.9059,8.47125 13.7629,8.82852 C13.6128,9.183 13.3552,9.57088 13.0869,9.84625 C12.813,10.1163 12.4265,10.3761 12.0734,10.5274 C11.7172,10.6716 11.2607,10.763 10.8766,10.7669 L10.1234,10.7669 L10.1234,12.5676 L10.1209,12.5676 C10.1204,12.793 10.0633,13.0792 9.97807,13.262 C9.8627,13.466 9.61158,13.7198 9.40818,13.8382 L9.40662,13.8391 L9.40539,13.8398 C9.22962,13.9255 8.94505,13.9951 8.75059,14 L8.74789,14 C8.35724,13.9963 7.98473,13.8383 7.71035,13.5617 L5.39553,10.7669 L3.12342,10.7669 C2.29348,10.7669 1.49851,10.4352 0.913134,9.84625 C0.644826,9.57089 0.387187,9.183 0.23711,8.82852 C0.0941235,8.47125 0.00379528,8.01443 0,7.62943 L0,3.13746 C0,2.30689 0.327915,1.50939 0.913134,0.920639 Z M3.12342,1.59494 C2.71959,1.59494 2.33133,1.75628 2.04431,2.04503 C1.75713,2.33395 1.59494,2.72681 1.59494,3.13746 L1.59494,7.62943 C1.59114,7.85901 1.62114,8.01076 1.71193,8.22129 C1.79563,8.4346 1.88065,8.56264 2.04431,8.72185 C2.33133,9.01061 2.71959,9.17195 3.12342,9.17195 L5.72383,9.17195 C5.93413,9.17195 6.13592,9.25502 6.28527,9.40308 L8.52848,12.1269 L8.52848,9.96942 C8.52848,9.52899 8.88552,9.17195 9.32595,9.17195 L10.8766,9.17195 C11.1034,9.17583 11.2517,9.14614 11.4599,9.05518 C11.6712,8.97132 11.7976,8.88635 11.9557,8.72185 C12.1193,8.56264 12.2044,8.4346 12.2881,8.22129 C12.3789,8.01076 12.4089,7.85901 12.4051,7.62943 L12.4051,3.13746 C12.4051,2.72681 12.2429,2.33394 11.9557,2.04503 C11.6687,1.75628 11.2804,1.59494 10.8766,1.59494 L3.12342,1.59494 Z"]';
@@ -286,7 +271,11 @@ function readyToLoad() {
   const mutationObserver = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
       if (mutation.attributeName === 'class') {
-        storeTheme();
+        const isLightTheme = Boolean(
+          mutation.target.classList.contains('notion-light-theme')
+        );
+
+        storeCurrentTheme(isLightTheme);
       }
     });
   });
@@ -307,3 +296,7 @@ chrome.storage.sync.get(['checkedColors', 'displayTimes'], function (
 
   readyToLoad();
 });
+
+function storeCurrentTheme(isLightTheme) {
+  chrome.storage.sync.set({ theme: isLightTheme ? 'light' : 'dark' });
+}
