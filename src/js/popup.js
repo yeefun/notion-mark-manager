@@ -11,7 +11,7 @@ if (inProdEnv) {
 }
 
 const container = document.getElementById('container');
-const navItems = document.querySelectorAll('.nav-item');
+const navItems = getEleArray('.nav-item');
 
 chrome.storage.sync.get(['theme'], setTheme);
 
@@ -19,9 +19,9 @@ function setTheme(result) {
   document.body.classList.add(result.theme);
 }
 
-Array.from(navItems).forEach(function (item) {
+navItems.forEach(function (item) {
   item.addEventListener('click', function () {
-    Array.from(navItems).forEach(function (item) {
+    navItems.forEach(function (item) {
       item.classList.remove('active');
     });
     this.classList.add('active');
@@ -117,18 +117,18 @@ function loadColoredTexts() {
   );
 }
 
-function bindClickEventToScrollTo(className) {
-  const marks = document.querySelectorAll(className);
+function bindClickEventToScrollTo(selectors) {
+  const marks = getEleArray(selectors);
   const action =
-    className === '.comment' ? 'scroll to comment' : 'scroll to colored text';
-  Array.from(marks).forEach(function (mark) {
+    selectors === '.comment' ? 'scroll to comment' : 'scroll to colored text';
+  marks.forEach(function (mark) {
     mark.addEventListener('click', function () {
       const blockID = this.dataset.id;
       sendMessageToContentScript({
         action,
         id: blockID,
       });
-      Array.from(marks).forEach(function (mark) {
+      marks.forEach(function (mark) {
         mark.classList.remove('active');
       });
       this.classList.add('active');
@@ -168,3 +168,7 @@ window.addEventListener('scroll', function () {
   }
   beforeScrollY = currentScrollY;
 });
+
+function getEleArray(selectors) {
+  return Array.from(document.querySelectorAll(selectors));
+}
