@@ -232,7 +232,7 @@ function readyToLoad() {
 
     return Array.from(commentIconElems)
       .map(getBlockElem)
-      .filter(removeDuplicateElem)
+      .filter(removeDuplicate)
       .map(constructContentHtml)
       .filter(removeFalsy);
 
@@ -252,14 +252,10 @@ function readyToLoad() {
         html: content.innerHTML,
       };
     }
+  }
 
-    function removeDuplicateElem(currentElem, idx, elems) {
-      return elems.findIndex(isEqualElem) === idx;
-
-      function isEqualElem(otherElem) {
-        return currentElem.isEqualNode(otherElem);
-      }
-    }
+  function removeDuplicate(item, idx, arr) {
+    return arr.indexOf(item) === idx;
   }
 
   function removeFalsy(value) {
