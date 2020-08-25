@@ -15,21 +15,24 @@ function readyToLoad() {
   storeCurrentTheme(isLightTheme);
 
   function getColoredTexts() {
-    const fontColors = isLightTheme ? COLOR_LIGHT_FONTS : COLOR_DARK_FONTS;
-    const backgroundColors = isLightTheme
+    const coloredFonts = isLightTheme ? COLOR_LIGHT_FONTS : COLOR_DARK_FONTS;
+    const coloredBackgrounds = isLightTheme
       ? COLOR_LIGHT_BACKGROUNDS
       : COLOR_DARK_BACKGROUNDS;
+
     let results = {};
-    fontColors.forEach(function (color) {
-      if (options.checkedColors.indexOf(color.name) !== -1) {
-        getColoredText(color.value, color.name, results);
-      }
+    coloredFonts.filter(isCheckedColor).forEach(function (color) {
+      getColoredText(color.value, color.name, results);
     });
-    backgroundColors.forEach(function (color) {
-      if (options.checkedColors.indexOf(color.name) !== -1) {
-        getColoredText(color.value, color.name, results);
-      }
+
+    coloredBackgrounds.filter(isCheckedColor).forEach(function (color) {
+      getColoredText(color.value, color.name, results);
     });
+
+    function isCheckedColor(color) {
+      return options.checkedColors.includes(color.name);
+    }
+
     if (options.displayTimes === 'once') {
       for (let coloredTextID in repeatedColoredTexts) {
         const repeatedColoredText = repeatedColoredTexts[coloredTextID];
@@ -46,119 +49,138 @@ function readyToLoad() {
   }
 
   let repeatedColoredTexts = {};
+
   function getColoredText(value, className, results) {
-    const coloredTexts = document.querySelectorAll(
+    const coloredTextElems = document.querySelectorAll(
       `[style*="${value}"], [style*="${value.replace(/, /g, ',')}"]`
     );
-    if (!coloredTexts.length) return;
 
-    let coloredTextNodes = [];
-    const blocks = Array.prototype.map.call(coloredTexts, function (text, idx) {
-      coloredTextNodes[idx] = text.nodeName;
-      return text.closest('.notion-selectable');
-    });
+    if (!coloredTextElems.length) {
+      return;
+    }
 
-    // 移除同一顏色的重複區塊
-    const uniqueBlocks = blocks.filter(function (block, idx, arr) {
-      return arr.indexOf(block) === idx;
-    });
+    const blocksContent = Array.from(coloredTextElems)
+      .map(constructBlock)
+      .filter(removeFalsy)
+      .filter(removeDuplicateId);
 
-    let blockIDs = [];
-    let blocksContent = [];
-    uniqueBlocks.map(function (block, idx) {
-      blockIDs[idx] = block.dataset.blockId;
-      const editedContent = block.querySelector('[contenteditable]');
-      // 解除加上顏色的 Table of Contents 功能的錯誤（雖然是顏色文字，但子元素並沒 contenteditable 屬性）
-      if (editedContent) {
-        blocksContent.push(editedContent);
-      }
-    });
-
-    blocksContent.forEach(function (content, idx) {
-      const nodeName = coloredTextNodes[idx];
-      const blockID = blockIDs[idx];
-      const coloredTextHTML = content.innerHTML;
-
-      if (!results[blockID]) {
-        const result = (results[blockID] = {});
-        result.nodeName = nodeName;
-        result.colorName = className;
-        result.coloredTextHTML = coloredTextHTML;
-        return;
-      }
-
-      // 顯示與色彩數量同樣多次
-      function displayMoreTimes() {
-        if (!repeatedColoredTexts[blockID]) {
-          repeatedColoredTexts[blockID] = [];
+    blocksContent.forEach(
+      (
+        {
+          id: blockId,
+          coloredTextNodeName: nodeName,
+          contentHtml: coloredTextHTML,
+        },
+        idx
+      ) => {
+        if (!results[blockId]) {
+          const result = (results[blockId] = {});
+          result.nodeName = nodeName;
+          result.colorName = className;
+          result.coloredTextHTML = coloredTextHTML;
+          return;
         }
-        const repeatedColoredTextIDs = repeatedColoredTexts[blockID];
-        const prefixID = `${blockID}{{${className}-${idx}}}`;
-        const prefixResult = (results[prefixID] = {});
-        if (results[blockID].nodeName !== 'DIV') {
-          if (nodeName === 'DIV') {
-            let result = results[blockID];
-            result.nodeName = nodeName;
-            result.colorName = className;
-            repeatedColoredTextIDs.forEach(function (coloredTextID) {
-              const result = (results[coloredTextID] = {});
+
+        // 顯示與色彩數量同樣多次
+        function displayMoreTimes() {
+          if (!repeatedColoredTexts[blockId]) {
+            repeatedColoredTexts[blockId] = [];
+          }
+          const repeatedColoredTextIDs = repeatedColoredTexts[blockId];
+          const prefixID = `${blockId}{{${className}-${idx}}}`;
+          const prefixResult = (results[prefixID] = {});
+          if (results[blockId].nodeName !== 'DIV') {
+            if (nodeName === 'DIV') {
+              let result = results[blockId];
               result.nodeName = nodeName;
               result.colorName = className;
-            });
+              repeatedColoredTextIDs.forEach(function (coloredTextID) {
+                const result = (results[coloredTextID] = {});
+                result.nodeName = nodeName;
+                result.colorName = className;
+              });
+            }
+            repeatedColoredTextIDs.push(prefixID);
+            prefixResult.nodeName = nodeName;
+            prefixResult.colorName = className;
+          } else {
+            prefixResult.nodeName = results[blockId].nodeName;
+            prefixResult.colorName = results[blockId].colorName;
           }
-          repeatedColoredTextIDs.push(prefixID);
-          prefixResult.nodeName = nodeName;
-          prefixResult.colorName = className;
-        } else {
-          prefixResult.nodeName = results[blockID].nodeName;
-          prefixResult.colorName = results[blockID].colorName;
+          prefixResult.coloredTextHTML = coloredTextHTML;
         }
-        prefixResult.coloredTextHTML = coloredTextHTML;
-      }
-      // 只顯示一次
-      function displayOnce() {
-        if (results[blockID].nodeName !== 'DIV') {
-          results[blockID] = {};
-          if (nodeName === 'DIV') {
-            let repeatedColoredText = repeatedColoredTexts[blockID];
+        // 只顯示一次
+        function displayOnce() {
+          if (results[blockId].nodeName !== 'DIV') {
+            results[blockId] = {};
+            if (nodeName === 'DIV') {
+              let repeatedColoredText = repeatedColoredTexts[blockId];
+              if (!repeatedColoredText) {
+                repeatedColoredText = {};
+                repeatedColoredText.coloredTextHTML = coloredTextHTML;
+              }
+              repeatedColoredText.nodeName = nodeName;
+              repeatedColoredText.colorName = className;
+            }
+            if (!repeatedColoredTexts[blockId]) {
+              const repeatedColoredText = (repeatedColoredTexts[blockId] = {});
+              repeatedColoredText.coloredTextHTML = coloredTextHTML;
+              repeatedColoredText.nodeName = nodeName;
+              repeatedColoredText.colorName = className;
+            }
+          } else {
+            let result = results[blockId];
+            var repeatedColoredText = repeatedColoredTexts[blockId];
             if (!repeatedColoredText) {
               repeatedColoredText = {};
               repeatedColoredText.coloredTextHTML = coloredTextHTML;
             }
-            repeatedColoredText.nodeName = nodeName;
-            repeatedColoredText.colorName = className;
+            repeatedColoredText.nodeName = result.nodeName;
+            repeatedColoredText.colorName = result.className;
+            result = {};
           }
-          if (!repeatedColoredTexts[blockID]) {
-            const repeatedColoredText = (repeatedColoredTexts[blockID] = {});
-            repeatedColoredText.coloredTextHTML = coloredTextHTML;
-            repeatedColoredText.nodeName = nodeName;
-            repeatedColoredText.colorName = className;
-          }
+        }
+
+        if (options.displayTimes === 'once') {
+          displayOnce();
         } else {
-          let result = results[blockID];
-          var repeatedColoredText = repeatedColoredTexts[blockID];
-          if (!repeatedColoredText) {
-            repeatedColoredText = {};
-            repeatedColoredText.coloredTextHTML = coloredTextHTML;
-          }
-          repeatedColoredText.nodeName = result.nodeName;
-          repeatedColoredText.colorName = result.className;
-          result = {};
+          displayMoreTimes();
         }
       }
+    );
 
-      if (options.displayTimes === 'once') {
-        displayOnce();
-      } else {
-        displayMoreTimes();
+    function constructBlock(coloredTextElem) {
+      const { nodeName: coloredTextNodeName } = coloredTextElem;
+      const blockElem = coloredTextElem.closest('[data-block-id]');
+      const { blockId: id } = blockElem.dataset;
+      const contentElem = blockElem.querySelector('[contenteditable]');
+
+      if (!contentElem) {
+        return undefined;
       }
-    });
+
+      const { innerHTML: contentHtml } = contentElem;
+
+      return {
+        id,
+        coloredTextNodeName,
+        contentHtml,
+      };
+    }
+
+    function removeDuplicateId({ id }, idx, blocks) {
+      return blocks.findIndex(doesIdEqual) === idx;
+
+      function doesIdEqual({ id: otherId }) {
+        return id === otherId;
+      }
+    }
   }
 
-  function scrollToComment(blockID) {
+  function scrollToComment(blockId) {
     bodyEl.click();
     const commentedBlock = document.querySelector(
-      `[data-block-id="${blockID}"]`
+      `[data-block-id="${blockId}"]`
     );
     const intersectionObserver = new IntersectionObserver(function (entries) {
       const entry = entries[0];
@@ -187,8 +209,8 @@ function readyToLoad() {
     });
   }
 
-  function scrollToColoredText(blockID) {
-    const blockIDRemovePrefix = blockID.replace(/\{\{.*\}\}/, '');
+  function scrollToColoredText(blockId) {
+    const blockIDRemovePrefix = blockId.replace(/\{\{.*\}\}/, '');
     bodyEl.click();
     const coloredTextBlock = document.querySelector(
       `[data-block-id="${blockIDRemovePrefix}"]`
@@ -230,6 +252,10 @@ function readyToLoad() {
   function getComments() {
     const commentIconElems = document.querySelectorAll('.speechBubble');
 
+    if (commentIconElems.length) {
+      return;
+    }
+
     return Array.from(commentIconElems)
       .map(getBlockElem)
       .filter(removeDuplicate)
@@ -241,15 +267,15 @@ function readyToLoad() {
     }
 
     function constructContentHtml(block) {
-      const content = block.querySelector('[contenteditable]');
+      const contentElem = block.querySelector('[contenteditable]');
 
-      if (!content) {
+      if (!contentElem) {
         return undefined;
       }
 
       return {
         id: block.dataset.blockId,
-        html: content.innerHTML,
+        html: contentElem.innerHTML,
       };
     }
   }
