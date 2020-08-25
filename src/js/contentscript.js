@@ -21,6 +21,7 @@ function readyToLoad() {
       : COLOR_DARK_BACKGROUNDS;
 
     let results = {};
+
     coloredFonts.filter(isCheckedColor).forEach(function (color) {
       getColoredText(color.value, color.name, results);
     });
@@ -28,10 +29,6 @@ function readyToLoad() {
     coloredBackgrounds.filter(isCheckedColor).forEach(function (color) {
       getColoredText(color.value, color.name, results);
     });
-
-    function isCheckedColor(color) {
-      return options.checkedColors.includes(color.name);
-    }
 
     if (options.displayTimes === 'once') {
       for (let coloredTextID in repeatedColoredTexts) {
@@ -43,9 +40,14 @@ function readyToLoad() {
         result.coloredTextHTML = repeatedColoredText.coloredTextHTML;
       }
     }
+
     repeatedColoredTexts = {};
 
     return results;
+
+    function isCheckedColor(color) {
+      return options.checkedColors.includes(color.name);
+    }
   }
 
   let repeatedColoredTexts = {};
@@ -75,6 +77,7 @@ function readyToLoad() {
       ) => {
         if (!results[blockId]) {
           const result = (results[blockId] = {});
+
           result.nodeName = nodeName;
           result.colorName = className;
           result.coloredTextHTML = coloredTextHTML;
@@ -86,44 +89,57 @@ function readyToLoad() {
           if (!repeatedColoredTexts[blockId]) {
             repeatedColoredTexts[blockId] = [];
           }
+
           const repeatedColoredTextIDs = repeatedColoredTexts[blockId];
           const prefixID = `${blockId}{{${className}-${idx}}}`;
           const prefixResult = (results[prefixID] = {});
+
           if (results[blockId].nodeName !== 'DIV') {
             if (nodeName === 'DIV') {
               let result = results[blockId];
+
               result.nodeName = nodeName;
               result.colorName = className;
               repeatedColoredTextIDs.forEach(function (coloredTextID) {
                 const result = (results[coloredTextID] = {});
+
                 result.nodeName = nodeName;
                 result.colorName = className;
               });
             }
+
             repeatedColoredTextIDs.push(prefixID);
+
             prefixResult.nodeName = nodeName;
             prefixResult.colorName = className;
           } else {
             prefixResult.nodeName = results[blockId].nodeName;
             prefixResult.colorName = results[blockId].colorName;
           }
+
           prefixResult.coloredTextHTML = coloredTextHTML;
         }
+
         // 只顯示一次
         function displayOnce() {
           if (results[blockId].nodeName !== 'DIV') {
             results[blockId] = {};
+
             if (nodeName === 'DIV') {
               let repeatedColoredText = repeatedColoredTexts[blockId];
+
               if (!repeatedColoredText) {
                 repeatedColoredText = {};
                 repeatedColoredText.coloredTextHTML = coloredTextHTML;
               }
+
               repeatedColoredText.nodeName = nodeName;
               repeatedColoredText.colorName = className;
             }
+
             if (!repeatedColoredTexts[blockId]) {
               const repeatedColoredText = (repeatedColoredTexts[blockId] = {});
+
               repeatedColoredText.coloredTextHTML = coloredTextHTML;
               repeatedColoredText.nodeName = nodeName;
               repeatedColoredText.colorName = className;
@@ -131,12 +147,15 @@ function readyToLoad() {
           } else {
             let result = results[blockId];
             var repeatedColoredText = repeatedColoredTexts[blockId];
+
             if (!repeatedColoredText) {
               repeatedColoredText = {};
               repeatedColoredText.coloredTextHTML = coloredTextHTML;
             }
+
             repeatedColoredText.nodeName = result.nodeName;
             repeatedColoredText.colorName = result.className;
+
             result = {};
           }
         }
