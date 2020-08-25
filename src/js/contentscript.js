@@ -1,10 +1,10 @@
 import DEFAULT_OPTIONS from './data/default-options.js';
 
 import {
-  COLORS_LIGHT_FONTS,
-  COLORS_LIGHT_BACKGROUNDS,
-  COLORS_DARK_FONTS,
-  COLORS_DARK_BACKGROUNDS,
+  COLOR_LIGHT_FONTS,
+  COLOR_LIGHT_BACKGROUNDS,
+  COLOR_DARK_FONTS,
+  COLOR_DARK_BACKGROUNDS,
 } from './data/colors.js';
 
 function readyToLoad() {
@@ -15,10 +15,10 @@ function readyToLoad() {
   storeCurrentTheme(isLightTheme);
 
   function getColoredTexts() {
-    const fontColors = isLightTheme ? COLORS_LIGHT_FONTS : COLORS_DARK_FONTS;
+    const fontColors = isLightTheme ? COLOR_LIGHT_FONTS : COLOR_DARK_FONTS;
     const backgroundColors = isLightTheme
-      ? COLORS_LIGHT_BACKGROUNDS
-      : COLORS_DARK_BACKGROUNDS;
+      ? COLOR_LIGHT_BACKGROUNDS
+      : COLOR_DARK_BACKGROUNDS;
     let results = {};
     fontColors.forEach(function (color) {
       if (options.checkedColors.indexOf(color.name) !== -1) {
