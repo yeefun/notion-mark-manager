@@ -1,5 +1,6 @@
 import {
   inProdEnv,
+  removeDuplicate,
   loadGa,
   sendGaPageview,
   sendGaEvent,
@@ -10,7 +11,7 @@ if (inProdEnv) {
   sendGaPageview('/popup.html');
 }
 
-const container = document.getElementById('container');
+const containerElem = document.getElementById('container');
 const navs = document.querySelectorAll('.nav-item');
 
 chrome.storage.sync.get(['theme'], setTheme);
@@ -31,82 +32,107 @@ function handleClickNavs() {
   } else {
     loadColoredTexts();
   }
+
   // GA: 'comments' 與 'colored texts' tab 各被按幾次？
   sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tabName}]`);
+}
+
+function loadColoredTexts() {
+  sendMessageToContentscript({ action: 'get colored texts' }, handleResponse);
+
+  function handleResponse(response = []) {
+    if (response.length == 0) {
+      return;
+    }
+
+    const coloredTextsHtml = constructColoredTextsHtml(response);
+    setHtml(containerElem, coloredTextsHtml);
+
+    bindClickEventToScrollTo('.colored-text');
+
+    const [loadedFontColors, loadedBackgroundColors] = response
+      .map(extractColorName)
+      .filter(removeDuplicate)
+      .reduce(classifyColor, [[], []]);
+
+    // GA: 有哪些顏色文字（font）被載入？
+    sendGaEvent(
+      'Marks',
+      'Load',
+      `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`,
+      loadedFontColors.length
+    );
+    // GA: 有哪些顏色文字（background）被載入？
+    sendGaEvent(
+      'Marks',
+      'Load',
+      `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`,
+      loadedBackgroundColors.length
+    );
+
+    function constructColoredTextsHtml(blockObjs) {
+      return blockObjs.map(constructColoredTextHtml).join('');
+
+      function constructColoredTextHtml({
+        id,
+        coloredTextNodeName,
+        colorName,
+        contentHtml,
+      }) {
+        const isDiv = coloredTextNodeName === 'DIV';
+
+        return `
+          <div
+            class="block colored-text ${isDiv ? colorName : ''}"
+            data-id="${id}"
+          >
+            ${contentHtml}
+          </div>
+        `;
+      }
+    }
+
+    function extractColorName(blockObj) {
+      return blockObj.colorName;
+    }
+
+    function classifyColor([fontNames, backgroundNames], colorName) {
+      const [, currentName] = colorName.split('-');
+
+      if (colorName.includes('font')) {
+        return [[...fontNames, currentName], backgroundNames];
+      } else {
+        return [fontNames, [...backgroundNames, currentName]];
+      }
+    }
+  }
 }
 
 function loadComments() {
   sendMessageToContentscript({ action: 'get comments' }, handleResponse);
 
-  function handleResponse(response) {
+  function handleResponse(response = []) {
+    if (response.length == 0) {
+      return;
+    }
+
     const commentsHtml = constructCommentsHtml(response);
-    setHtml(container, commentsHtml);
+    setHtml(containerElem, commentsHtml);
 
     bindClickEventToScrollTo('.comment');
   }
-}
 
-function constructCommentsHtml(contentHtmls) {
-  return contentHtmls.map(constructCommentHtml).join('');
+  function constructCommentsHtml(contentHtmls) {
+    return contentHtmls.map(constructCommentHtml).join('');
 
-  function constructCommentHtml({ id, html }) {
-    return `<div class="block comment" data-id="${id}">${html}</div>`;
+    function constructCommentHtml({ id, html }) {
+      return `<div class="block comment" data-id="${id}">${html}</div>`;
+    }
   }
 }
 
 function setHtml(elem, html) {
   elem.innerHTML = html;
-}
-
-function loadColoredTexts() {
-  sendMessageToContentscript(
-    {
-      action: 'get colored texts',
-    },
-    function (response) {
-      const coloredTextObj = response;
-      let result = '';
-      let colorNames = [];
-      for (let colorTextID in coloredTextObj) {
-        const coloredTextHTML = coloredTextObj[colorTextID].coloredTextHTML;
-        const nodeName = coloredTextObj[colorTextID].nodeName;
-        const colorName = coloredTextObj[colorTextID].colorName;
-        colorNames.push(colorName);
-        result += `<div class="block colored-text ${
-          nodeName === 'DIV' ? colorName : ''
-        }" data-id="${colorTextID}">${coloredTextHTML}</div>`;
-      }
-      container.innerHTML = result;
-      bindClickEventToScrollTo('.colored-text');
-
-      const loadedFontColors = [];
-      const loadedBackgroundColors = [];
-      colorNames.forEach(function (color, idx, arr) {
-        if (arr.indexOf(color) === idx) {
-          if (color.indexOf('font-') !== -1) {
-            loadedFontColors.push(color.split('font-')[1]);
-          } else {
-            loadedBackgroundColors.push(color.split('background-')[1]);
-          }
-        }
-      });
-
-      // GA: 有哪些顏色文字（font）被載入？
-      sendGaEvent(
-        'Marks',
-        'Load',
-        `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`,
-        loadedFontColors.length
-      );
-      // GA: 有哪些顏色文字（background）被載入？
-      sendGaEvent(
-        'Marks',
-        'Load',
-        `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`,
-        loadedBackgroundColors.length
-      );
-    }
-  );
 }
 
 function bindClickEventToScrollTo(selectors) {

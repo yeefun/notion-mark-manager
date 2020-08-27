@@ -2,7 +2,7 @@ const COLORS = {
   light: {
     fonts: [
       {
-        value: 'rgb(155, 154, 51)',
+        value: 'rgb(155, 154, 151)',
         name: 'font-gray',
       },
       {
