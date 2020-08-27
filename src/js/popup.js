@@ -122,11 +122,11 @@ function loadComments() {
     bindClickEventToScrollTo('.comment');
   }
 
-  function constructCommentsHtml(contentHtmls) {
-    return contentHtmls.map(constructCommentHtml).join('');
+  function constructCommentsHtml(blockObjs) {
+    return blockObjs.map(constructCommentHtml).join('');
 
-    function constructCommentHtml({ id, html }) {
-      return `<div class="block comment" data-id="${id}">${html}</div>`;
+    function constructCommentHtml({ id, contentHtml }) {
+      return `<div class="block comment" data-id="${id}">${contentHtml}</div>`;
     }
   }
 }

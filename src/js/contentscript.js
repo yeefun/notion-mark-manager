@@ -253,9 +253,9 @@ function readyToLoad() {
       return [
         Array.from(
           document.querySelectorAll(`
-          [data-block-id] [style*="${color.value}"],
-          [data-block-id] [style*="${color.value.replace(/, /g, ',')}"]
-        `)
+            [data-block-id] [style*="${color.value}"],
+            [data-block-id] [style*="${color.value.replace(/, /g, ',')}"]
+          `)
         ),
         color.name,
       ];
@@ -308,23 +308,26 @@ function readyToLoad() {
     return Array.from(commentIconElems)
       .map(getBlockElem)
       .filter(removeDuplicate)
-      .map(constructContentHtml)
+      .map(constructBlockObj)
       .filter(removeFalsy);
 
     function getBlockElem(elem) {
       return elem.closest('[data-block-id]');
     }
 
-    function constructContentHtml(block) {
-      const contentElem = block.querySelector('[contenteditable]');
+    function constructBlockObj(blockElem) {
+      const contentElem = blockElem.querySelector('[contenteditable]');
+      const { blockId: id } = blockElem.dataset;
 
       if (!contentElem) {
         return undefined;
       }
 
+      const { innerHTML: contentHtml } = contentElem;
+
       return {
-        id: block.dataset.blockId,
-        html: contentElem.innerHTML,
+        id,
+        contentHtml,
       };
     }
   }
