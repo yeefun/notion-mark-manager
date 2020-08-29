@@ -235,15 +235,29 @@ function readyToLoad() {
 
     const allColors = [...coloredFonts, ...coloredBackgrounds];
 
-    const blockObjs = allColors
-      .filter(isCheckedColor)
-      .map(getColoredTextElem)
-      .flatMap(constructBlockObj)
-      .filter(removeFalsy)
-      .reduce(moveDivBlockForward, [])
-      .filter(removeDuplicateBlock);
+    const shouldDisplayOnce = options.displayTimes == 'once';
 
-    return blockObjs;
+    var blocks;
+
+    if (shouldDisplayOnce) {
+      blocks = allColors
+        .filter(isCheckedColor)
+        .map(getColoredTextElem)
+        .flatMap(constructBlock)
+        .filter(removeFalsy)
+        .reduce(moveBlockHavingDivWrapperForward, [])
+        .filter(removeDuplicateBlock);
+    } else {
+      blocks = allColors
+        .filter(isCheckedColor)
+        .map(getColoredTextElem)
+        .flatMap(constructBlock)
+        .filter(removeFalsy);
+
+      blocks.forEach(modifyWrapperNodeNameAndColorName);
+    }
+
+    return blocks;
 
     function isCheckedColor(color) {
       return options.checkedColors.includes(color.name);
@@ -261,9 +275,9 @@ function readyToLoad() {
       ];
     }
 
-    function constructBlockObj([coloredTextElems, colorName]) {
+    function constructBlock([coloredTextElems, colorName]) {
       return coloredTextElems.map((coloredTextElem) => {
-        const { nodeName: coloredTextNodeName } = coloredTextElem;
+        const { nodeName: wrapperNodeName } = coloredTextElem;
         const blockElem = coloredTextElem.closest('[data-block-id]');
         const { blockId: id } = blockElem.dataset;
         const contentElem = blockElem.querySelector('[contenteditable]');
@@ -276,17 +290,15 @@ function readyToLoad() {
 
         return {
           id,
-          coloredTextNodeName,
+          wrapperNodeName,
           colorName,
           contentHtml,
         };
       });
     }
 
-    function moveDivBlockForward(acc, block) {
-      return block.coloredTextNodeName == 'DIV'
-        ? [block, ...acc]
-        : [...acc, block];
+    function moveBlockHavingDivWrapperForward(acc, block) {
+      return block.wrapperNodeName == 'DIV' ? [block, ...acc] : [...acc, block];
     }
 
     function removeDuplicateBlock({ id }, idx, blocks) {
@@ -295,6 +307,31 @@ function readyToLoad() {
       function doesIdEqual({ id: otherId }) {
         return id === otherId;
       }
+    }
+
+    function modifyWrapperNodeNameAndColorName(block, idx, blocks) {
+      if (block.wrapperNodeName == 'DIV') {
+        return;
+      }
+
+      const blockHavingEqualWrapper = blocks
+        .filter(hasDivWrapper)
+        .find(doesIdEqual);
+
+      if (blockHavingEqualWrapper == undefined) {
+        return;
+      }
+
+      block.wrapperNodeName = 'DIV';
+      block.colorName = blockHavingEqualWrapper.colorName;
+
+      function doesIdEqual(blockHavingDivWrapper) {
+        return block.id == blockHavingDivWrapper.id;
+      }
+    }
+
+    function hasDivWrapper(block) {
+      return block.wrapperNodeName == 'DIV';
     }
   }
 
@@ -305,17 +342,19 @@ function readyToLoad() {
       return [];
     }
 
-    return Array.from(commentIconElems)
+    const blocks = Array.from(commentIconElems)
       .map(getBlockElem)
       .filter(removeDuplicate)
-      .map(constructBlockObj)
+      .map(constructBlock)
       .filter(removeFalsy);
+
+    return blocks;
 
     function getBlockElem(elem) {
       return elem.closest('[data-block-id]');
     }
 
-    function constructBlockObj(blockElem) {
+    function constructBlock(blockElem) {
       const contentElem = blockElem.querySelector('[contenteditable]');
       const { blockId: id } = blockElem.dataset;
 

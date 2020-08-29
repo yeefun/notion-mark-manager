@@ -70,20 +70,20 @@ function loadColoredTexts() {
       loadedBackgroundColors.length
     );
 
-    function constructColoredTextsHtml(blockObjs) {
-      return blockObjs.map(constructColoredTextHtml).join('');
+    function constructColoredTextsHtml(blocks) {
+      return blocks.map(constructColoredTextHtml).join('');
 
       function constructColoredTextHtml({
         id,
-        coloredTextNodeName,
+        wrapperNodeName,
         colorName,
         contentHtml,
       }) {
-        const isDiv = coloredTextNodeName === 'DIV';
+        const hasDivWrapper = wrapperNodeName === 'DIV';
 
         return `
           <div
-            class="block colored-text ${isDiv ? colorName : ''}"
+            class="block colored-text ${hasDivWrapper ? colorName : ''}"
             data-id="${id}"
           >
             ${contentHtml}
@@ -92,8 +92,8 @@ function loadColoredTexts() {
       }
     }
 
-    function extractColorName(blockObj) {
-      return blockObj.colorName;
+    function extractColorName(block) {
+      return block.colorName;
     }
 
     function classifyColor([fontNames, backgroundNames], colorName) {
@@ -122,8 +122,8 @@ function loadComments() {
     bindClickEventToScrollTo('.comment');
   }
 
-  function constructCommentsHtml(blockObjs) {
-    return blockObjs.map(constructCommentHtml).join('');
+  function constructCommentsHtml(blocks) {
+    return blocks.map(constructCommentHtml).join('');
 
     function constructCommentHtml({ id, contentHtml }) {
       return `<div class="block comment" data-id="${id}">${contentHtml}</div>`;
