@@ -228,33 +228,35 @@ function readyToLoad() {
   });
 
   function getColoredTexts() {
-    const coloredFonts = isLightTheme ? COLOR_LIGHT_FONTS : COLOR_DARK_FONTS;
-    const coloredBackgrounds = isLightTheme
-      ? COLOR_LIGHT_BACKGROUNDS
-      : COLOR_DARK_BACKGROUNDS;
-
-    const allColors = [...coloredFonts, ...coloredBackgrounds];
-
-    const shouldDisplayOnce = options.displayTimes == 'once';
-
     var blocks;
 
-    if (shouldDisplayOnce) {
-      blocks = allColors
-        .filter(isCheckedColor)
-        .map(getColoredTextElem)
-        .flatMap(constructBlock)
-        .filter(removeFalsy)
-        .reduce(moveBlockHavingDivWrapperForward, [])
-        .filter(removeDuplicateBlock);
-    } else {
-      blocks = allColors
-        .filter(isCheckedColor)
-        .map(getColoredTextElem)
-        .flatMap(constructBlock)
-        .filter(removeFalsy);
+    {
+      const coloredFonts = isLightTheme ? COLOR_LIGHT_FONTS : COLOR_DARK_FONTS;
+      const coloredBackgrounds = isLightTheme
+        ? COLOR_LIGHT_BACKGROUNDS
+        : COLOR_DARK_BACKGROUNDS;
 
-      blocks.forEach(modifyWrapperNodeNameAndColorName);
+      const allColors = [...coloredFonts, ...coloredBackgrounds];
+
+      const shouldDisplayOnce = options.displayTimes == 'once';
+
+      if (shouldDisplayOnce) {
+        blocks = allColors
+          .filter(isCheckedColor)
+          .map(getColoredTextElem)
+          .flatMap(constructBlock)
+          .filter(removeFalsy)
+          .reduce(moveBlockHavingDivWrapperForward, [])
+          .filter(removeDuplicateBlock);
+      } else {
+        blocks = allColors
+          .filter(isCheckedColor)
+          .map(getColoredTextElem)
+          .flatMap(constructBlock)
+          .filter(removeFalsy);
+
+        blocks.forEach(modifyWrapperNodeNameAndColorName);
+      }
     }
 
     return blocks;
@@ -277,16 +279,21 @@ function readyToLoad() {
 
     function constructBlock([coloredTextElems, colorName]) {
       return coloredTextElems.map((coloredTextElem) => {
-        const { nodeName: wrapperNodeName } = coloredTextElem;
-        const blockElem = coloredTextElem.closest('[data-block-id]');
-        const { blockId: id } = blockElem.dataset;
-        const contentElem = blockElem.querySelector('[contenteditable]');
+        var id;
+        var { nodeName: wrapperNodeName } = coloredTextElem;
+        var contentHtml;
 
-        if (!contentElem) {
-          return undefined;
+        {
+          const blockElem = coloredTextElem.closest('[data-block-id]');
+          ({ blockId: id } = blockElem.dataset);
+          const contentElem = blockElem.querySelector('[contenteditable]');
+
+          if (!contentElem) {
+            return undefined;
+          }
+
+          ({ innerHTML: contentHtml } = contentElem);
         }
-
-        const { innerHTML: contentHtml } = contentElem;
 
         return {
           id,
@@ -314,16 +321,18 @@ function readyToLoad() {
         return;
       }
 
-      const blockHavingEqualWrapper = blocks
-        .filter(hasDivWrapper)
-        .find(doesIdEqual);
+      {
+        const blockHavingEqualWrapper = blocks
+          .filter(hasDivWrapper)
+          .find(doesIdEqual);
 
-      if (blockHavingEqualWrapper == undefined) {
-        return;
+        if (blockHavingEqualWrapper == undefined) {
+          return;
+        }
+
+        block.wrapperNodeName = 'DIV';
+        block.colorName = blockHavingEqualWrapper.colorName;
       }
-
-      block.wrapperNodeName = 'DIV';
-      block.colorName = blockHavingEqualWrapper.colorName;
 
       function doesIdEqual(blockHavingDivWrapper) {
         return block.id == blockHavingDivWrapper.id;
@@ -336,17 +345,21 @@ function readyToLoad() {
   }
 
   function getComments() {
-    const commentIconElems = document.querySelectorAll('.speechBubble');
+    var blocks;
 
-    if (commentIconElems.length == 0) {
-      return [];
+    {
+      const commentIconElems = document.querySelectorAll('.speechBubble');
+
+      if (commentIconElems.length == 0) {
+        return [];
+      }
+
+      blocks = Array.from(commentIconElems)
+        .map(getBlockElem)
+        .filter(removeDuplicate)
+        .map(constructBlock)
+        .filter(removeFalsy);
     }
-
-    const blocks = Array.from(commentIconElems)
-      .map(getBlockElem)
-      .filter(removeDuplicate)
-      .map(constructBlock)
-      .filter(removeFalsy);
 
     return blocks;
 
@@ -355,14 +368,19 @@ function readyToLoad() {
     }
 
     function constructBlock(blockElem) {
-      const contentElem = blockElem.querySelector('[contenteditable]');
-      const { blockId: id } = blockElem.dataset;
+      var id;
+      var contentHtml;
 
-      if (!contentElem) {
-        return undefined;
+      {
+        const contentElem = blockElem.querySelector('[contenteditable]');
+        ({ blockId: id } = blockElem.dataset);
+
+        if (!contentElem) {
+          return undefined;
+        }
+
+        ({ innerHTML: contentHtml } = contentElem);
       }
-
-      const { innerHTML: contentHtml } = contentElem;
 
       return {
         id,

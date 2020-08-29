@@ -45,30 +45,34 @@ function loadColoredTexts() {
       return;
     }
 
-    const coloredTextsHtml = constructColoredTextsHtml(response);
-    setHtml(containerElem, coloredTextsHtml);
+    {
+      const coloredTextsHtml = constructColoredTextsHtml(response);
+      setHtml(containerElem, coloredTextsHtml);
+    }
 
     bindClickEventToScrollTo('.colored-text');
 
-    const [loadedFontColors, loadedBackgroundColors] = response
-      .map(extractColorName)
-      .filter(removeDuplicate)
-      .reduce(classifyColor, [[], []]);
+    {
+      const [loadedFontColors, loadedBackgroundColors] = response
+        .map(extractColorName)
+        .filter(removeDuplicate)
+        .reduce(classifyColor, [[], []]);
 
-    // GA: 有哪些顏色文字（font）被載入？
-    sendGaEvent(
-      'Marks',
-      'Load',
-      `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`,
-      loadedFontColors.length
-    );
-    // GA: 有哪些顏色文字（background）被載入？
-    sendGaEvent(
-      'Marks',
-      'Load',
-      `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`,
-      loadedBackgroundColors.length
-    );
+      // GA: 有哪些顏色文字（font）被載入？
+      sendGaEvent(
+        'Marks',
+        'Load',
+        `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`,
+        loadedFontColors.length
+      );
+      // GA: 有哪些顏色文字（background）被載入？
+      sendGaEvent(
+        'Marks',
+        'Load',
+        `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`,
+        loadedBackgroundColors.length
+      );
+    }
 
     function constructColoredTextsHtml(blocks) {
       return blocks.map(constructColoredTextHtml).join('');
@@ -79,7 +83,7 @@ function loadColoredTexts() {
         colorName,
         contentHtml,
       }) {
-        const hasDivWrapper = wrapperNodeName === 'DIV';
+        var hasDivWrapper = wrapperNodeName === 'DIV';
 
         return `
           <div
@@ -97,7 +101,7 @@ function loadColoredTexts() {
     }
 
     function classifyColor([fontNames, backgroundNames], colorName) {
-      const [, currentName] = colorName.split('-');
+      var [, currentName] = colorName.split('-');
 
       if (colorName.includes('font')) {
         return [[...fontNames, currentName], backgroundNames];
@@ -116,8 +120,10 @@ function loadComments() {
       return;
     }
 
-    const commentsHtml = constructCommentsHtml(response);
-    setHtml(containerElem, commentsHtml);
+    {
+      const commentsHtml = constructCommentsHtml(response);
+      setHtml(containerElem, commentsHtml);
+    }
 
     bindClickEventToScrollTo('.comment');
   }
