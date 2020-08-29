@@ -12,7 +12,7 @@ if (inProdEnv) {
 }
 
 const containerElem = document.getElementById('container');
-const navs = document.querySelectorAll('.nav-item');
+const navElems = document.querySelectorAll('.nav-item');
 
 chrome.storage.sync.get(['theme'], setTheme);
 
@@ -20,11 +20,11 @@ function setTheme(result) {
   document.body.classList.add(result.theme);
 }
 
-bindClickEvtListeners(navs, handleClickNavs);
+bindClickEvtListeners(navElems, handleClickNavs);
 
 function handleClickNavs() {
-  removeAllActiveClass(navs);
-  addActiveClass(this);
+  removeAllFocusedClass(navElems);
+  addFocusedClass(this);
 
   const tabName = this.dataset.tab;
   if (tabName === 'comments') {
@@ -50,7 +50,7 @@ function loadColoredTexts() {
       setHtml(containerElem, coloredTextsHtml);
     }
 
-    bindClickEventToScrollTo('.colored-text');
+    bindClickEvtListenerToScroll('.colored-text', handleClickBlock);
 
     {
       const [loadedFontColors, loadedBackgroundColors] = response
@@ -125,7 +125,7 @@ function loadComments() {
       setHtml(containerElem, commentsHtml);
     }
 
-    bindClickEventToScrollTo('.comment');
+    bindClickEvtListenerToScroll('.comment', handleClickBlock);
   }
 
   function constructCommentsHtml(blocks) {
@@ -141,28 +141,42 @@ function setHtml(elem, html) {
   elem.innerHTML = html;
 }
 
-function bindClickEventToScrollTo(selectors) {
-  const marks = document.querySelectorAll(selectors);
-  const action =
-    selectors === '.comment' ? 'scroll to comment' : 'scroll to colored text';
+function bindClickEvtListenerToScroll(selectors, callback) {
+  var blockElems = document.querySelectorAll(selectors);
+  var action =
+    selectors === '.colored-text'
+      ? 'scroll to the colored text'
+      : 'scroll to the comment';
 
-  bindClickEvtListeners(marks, function () {
-    const blockID = this.dataset.id;
+  bindClickEvtListeners(blockElems, (evt) => {
+    callback(evt, action, blockElems);
+  });
+}
+
+function handleClickBlock(evt, action, blocks) {
+  {
+    let currentBlock = evt.currentTarget;
+    let { id: blockId } = currentBlock.dataset;
+
     sendMessageToContentscript({
       action,
-      id: blockID,
+      blockId,
     });
 
-    removeAllActiveClass(marks);
-    addActiveClass(this);
+    focusBlock(blocks, currentBlock);
+  }
 
-    // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
-    sendGaEvent(
-      'Marks',
-      'Scroll To',
-      `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`
-    );
-  });
+  // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
+  sendGaEvent(
+    'Marks',
+    'Scroll To',
+    `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`
+  );
+}
+
+function focusBlock(blocks, currentBlock) {
+  removeAllFocusedClass(blocks);
+  addFocusedClass(currentBlock);
 }
 
 chrome.storage.sync.get(['tabFirstShow'], function (items) {
@@ -171,10 +185,10 @@ chrome.storage.sync.get(['tabFirstShow'], function (items) {
     loadColoredTexts();
     document
       .querySelector('[data-tab="colored texts"]')
-      .classList.add('active');
+      .classList.add('focused');
   } else {
     loadComments();
-    document.querySelector('[data-tab="comments"]').classList.add('active');
+    document.querySelector('[data-tab="comments"]').classList.add('focused');
   }
 });
 
@@ -207,12 +221,12 @@ function bindClickEvtListeners(elems, handleClick) {
   }
 }
 
-function removeAllActiveClass(elems) {
+function removeAllFocusedClass(elems) {
   elems.forEach((elem) => {
-    elem.classList.remove('active');
+    elem.classList.remove('focused');
   });
 }
 
-function addActiveClass(elem) {
-  elem.classList.add('active');
+function addFocusedClass(elem) {
+  elem.classList.add('focused');
 }

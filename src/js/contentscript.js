@@ -42,11 +42,11 @@ function readyToLoad() {
         break;
       }
 
-      case 'scroll to comment':
-        scrollToComment(message.id);
+      case 'scroll to the colored text':
+        scrollToTheColoredText(message.blockId);
         break;
-      case 'scroll to colored text':
-        scrollToColoredText(message.id);
+      case 'scroll to the comment':
+        scrollToTheComment(message.blockId);
         break;
     }
   });
@@ -213,48 +213,68 @@ function readyToLoad() {
     }
   }
 
-  function scrollToComment(blockId) {
+  function scrollToTheColoredText(blockId) {
     document.body.click();
-    const commentedBlock = document.querySelector(
-      `[data-block-id="${blockId}"]`
-    );
-    const intersectionObserver = new IntersectionObserver(function (entries) {
-      const entry = entries[0];
-      const target = entry.target;
-      if (entry.isIntersecting) {
-        setTimeout(function () {
-          const spanEls = commentedBlock.getElementsByTagName('SPAN');
-          const commentedSpan = Array.prototype.find.call(spanEls, function (
-            spanEl
-          ) {
-            return (
-              spanEl.style['border-bottom'] === '2px solid rgb(255, 212, 0)'
-            );
-          });
-          if (commentedSpan) {
-            commentedSpan.click();
-          }
-        }, 80);
-        intersectionObserver.unobserve(target);
-      }
-    });
-    intersectionObserver.observe(commentedBlock);
-    commentedBlock.scrollIntoView({
+
+    getBlockElem(blockId).scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     });
   }
 
-  function scrollToColoredText(blockId) {
-    const blockIDRemovePrefix = blockId.replace(/\{\{.*\}\}/, '');
+  function scrollToTheComment(blockId) {
+    var intersectionObserver;
+
     document.body.click();
-    const coloredTextBlock = document.querySelector(
-      `[data-block-id="${blockIDRemovePrefix}"]`
-    );
-    coloredTextBlock.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+
+    {
+      let blockElem = getBlockElem(blockId);
+
+      intersectionObserver = new IntersectionObserver(handleObserve);
+
+      intersectionObserver.observe(blockElem);
+
+      blockElem.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+
+    function handleObserve(entries) {
+      var blockElem;
+
+      {
+        let isIntersecting;
+
+        {
+          let [entry] = entries;
+
+          ({ target: blockElem, isIntersecting } = entry);
+        }
+
+        if (!isIntersecting) {
+          return;
+        }
+      }
+
+      setTimeout(openComment, 90);
+
+      intersectionObserver.unobserve(blockElem);
+
+      function openComment() {
+        var commentUnderlinerElem = blockElem.querySelector(
+          '[style*="rgb(255, 212, 0)"], [style*="rgb(255,212,0)"]'
+        );
+
+        if (commentUnderlinerElem) {
+          commentUnderlinerElem.click();
+        }
+      }
+    }
+  }
+
+  function getBlockElem(id) {
+    return document.querySelector(`[data-block-id="${id}"]`);
   }
 
   function removeFalsy(value) {
