@@ -10,7 +10,7 @@ if (inProdEnv) {
   sendGaPageview('/options.html');
 }
 
-let originColors = [];
+let originColorNames = [];
 let originTab = '';
 let originTimes = '';
 
@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function initOptions() {
     chrome.storage.sync.get(
-      ['checkedColors', 'tabFirstShow', 'displayTimes'],
+      ['checkedColorNames', 'tabFirstShow', 'displayTimes'],
       function (items) {
-        originColors = items.checkedColors || [
+        originColorNames = items.checkedColorNames || [
           'font-gray',
           'font-brown',
           'font-orange',
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
           'background-pink',
           'background-red',
         ];
-        originColors.forEach(function (color) {
+        originColorNames.forEach(function (color) {
           constructOption(color);
         });
 
@@ -64,24 +64,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    let checkedColors = [];
+    let checkedColorNames = [];
     const checkedboxes = document.querySelectorAll('[type="checkbox"]:checked');
     const checkedTab = document.querySelector('[name="tab"]:checked').value;
     const checkedTimes = document.querySelector('[name="times"]:checked').value;
     Array.prototype.forEach.call(checkedboxes, function (checkedbox) {
-      checkedColors.push(checkedbox.value);
+      checkedColorNames.push(checkedbox.value);
     });
 
     chrome.storage.sync.set(
       {
-        checkedColors,
+        checkedColorNames,
         tabFirstShow: checkedTab,
         displayTimes: checkedTimes,
       },
       function () {
         let checkedFontColors = [];
         let checkedBackgroundColors = [];
-        checkedColors.forEach(function (color) {
+        checkedColorNames.forEach(function (color) {
           if (color.indexOf('font-') !== -1) {
             checkedFontColors.push(color);
           } else {
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         status.textContent = 'Your options have been saved!';
 
-        const originColorsStr = originColors.join();
+        const originColorsStr = originColorNames.join();
         const originFontColors = originColorsStr.substring(
           originColorsStr.indexOf(',background-'),
           0
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
           checkedBackgroundColors.length
         );
 
-        originColors = checkedColors;
+        originColorNames = checkedColorNames;
         originTab = checkedTab;
         originTimes = checkedTimes;
 

@@ -157,14 +157,4 @@ const COLORS = {
   },
 };
 
-const COLOR_LIGHT_FONTS = COLORS.light.fonts;
-const COLOR_LIGHT_BACKGROUNDS = COLORS.light.backgrounds;
-const COLOR_DARK_FONTS = COLORS.dark.fonts;
-const COLOR_DARK_BACKGROUNDS = COLORS.light.backgrounds;
-
-export {
-  COLOR_LIGHT_FONTS,
-  COLOR_LIGHT_BACKGROUNDS,
-  COLOR_DARK_FONTS,
-  COLOR_DARK_BACKGROUNDS,
-};
+export default COLORS;

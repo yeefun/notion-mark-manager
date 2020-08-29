@@ -1,80 +1,130 @@
 import { removeDuplicate } from './utils/index.js';
 import DEFAULT_OPTIONS from './data/default-options.js';
-import {
-  COLOR_LIGHT_FONTS,
-  COLOR_LIGHT_BACKGROUNDS,
-  COLOR_DARK_FONTS,
-  COLOR_DARK_BACKGROUNDS,
-} from './data/colors.js';
+import COLORS from './data/colors.js';
 
-let options = {};
-chrome.storage.sync.get(['checkedColors', 'displayTimes'], function (
-  userOptions
-) {
-  options = {
-    ...DEFAULT_OPTIONS,
-    ...userOptions,
-  };
+(async function iife() {
+  {
+    const theme = document.querySelector('.notion-light-theme')
+      ? 'light'
+      : 'dark';
 
-  readyToLoad();
-});
+    {
+      const options = await getOptions();
 
-function readyToLoad() {
-  const notionApp = document.querySelector('.notion-app-inner');
-  const isLightTheme = Boolean(document.querySelector('.notion-light-theme'));
-
-  storeCurrentTheme(isLightTheme);
-
-  chrome.runtime.onMessage.addListener(function (
-    message,
-    sender,
-    sendResponse
-  ) {
-    switch (message.action) {
-      case 'get colored texts': {
-        let result = getColoredTexts();
-        sendResponse(result);
-        break;
-      }
-      case 'get comments': {
-        let result = getComments();
-        sendResponse(result);
-        break;
-      }
-
-      case 'scroll to the colored text':
-        scrollToTheColoredText(message.blockId);
-        break;
-      case 'scroll to the comment':
-        scrollToTheComment(message.blockId);
-        break;
+      setUpMessageListener(options, theme);
     }
-  });
 
-  function getColoredTexts() {
+    storeCurrentTheme(theme);
+  }
+
+  listenThemeChanged();
+
+  async function getOptions() {
+    var userOptions = await getUserOptions();
+
+    return {
+      ...DEFAULT_OPTIONS,
+      ...userOptions,
+    };
+
+    function getUserOptions() {
+      return new Promise((resolve) => {
+        chrome.storage.sync.get(
+          ['checkedColorNames', 'displayTimes'],
+          function callback(userOptions) {
+            resolve(userOptions);
+          }
+        );
+      });
+    }
+  }
+
+  function setUpMessageListener(options, theme) {
+    chrome.runtime.onMessage.addListener(handleMessage);
+
+    var checkedColors;
+    var doesWantDisplayOnce = options.displayTimes == 'once';
+
+    {
+      const themeColors = getThemeColors(theme);
+      checkedColors = getCheckedColors(themeColors, options.checkedColorNames);
+    }
+
+    function handleMessage(message, sender, sendResponse) {
+      switch (message.action) {
+        case 'get colored texts':
+          sendResponse(getColoredTexts(checkedColors, doesWantDisplayOnce));
+          break;
+        case 'get comments':
+          sendResponse(getComments());
+          break;
+
+        case 'scroll to the colored text':
+          scrollToTheColoredText(message.blockId);
+          break;
+        case 'scroll to the comment':
+          scrollToTheComment(message.blockId);
+          break;
+      }
+    }
+
+    function getCheckedColors(themeColors, checkedColorNames) {
+      return themeColors.filter(isCheckedColor);
+
+      function isCheckedColor(color) {
+        return checkedColorNames.includes(color.name);
+      }
+    }
+
+    function getThemeColors(theme) {
+      var coloredFonts = COLORS[theme].fonts;
+      var coloredBackgrounds = COLORS[theme].backgrounds;
+
+      return [...coloredFonts, ...coloredBackgrounds];
+    }
+  }
+
+  function storeCurrentTheme(theme) {
+    chrome.storage.sync.set({ theme });
+  }
+
+  function listenThemeChanged() {
+    var mutationObserver = new MutationObserver(handleMutate);
+
+    mutationObserver.observe(document.querySelector('.notion-app-inner'), {
+      attributes: true,
+    });
+
+    function handleMutate(mutations) {
+      mutations.forEach(({ attributeName, target }) => {
+        if (attributeName != 'class') {
+          return;
+        }
+
+        {
+          const theme = target.classList.contains('notion-light-theme')
+            ? 'light'
+            : 'dark';
+
+          storeCurrentTheme(theme);
+        }
+      });
+    }
+  }
+
+  function getColoredTexts(checkedColors, doesWantDisplayOnce) {
     var blocks;
 
     {
-      const coloredFonts = isLightTheme ? COLOR_LIGHT_FONTS : COLOR_DARK_FONTS;
-      const coloredBackgrounds = isLightTheme
-        ? COLOR_LIGHT_BACKGROUNDS
-        : COLOR_DARK_BACKGROUNDS;
-
-      const allColors = [...coloredFonts, ...coloredBackgrounds];
-
-      const shouldDisplayOnce = options.displayTimes == 'once';
-
-      if (shouldDisplayOnce) {
-        blocks = allColors
-          .filter(isCheckedColor)
+      if (doesWantDisplayOnce) {
+        blocks = checkedColors
           .map(getColoredTextElem)
           .flatMap(constructBlock)
           .filter(removeFalsy)
           .reduce(moveBlockHavingDivWrapperForward, [])
           .filter(removeDuplicateBlock);
       } else {
-        blocks = allColors
-          .filter(isCheckedColor)
+        blocks = checkedColors
           .map(getColoredTextElem)
           .flatMap(constructBlock)
           .filter(removeFalsy);
@@ -84,10 +134,6 @@ function readyToLoad() {
     }
 
     return blocks;
-
-    function isCheckedColor(color) {
-      return options.checkedColors.includes(color.name);
-    }
 
     function getColoredTextElem(color) {
       return [
@@ -179,7 +225,7 @@ function readyToLoad() {
       }
 
       blocks = Array.from(commentIconElems)
-        .map(getBlockElem)
+        .map(getClosestBlockElem)
         .filter(removeDuplicate)
         .map(constructBlock)
         .filter(removeFalsy);
@@ -187,7 +233,7 @@ function readyToLoad() {
 
     return blocks;
 
-    function getBlockElem(elem) {
+    function getClosestBlockElem(elem) {
       return elem.closest('[data-block-id]');
     }
 
@@ -228,9 +274,9 @@ function readyToLoad() {
     document.body.click();
 
     {
-      let blockElem = getBlockElem(blockId);
+      const blockElem = getBlockElem(blockId);
 
-      intersectionObserver = new IntersectionObserver(handleObserve);
+      intersectionObserver = new IntersectionObserver(handleIntersect);
 
       intersectionObserver.observe(blockElem);
 
@@ -240,17 +286,13 @@ function readyToLoad() {
       });
     }
 
-    function handleObserve(entries) {
+    function handleIntersect([entry]) {
       var blockElem;
 
       {
         let isIntersecting;
 
-        {
-          let [entry] = entries;
-
-          ({ target: blockElem, isIntersecting } = entry);
-        }
+        ({ target: blockElem, isIntersecting } = entry);
 
         if (!isIntersecting) {
           return;
@@ -273,30 +315,11 @@ function readyToLoad() {
     }
   }
 
-  function getBlockElem(id) {
-    return document.querySelector(`[data-block-id="${id}"]`);
-  }
-
   function removeFalsy(value) {
     return value;
   }
 
-  const mutationObserver = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      if (mutation.attributeName === 'class') {
-        const isLightTheme = Boolean(
-          mutation.target.classList.contains('notion-light-theme')
-        );
-
-        storeCurrentTheme(isLightTheme);
-      }
-    });
-  });
-  mutationObserver.observe(notionApp, {
-    attributes: true,
-  });
-}
-
-function storeCurrentTheme(isLightTheme) {
-  chrome.storage.sync.set({ theme: isLightTheme ? 'light' : 'dark' });
-}
+  function getBlockElem(id) {
+    return document.querySelector(`[data-block-id="${id}"]`);
+  }
+})();
