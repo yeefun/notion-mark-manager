@@ -19,7 +19,8 @@ const DEFAULT_OPTIONS = {
     'background-pink',
     'background-red',
   ],
-  displayTimes: 'once',
+  tabActivatedFirst: 'colored-texts',
+  displayedTimes: 'once',
 };
 
 export default DEFAULT_OPTIONS;

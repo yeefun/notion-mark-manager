@@ -40,7 +40,7 @@ nav {
   margin-bottom: 0;
 }
 
-.nav-item {
+.tab {
   width: 50%;
   text-align: center;
   font-size: 16px;
@@ -52,7 +52,7 @@ nav {
   user-select: none;
 
   &:hover,
-  &.focused {
+  &.active {
     // = background-color: rgba(55, 53, 47, 0.08);
     background-color: rgb(239, 239, 239);
   }
@@ -63,7 +63,7 @@ nav {
   }
 }
 
-.container {
+.blocks-container {
   width: 300px;
   padding: 56px 8px 14px;
   box-sizing: border-box;
@@ -176,8 +176,8 @@ nav {
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07);
   }
 
-  .nav-item {
-    &.focused,
+  .tab {
+    &.active,
     &:hover {
       background-color: rgb(71, 76, 80);
     }

@@ -30,7 +30,7 @@ import COLORS from './data/colors.js';
     function getUserOptions() {
       return new Promise((resolve) => {
         chrome.storage.sync.get(
-          ['checkedColorNames', 'displayTimes'],
+          ['checkedColorNames', 'displayedTimes'],
           function callback(userOptions) {
             resolve(userOptions);
           }
@@ -43,7 +43,7 @@ import COLORS from './data/colors.js';
     chrome.runtime.onMessage.addListener(handleMessage);
 
     var checkedColors;
-    var doesWantDisplayOnce = options.displayTimes == 'once';
+    var shouldDisplayOnce = options.displayedTimes == 'once';
 
     {
       const themeColors = getThemeColors(theme);
@@ -53,7 +53,7 @@ import COLORS from './data/colors.js';
     function handleMessage(message, sender, sendResponse) {
       switch (message.action) {
         case 'get colored texts':
-          sendResponse(getColoredTexts(checkedColors, doesWantDisplayOnce));
+          sendResponse(getColoredTexts(checkedColors, shouldDisplayOnce));
           break;
         case 'get comments':
           sendResponse(getComments());
@@ -112,11 +112,11 @@ import COLORS from './data/colors.js';
     }
   }
 
-  function getColoredTexts(checkedColors, doesWantDisplayOnce) {
+  function getColoredTexts(checkedColors, shouldDisplayOnce) {
     var blocks;
 
     {
-      if (doesWantDisplayOnce) {
+      if (shouldDisplayOnce) {
         blocks = checkedColors
           .map(getColoredTextElem)
           .flatMap(constructBlock)

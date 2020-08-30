@@ -5,49 +5,81 @@ import {
   sendGaPageview,
   sendGaEvent,
 } from './utils/index.js';
+import DEFAULT_OPTIONS from './data/default-options.js';
 
-if (inProdEnv) {
-  loadGa();
-  sendGaPageview('/popup.html');
-}
+document.addEventListener('DOMContentLoaded', () => {
+  setTheme();
+  loadBlocks();
+  listenTabClicked();
+  listenScrollToToggleNavbar();
 
-const containerElem = document.getElementById('container');
-const navElems = document.querySelectorAll('.nav-item');
-
-chrome.storage.sync.get(['theme'], setTheme);
-
-function setTheme(result) {
-  document.body.classList.add(result.theme);
-}
-
-bindClickEvtListeners(navElems, handleClickNavs);
-
-function handleClickNavs() {
-  removeAllFocusedClass(navElems);
-  addFocusedClass(this);
-
-  const tabName = this.dataset.tab;
-  if (tabName === 'comments') {
-    loadComments();
-  } else {
-    loadColoredTexts();
+  if (inProdEnv) {
+    loadGa();
+    sendGaPageview('/popup.html');
   }
 
-  // GA: 'comments' 與 'colored texts' tab 各被按幾次？
-  sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tabName}]`);
-}
+  function setTheme() {
+    chrome.storage.sync.get(['theme'], function callback({ theme = 'light' }) {
+      document.body.classList.add(theme);
+    });
+  }
 
-function loadColoredTexts() {
-  sendMessageToContentscript({ action: 'get colored texts' }, handleResponse);
+  function listenTabClicked() {
+    var tabElems = document.querySelectorAll('.tab');
 
-  function handleResponse(response = []) {
+    bindClickEvtListeners(tabElems, handleClickTab);
+
+    function handleClickTab() {
+      activateItem(tabElems, this);
+
+      {
+        const { tab } = this.dataset;
+
+        if (tab === 'comments') {
+          sendMessageToGetComments();
+        } else {
+          sendMessageToGetColoredTexts();
+        }
+
+        // GA: 'comments' 與 'colored texts' tab 各被按幾次？
+        sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tab}]`);
+      }
+    }
+  }
+
+  function loadBlocks() {
+    chrome.storage.sync.get(['tabActivatedFirst'], function callback({
+      tabActivatedFirst = DEFAULT_OPTIONS.tabActivatedFirst,
+    }) {
+      if (tabActivatedFirst == 'colored-texts') {
+        sendMessageToGetColoredTexts();
+      } else {
+        sendMessageToGetComments();
+      }
+
+      activateTab(tabActivatedFirst);
+
+      function activateTab(name) {
+        document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+      }
+    });
+  }
+
+  function sendMessageToGetColoredTexts() {
+    sendMessageToContentscript(
+      { action: 'get colored texts' },
+      handleGetColoredTextsResponse
+    );
+  }
+
+  function handleGetColoredTextsResponse(response = []) {
     if (response.length == 0) {
       return;
     }
 
     {
       const coloredTextsHtml = constructColoredTextsHtml(response);
-      setHtml(containerElem, coloredTextsHtml);
+      setHtmlForBlocksContainer(coloredTextsHtml);
     }
 
     bindClickEvtListenerToScroll('.colored-text', handleClickBlock);
@@ -88,7 +120,7 @@ function loadColoredTexts() {
         return `
           <div
             class="block colored-text ${hasDivWrapper ? colorName : ''}"
-            data-id="${id}"
+            data-block-id="${id}"
           >
             ${contentHtml}
           </div>
@@ -110,123 +142,129 @@ function loadColoredTexts() {
       }
     }
   }
-}
 
-function loadComments() {
-  sendMessageToContentscript({ action: 'get comments' }, handleResponse);
+  function sendMessageToGetComments() {
+    sendMessageToContentscript(
+      { action: 'get comments' },
+      handleGetCommentsResponse
+    );
+  }
 
-  function handleResponse(response = []) {
+  function handleGetCommentsResponse(response = []) {
     if (response.length == 0) {
       return;
     }
 
     {
       const commentsHtml = constructCommentsHtml(response);
-      setHtml(containerElem, commentsHtml);
+      setHtmlForBlocksContainer(commentsHtml);
     }
 
     bindClickEvtListenerToScroll('.comment', handleClickBlock);
-  }
 
-  function constructCommentsHtml(blocks) {
-    return blocks.map(constructCommentHtml).join('');
+    function constructCommentsHtml(blocks) {
+      return blocks.map(constructCommentHtml).join('');
 
-    function constructCommentHtml({ id, contentHtml }) {
-      return `<div class="block comment" data-id="${id}">${contentHtml}</div>`;
+      function constructCommentHtml({ id, contentHtml }) {
+        return `<div class="block comment" data-block-id="${id}">${contentHtml}</div>`;
+      }
     }
   }
-}
 
-function setHtml(elem, html) {
-  elem.innerHTML = html;
-}
+  function listenScrollToToggleNavbar() {
+    window.addEventListener('scroll', toggleNavbar);
 
-function bindClickEvtListenerToScroll(selectors, callback) {
-  var blockElems = document.querySelectorAll(selectors);
-  var action =
-    selectors === '.colored-text'
-      ? 'scroll to the colored text'
-      : 'scroll to the comment';
+    var navbarElem = document.getElementById('navbar');
+    var beforeScrollY = window.pageYOffset;
 
-  bindClickEvtListeners(blockElems, (evt) => {
-    callback(evt, action, blockElems);
-  });
-}
+    function toggleNavbar() {
+      const currentScrollY = this.pageYOffset;
 
-function handleClickBlock(evt, action, blocks) {
-  {
-    let currentBlock = evt.currentTarget;
-    let { id: blockId } = currentBlock.dataset;
+      {
+        const delta = currentScrollY - beforeScrollY;
 
-    sendMessageToContentscript({
-      action,
-      blockId,
+        if (delta > 0) {
+          navbarElem.classList.remove('show');
+        } else {
+          navbarElem.classList.add('show');
+        }
+      }
+
+      beforeScrollY = currentScrollY;
+    }
+  }
+
+  function bindClickEvtListenerToScroll(selectors, callback) {
+    var blockElems = document.querySelectorAll(selectors);
+    var action =
+      selectors === '.colored-text'
+        ? 'scroll to the colored text'
+        : 'scroll to the comment';
+
+    bindClickEvtListeners(blockElems, (evt) => {
+      callback(evt, action, blockElems);
     });
-
-    focusBlock(blocks, currentBlock);
   }
 
-  // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
-  sendGaEvent(
-    'Marks',
-    'Scroll To',
-    `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`
-  );
-}
+  function handleClickBlock(evt, action, blocks) {
+    {
+      const currentBlock = evt.currentTarget;
+      const { blockId } = currentBlock.dataset;
 
-function focusBlock(blocks, currentBlock) {
-  removeAllFocusedClass(blocks);
-  addFocusedClass(currentBlock);
-}
+      sendMessageToContentscript({
+        action,
+        blockId,
+      });
 
-chrome.storage.sync.get(['tabFirstShow'], function (items) {
-  const tabFirstShowName = items.tabFirstShow || 'colored-texts';
-  if (tabFirstShowName === 'colored-texts') {
-    loadColoredTexts();
-    document
-      .querySelector('[data-tab="colored texts"]')
-      .classList.add('focused');
-  } else {
-    loadComments();
-    document.querySelector('[data-tab="comments"]').classList.add('focused');
+      focusItem(blocks, currentBlock);
+    }
+
+    // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
+    sendGaEvent(
+      'Marks',
+      'Scroll To',
+      `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`
+    );
+  }
+
+  function sendMessageToContentscript(message, handleResponse) {
+    chrome.tabs.query({ active: true, currentWindow: true }, handleQueriedTabs);
+
+    function handleQueriedTabs(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, message, handleResponse);
+    }
+  }
+
+  function bindClickEvtListeners(elems, handleClick) {
+    elems.forEach(bindClickEvtListener);
+
+    function bindClickEvtListener(elem) {
+      elem.addEventListener('click', handleClick);
+    }
+  }
+
+  var blocksContainerElem = document.getElementById('blocks-container');
+  function setHtmlForBlocksContainer(html) {
+    blocksContainerElem.innerHTML = html;
+  }
+
+  function activateItem(items, currentItem) {
+    removeClassNames('active', items);
+    addClassName('active', currentItem);
+  }
+
+  function focusItem(items, currentItem) {
+    removeClassNames('focused', items);
+    addClassName('focused', currentItem);
+  }
+
+  function removeClassNames(className, elems) {
+    elems.forEach((elem) => {
+      elem.classList.remove(className);
+    });
+  }
+
+  function addClassName(className, elem) {
+    elem.classList.add(className);
   }
 });
-
-const navbar = document.getElementById('navbar');
-let beforeScrollY = window.scrollY;
-window.addEventListener('scroll', function () {
-  const currentScrollY = this.scrollY;
-  const scrollDelta = currentScrollY - beforeScrollY;
-  if (scrollDelta > 0) {
-    navbar.classList.remove('show');
-  } else {
-    navbar.classList.add('show');
-  }
-  beforeScrollY = currentScrollY;
-});
-
-function sendMessageToContentscript(message, handleResponse) {
-  chrome.tabs.query({ active: true, currentWindow: true }, handleQueriedTabs);
-
-  function handleQueriedTabs(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, message, handleResponse);
-  }
-}
-
-function bindClickEvtListeners(elems, handleClick) {
-  elems.forEach(bindClickEvtListener);
-
-  function bindClickEvtListener(elem) {
-    elem.addEventListener('click', handleClick);
-  }
-}
-
-function removeAllFocusedClass(elems) {
-  elems.forEach((elem) => {
-    elem.classList.remove('focused');
-  });
-}
-
-function addFocusedClass(elem) {
-  elem.classList.add('focused');
-}

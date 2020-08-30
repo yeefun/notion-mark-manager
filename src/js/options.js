@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function initOptions() {
     chrome.storage.sync.get(
-      ['checkedColorNames', 'tabFirstShow', 'displayTimes'],
+      ['checkedColorNames', 'tabActivatedFirst', 'displayedTimes'],
       function (items) {
         originColorNames = items.checkedColorNames || [
           'font-gray',
@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
           constructOption(color);
         });
 
-        originTab = items.tabFirstShow || 'colored-texts';
+        originTab = items.tabActivatedFirst || 'colored-texts';
         document.getElementById(originTab).checked = true;
 
-        originTimes = items.displayTimes || 'once';
+        originTimes = items.displayedTimes || 'once';
         document.getElementById(originTimes).checked = true;
       }
     );
@@ -75,8 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.sync.set(
       {
         checkedColorNames,
-        tabFirstShow: checkedTab,
-        displayTimes: checkedTimes,
+        tabActivatedFirst: checkedTab,
+        displayedTimes: checkedTimes,
       },
       function () {
         let checkedFontColors = [];
