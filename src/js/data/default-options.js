@@ -1,5 +1,5 @@
 const DEFAULT_OPTIONS = {
-  checkedColorNames: [
+  colorNames: [
     'font-gray',
     'font-brown',
     'font-orange',

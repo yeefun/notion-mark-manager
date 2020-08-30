@@ -7,7 +7,7 @@ html(lang="en")
     title Notion+ Mark Manager Options
     link(rel="stylesheet", href="css/options.scss")
   body
-    form#options-form
+    form#form
       fieldset
         legend(style="margin-bottom: 10px;") Choose the text colors you want to load:
         div
@@ -16,7 +16,7 @@ html(lang="en")
             each color, idx in ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
               div(class= idx < 3 ? "mt-0" : "")
                 label(for= "font-"+color)
-                  input(id= "font-"+color, type="checkbox", value= "font-"+color)
+                  input(id= "font-"+color, type="checkbox", name="color-name" value= "font-"+color)
                   div
                     .checkbox
                       svg.checked-icon(viewBox="0 0 14 14", style="width: 10px; height: 10px; fill: white;")
@@ -30,7 +30,7 @@ html(lang="en")
             each color in ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
               div
                 label(for= "background-"+color)
-                  input(id= "background-"+color, type="checkbox", value= "background-"+color)
+                  input(id= "background-"+color, type="checkbox", name="color-name" value= "background-"+color)
                   div
                     .checkbox
                       svg.checked-icon(viewBox="0 0 14 14", style="width: 10px; height: 10px; fill: white;")
@@ -54,13 +54,13 @@ html(lang="en")
         .options-wrapper
           div
             label(for="once")
-              input#once(type="radio", name="times", value="once")
+              input#once(type="radio", name="displayed-times", value="once")
               span only once
           div(style="flex-basis: calc(100% / 3 * 2);")
             label(for="more")
-              input#more(type="radio", name="times", value="more")
+              input#more(type="radio", name="displayed-times", value="more")
               span two or more times
       div.save-wrapper
         button(type="submit") Save
-        .status#status
+        .form-status#form-status
     script(src="js/options.js")

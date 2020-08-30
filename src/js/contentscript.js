@@ -30,7 +30,7 @@ import COLORS from './data/colors.js';
     function getUserOptions() {
       return new Promise((resolve) => {
         chrome.storage.sync.get(
-          ['checkedColorNames', 'displayedTimes'],
+          ['colorNames', 'displayedTimes'],
           function callback(userOptions) {
             resolve(userOptions);
           }
@@ -47,7 +47,7 @@ import COLORS from './data/colors.js';
 
     {
       const themeColors = getThemeColors(theme);
-      checkedColors = getCheckedColors(themeColors, options.checkedColorNames);
+      checkedColors = getCheckedColors(themeColors, options.colorNames);
     }
 
     function handleMessage(message, sender, sendResponse) {
@@ -68,11 +68,11 @@ import COLORS from './data/colors.js';
       }
     }
 
-    function getCheckedColors(themeColors, checkedColorNames) {
+    function getCheckedColors(themeColors, colorNames) {
       return themeColors.filter(isCheckedColor);
 
       function isCheckedColor(color) {
-        return checkedColorNames.includes(color.name);
+        return colorNames.includes(color.name);
       }
     }
 
