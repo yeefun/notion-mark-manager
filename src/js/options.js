@@ -4,7 +4,7 @@ import {
   setChromeStorage,
   loadGa,
   sendGaPageview,
-  sendGaEvent,
+  sendGaEvt,
 } from './utils/index.js';
 import DEFAULT_OPTIONS from './data/default-options.js';
 
@@ -56,20 +56,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         } = newOptions;
 
         if (newTabActivatedFirst !== oldTabActivatedFirst) {
-          // GA: 讓哪個 tab 先顯示？
-          sendGaEvent(
-            'Options',
-            'Select',
-            `[Notion+ Mark Manager] [tab first show] [${newTabActivatedFirst}]`
+          sendGaEvt(
+            'options',
+            'checked',
+            `tab activated first: ${newTabActivatedFirst}`
           );
         }
 
         if (newDisplayedTimes !== oldDisplayedTimes) {
-          // GA: 選了哪項顯示次數？
-          sendGaEvent(
-            'Options',
-            'Select',
-            `[Notion+ Mark Manager] [display times] [${newDisplayedTimes}]`
+          sendGaEvt(
+            'options',
+            'checked',
+            `displayed times: ${newDisplayedTimes}`
           );
         }
       }

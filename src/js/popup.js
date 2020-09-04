@@ -3,7 +3,7 @@ import {
   getChromeStorage,
   loadGa,
   sendGaPageview,
-  sendGaEvent,
+  sendGaEvt,
 } from './utils/index.js';
 import { DEFAULT_TAB_ACTIVATED_FIRST } from './data/default-options.js';
 
@@ -45,8 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sendMessageToGetComments();
       }
 
-      // GA: 'comments' 與 'colored texts' tab 各被按幾次？
-      sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tab}]`);
+      sendGaEvt('tabs', 'click', tab);
     }
   }
 
@@ -192,12 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       focusItem(blocks, currentBlock);
     }
 
-    // GA: 點擊幾次 'comment' 或 'colored text' 以捲動頁面？
-    sendGaEvent(
-      'Marks',
-      'Scroll To',
-      `[Notion+ Mark Manager] [${action.split('scroll to the ')[1]}]`
-    );
+    sendGaEvt('marks', 'scroll', action.split('scroll to the ')[1]);
   }
 
   function sendMessageToContentscript(message, handleResponse) {

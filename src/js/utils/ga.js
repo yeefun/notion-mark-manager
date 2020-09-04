@@ -1,4 +1,4 @@
-export { loadGa, sendGaPageview, sendGaEvent };
+export { loadGa, sendGaPageview, sendGaEvt };
 
 function loadGa() {
   // References: https://davidsimpson.me/2014/05/27/add-googles-universal-analytics-tracking-chrome-extension/
@@ -31,7 +31,7 @@ function sendGaPageview(page) {
   window.ga('send', 'pageview', page);
 }
 
-function sendGaEvent(category, action, label, value = 1) {
+function sendGaEvt(category, action, label, value = 1) {
   if (!window.ga) {
     return;
   }
