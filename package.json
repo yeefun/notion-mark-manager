@@ -14,7 +14,7 @@
     "predev": "rimraf dist && mkdir dist && cp -R static/* dist/",
     "dev": "parcel watch src/* src/**/* --no-source-maps --no-hmr",
     "prebuild": "rimraf dist",
-    "build": "parcel build src/* src/**/* --no-content-hash",
+    "build": "parcel build src/* src/**/* --no-content-hash --no-cache",
     "postbuild": "cp -R static/* dist/",
     "lint": "eslint --ignore-path .gitignore .",
     "lints": "stylelint 'src/css/*.{css,scss}' --fix"
