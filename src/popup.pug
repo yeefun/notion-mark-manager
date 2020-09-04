@@ -3,13 +3,15 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    meta(http-equiv="X-UA-Compatible", content="ie=edge")
     title Notion+ Mark Manager Popup
     link(rel="stylesheet", href="css/popup.scss")
+
   body
-    nav#navbar.show
-      ul.navbar-nav
-        li.tab(data-tab="colored-texts", style="border-top-left-radius: 3px;") Colored Texts
-        li.tab(data-tab="comments", style="border-top-right-radius: 3px;") Comments
+    nav#navbar.shown
+      ul
+        li.tab(data-tab="colored-texts") Colored Texts
+        li.tab(data-tab="comments") Comments
+
     section#blocks-container.blocks-container
+
     script(src="js/popup.js")

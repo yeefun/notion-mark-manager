@@ -16,6 +16,10 @@ fieldset {
   padding: 0;
   border: 0;
   margin-bottom: 24px;
+
+  > div + div {
+    margin-top: 16px;
+  }
 }
 
 legend {
@@ -23,6 +27,11 @@ legend {
   padding-left: 0;
   padding-right: 0;
   font-weight: 500;
+  margin-bottom: 8px;
+
+  &.text-colors {
+    margin-bottom: 10px;
+  }
 }
 
 label {
@@ -83,6 +92,17 @@ h5 {
   transition: background-color 120ms ease-in;
 }
 
+.checked-icon {
+  width: 10px;
+  height: 10px;
+  fill: #fff;
+}
+
+.unchecked-icon {
+  width: 14px;
+  height: 14px;
+}
+
 .options-wrapper {
   display: flex;
   padding-right: 0.8px;
@@ -101,9 +121,13 @@ h5 {
 
   > div {
     flex-basis: calc(100% / 3);
+
+    &:nth-child(-n + 3) {
+      margin-top: 0;
+    }
   }
 
-  &--color {
+  &--text-colors {
     > div {
       margin-top: 4px;
     }
@@ -111,6 +135,10 @@ h5 {
     span {
       text-transform: capitalize;
     }
+  }
+
+  &--either-or > div:last-child {
+    flex-basis: calc(100% / 3 * 2);
   }
 }
 
@@ -189,8 +217,4 @@ button {
   color: rgba(55, 53, 47, 0.6);
   font-size: 14px;
   margin-left: 10px;
-}
-
-.mt-0 {
-  margin-top: 0 !important;
 }

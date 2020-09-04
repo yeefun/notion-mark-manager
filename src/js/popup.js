@@ -156,9 +156,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const delta = currentScrollY - beforeScrollY;
 
         if (delta > 0) {
-          navbarElem.classList.remove('show');
+          navbarElem.classList.remove('shown');
         } else {
-          navbarElem.classList.add('show');
+          navbarElem.classList.add('shown');
         }
       }
 
