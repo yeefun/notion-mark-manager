@@ -1,11 +1,11 @@
 import {
   inProdEnv,
-  removeDuplicate,
+  getChromeStorage,
   loadGa,
   sendGaPageview,
   sendGaEvent,
 } from './utils/index.js';
-import DEFAULT_OPTIONS from './data/default-options.js';
+import { DEFAULT_TAB_ACTIVATED_FIRST } from './data/default-options.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   setTheme();
@@ -18,10 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     sendGaPageview('/popup.html');
   }
 
-  function setTheme() {
-    chrome.storage.sync.get(['theme'], function callback({ theme = 'light' }) {
-      document.body.classList.add(theme);
-    });
+  async function setTheme() {
+    var theme;
+
+    {
+      const getTheme = getChromeStorage({ theme: 'light' });
+      ({ theme } = await getTheme());
+    }
+
+    document.body.classList.add(theme);
   }
 
   function listenTabClicked() {
@@ -32,37 +37,41 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleClickTab() {
       activateItem(tabElems, this);
 
-      {
-        const { tab } = this.dataset;
+      var { tab } = this.dataset;
 
-        if (tab === 'comments') {
-          sendMessageToGetComments();
-        } else {
-          sendMessageToGetColoredTexts();
-        }
-
-        // GA: 'comments' 與 'colored texts' tab 各被按幾次？
-        sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tab}]`);
-      }
-    }
-  }
-
-  function loadBlocks() {
-    chrome.storage.sync.get(['tabActivatedFirst'], function callback({
-      tabActivatedFirst = DEFAULT_OPTIONS.tabActivatedFirst,
-    }) {
-      if (tabActivatedFirst == 'colored-texts') {
+      if (tab == 'colored-texts') {
         sendMessageToGetColoredTexts();
       } else {
         sendMessageToGetComments();
       }
 
-      activateTab(tabActivatedFirst);
+      // GA: 'comments' 與 'colored texts' tab 各被按幾次？
+      sendGaEvent('Tabs', 'Click', `[Notion+ Mark Manager] [${tab}]`);
+    }
+  }
 
-      function activateTab(name) {
-        document.querySelector(`[data-tab="${name}"]`).classList.add('active');
-      }
-    });
+  async function loadBlocks() {
+    var tab;
+
+    {
+      const getTabActivated = getChromeStorage({
+        tabActivatedFirst: DEFAULT_TAB_ACTIVATED_FIRST,
+      });
+
+      ({ tabActivatedFirst: tab } = await getTabActivated());
+    }
+
+    if (tab == 'colored-texts') {
+      sendMessageToGetColoredTexts();
+    } else {
+      sendMessageToGetComments();
+    }
+
+    activateTab(tab);
+
+    function activateTab(name) {
+      document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+    }
   }
 
   function sendMessageToGetColoredTexts() {
@@ -84,28 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     bindClickEvtListenerToScroll('.colored-text', handleClickBlock);
 
-    {
-      const [loadedFontColors, loadedBackgroundColors] = response
-        .map(extractColorName)
-        .filter(removeDuplicate)
-        .reduce(classifyColor, [[], []]);
-
-      // GA: 有哪些顏色文字（font）被載入？
-      sendGaEvent(
-        'Marks',
-        'Load',
-        `[Notion+ Mark Manager] [font color] [${loadedFontColors.join()}]`,
-        loadedFontColors.length
-      );
-      // GA: 有哪些顏色文字（background）被載入？
-      sendGaEvent(
-        'Marks',
-        'Load',
-        `[Notion+ Mark Manager] [background color] [${loadedBackgroundColors.join()}]`,
-        loadedBackgroundColors.length
-      );
-    }
-
     function constructColoredTextsHtml(blocks) {
       return blocks.map(constructColoredTextHtml).join('');
 
@@ -125,20 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ${contentHtml}
           </div>
         `;
-      }
-    }
-
-    function extractColorName(block) {
-      return block.colorName;
-    }
-
-    function classifyColor([fontNames, backgroundNames], colorName) {
-      var [, currentName] = colorName.split('-');
-
-      if (colorName.includes('font')) {
-        return [[...fontNames, currentName], backgroundNames];
-      } else {
-        return [fontNames, [...backgroundNames, currentName]];
       }
     }
   }
@@ -223,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sendGaEvent(
       'Marks',
       'Scroll To',
-      `[Notion+ Mark Manager] [${action.split('scroll to ')[1]}]`
+      `[Notion+ Mark Manager] [${action.split('scroll to the ')[1]}]`
     );
   }
 

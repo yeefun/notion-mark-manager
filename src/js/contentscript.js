@@ -1,60 +1,44 @@
-import { removeDuplicate } from './utils/index.js';
-import DEFAULT_OPTIONS from './data/default-options.js';
+import { getChromeStorage, setChromeStorage } from './utils/index.js';
+import {
+  DEFAULT_COLOR_NAMES,
+  DEFAULT_DISPLAYED_TIMES,
+} from './data/default-options.js';
 import COLORS from './data/colors.js';
 
 (async function iife() {
+  var theme = document.querySelector('.notion-light-theme') ? 'light' : 'dark';
+
   {
-    const theme = document.querySelector('.notion-light-theme')
-      ? 'light'
-      : 'dark';
+    const getUserOptions = getChromeStorage({
+      colorNames: DEFAULT_COLOR_NAMES,
+      displayedTimes: DEFAULT_DISPLAYED_TIMES,
+    });
+    const userOptions = await getUserOptions();
 
-    {
-      const options = await getOptions();
-
-      setUpMessageListener(options, theme);
-    }
-
-    storeCurrentTheme(theme);
+    setUpMessageListener(userOptions);
   }
+
+  storeCurrentTheme(theme);
 
   listenThemeChanged();
 
-  async function getOptions() {
-    var userOptions = await getUserOptions();
-
-    return {
-      ...DEFAULT_OPTIONS,
-      ...userOptions,
-    };
-
-    function getUserOptions() {
-      return new Promise((resolve) => {
-        chrome.storage.sync.get(
-          ['colorNames', 'displayedTimes'],
-          function callback(userOptions) {
-            resolve(userOptions);
-          }
-        );
-      });
-    }
-  }
-
-  function setUpMessageListener(options, theme) {
+  function setUpMessageListener(options) {
     chrome.runtime.onMessage.addListener(handleMessage);
 
-    var checkedColors;
     var shouldDisplayOnce = options.displayedTimes == 'once';
-
-    {
-      const themeColors = getThemeColors(theme);
-      checkedColors = getCheckedColors(themeColors, options.colorNames);
-    }
 
     function handleMessage(message, sender, sendResponse) {
       switch (message.action) {
-        case 'get colored texts':
+        case 'get colored texts': {
+          const themeColors = getThemeColors(theme);
+          const checkedColors = getCheckedColors(
+            themeColors,
+            options.colorNames
+          );
+
           sendResponse(getColoredTexts(checkedColors, shouldDisplayOnce));
           break;
+        }
         case 'get comments':
           sendResponse(getComments());
           break;
@@ -66,26 +50,26 @@ import COLORS from './data/colors.js';
           scrollToTheComment(message.blockId);
           break;
       }
-    }
 
-    function getCheckedColors(themeColors, colorNames) {
-      return themeColors.filter(isCheckedColor);
+      function getThemeColors(theme) {
+        var coloredFonts = COLORS[theme].fonts;
+        var coloredBackgrounds = COLORS[theme].backgrounds;
 
-      function isCheckedColor(color) {
-        return colorNames.includes(color.name);
+        return [...coloredFonts, ...coloredBackgrounds];
       }
-    }
 
-    function getThemeColors(theme) {
-      var coloredFonts = COLORS[theme].fonts;
-      var coloredBackgrounds = COLORS[theme].backgrounds;
+      function getCheckedColors(themeColors, colorNames) {
+        return themeColors.filter(isCheckedColor);
 
-      return [...coloredFonts, ...coloredBackgrounds];
+        function isCheckedColor(color) {
+          return colorNames.includes(color.name);
+        }
+      }
     }
   }
 
   function storeCurrentTheme(theme) {
-    chrome.storage.sync.set({ theme });
+    setChromeStorage({ theme });
   }
 
   function listenThemeChanged() {
@@ -101,13 +85,11 @@ import COLORS from './data/colors.js';
           return;
         }
 
-        {
-          const theme = target.classList.contains('notion-light-theme')
-            ? 'light'
-            : 'dark';
+        theme = target.classList.contains('notion-light-theme')
+          ? 'light'
+          : 'dark';
 
-          storeCurrentTheme(theme);
-        }
+        storeCurrentTheme(theme);
       });
     }
   }
@@ -313,6 +295,10 @@ import COLORS from './data/colors.js';
         }
       }
     }
+  }
+
+  function removeDuplicate(item, idx, arr) {
+    return arr.indexOf(item) === idx;
   }
 
   function removeFalsy(value) {
