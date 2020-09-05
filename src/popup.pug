@@ -14,4 +14,28 @@ html(lang="en")
 
     section#blocks-container.blocks-container
 
+    section.export-container
+      .export-status
+        label
+          input(type="checkbox")
+          div
+            .checkbox
+              svg.checked-icon(viewBox="0 0 14 14")
+                polygon(points="5.5 11.9993304 14 3.49933039 12.5 2 5.5 8.99933039 1.5 4.9968652 0 6.49933039")
+              svg.unchecked-icon(viewBox="0 0 16 16")
+                path(d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z")
+          span Select All
+        .btns
+          button.primary(type="button") Download
+          button.secondary(type="button") Cancel
+
+      .export-options
+        p Export:
+        label
+          input(type="radio", name="export-option", value="copy")
+          span copy
+        label
+          input(type="radio", name="export-option", value="download")
+          span download
+
     script(src="js/popup.js")

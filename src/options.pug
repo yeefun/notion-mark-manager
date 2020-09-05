@@ -17,7 +17,7 @@ html(lang="en")
           .options-wrapper.options-wrapper--text-colors
             each color in colors
               div
-                label(for=`font-${color}`)
+                label
                   input(id=`font-${color}`, type="checkbox", name="color-name" value=`font-${color}`)
                   div
                     .checkbox
@@ -31,7 +31,7 @@ html(lang="en")
           .options-wrapper.options-wrapper--text-colors
             each color in colors
               div
-                label(for=`background-${color}`)
+                label
                   input(id=`background-${color}`, type="checkbox", name="color-name" value=`background-${color}`)
                   div
                     .checkbox
@@ -45,11 +45,11 @@ html(lang="en")
         legend Choose the tab you want to show first:
         .options-wrapper.options-wrapper--either-or
           div
-            label(for="colored-texts")
+            label
               input#colored-texts(type="radio", name="tab", value="colored-texts")
               span Colored Texts
           div
-            label(for="comments")
+            label
               input#comments(type="radio", name="tab", value="comments")
               span Comments
 
@@ -57,15 +57,15 @@ html(lang="en")
         legend If a block contains two or more text colors, display this block...
         .options-wrapper.options-wrapper--either-or
           div
-            label(for="once")
+            label
               input#once(type="radio", name="displayed-times", value="once")
               span only once
           div
-            label(for="more")
+            label
               input#more(type="radio", name="displayed-times", value="more")
               span two or more times
       .save-wrapper
-        button(type="submit") Save
+        button.primary(type="submit") Save
         .form-status#form-status
 
     script(src="js/options.js")

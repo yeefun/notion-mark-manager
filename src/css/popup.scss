@@ -1,3 +1,8 @@
+@import './reset';
+@import './checkbox';
+@import './radio';
+@import './button';
+
 $font-colors-light: (
   'gray': rgb(155, 154, 151),
   'brown': rgb(100, 71, 58),
@@ -65,12 +70,13 @@ $background-colors-dark: (
 }
 
 body {
-  margin: 0;
+  width: 338px;
   font-size: 14px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
     'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
   color: rgb(55, 53, 47);
   position: relative;
+  line-height: 1.25;
 
   &.dark {
     background-color: rgb(47, 52, 55);
@@ -80,11 +86,13 @@ body {
 
 nav {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   background-color: #fff;
   z-index: 99;
   box-shadow: 0 1px 0 rgba(55, 53, 47, 0.09);
-  transform: translateY(-42px);
+  transform: translateY(-100%);
   opacity: 0;
   transition: all 200ms ease-out;
 
@@ -126,10 +134,26 @@ nav {
 }
 
 .blocks-container {
-  width: 300px;
-  padding: 56px 8px 14px;
+  padding: 56px 8px 55px;
   box-sizing: border-box;
   line-height: 1.5;
+  word-break: break-word;
+
+  .wrapper {
+    display: flex;
+
+    + .wrapper {
+      margin-top: 10px;
+    }
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    padding-right: 16px;
+    padding-left: 8px;
+    display: none;
+  }
 }
 
 .block {
@@ -142,10 +166,6 @@ nav {
 
   span {
     color: rgb(55, 53, 47);
-  }
-
-  + .block {
-    margin-top: 10px;
   }
 
   &:hover,
@@ -216,5 +236,61 @@ nav {
 
   @each $color, $value in $background-colors-dark {
     @include colored-text-color('background', $color, $value);
+  }
+}
+
+.export-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 49;
+  background-color: #fff;
+
+  label {
+    display: flex;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+  }
+}
+
+.export-options {
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -1px 0 rgba(55, 53, 47, 0.09);
+  padding: 12px 16px;
+
+  p {
+    font-weight: 500;
+    width: calc(100% / 3);
+  }
+
+  label:last-child {
+    margin-left: auto;
+  }
+}
+
+.export-status {
+  box-shadow: 0 -1px 0 rgba(55, 53, 47, 0.09);
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  display: none;
+
+  label > div {
+    margin-right: 8px;
+  }
+
+  span {
+    line-height: 1;
+  }
+
+  .btns {
+    margin-left: auto;
+  }
+
+  .secondary {
+    margin-left: 12px;
   }
 }

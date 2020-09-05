@@ -1,0 +1,45 @@
+[type='radio'] {
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #000;
+  margin-top: 0;
+  margin-left: 0;
+  border-radius: 50%;
+  margin-right: 6px;
+  transition: all 120ms ease-in;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: rgb(46, 170, 220);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 120ms ease-in;
+  }
+
+  &:checked {
+    border-color: rgb(46, 170, 220);
+
+    &::after {
+      transform: scale(1);
+    }
+  }
+}
+
+label {
+  &:hover input[type='radio'] {
+    background-color: rgba(55, 53, 47, 0.08);
+  }
+
+  &:active input[type='radio'] {
+    background-color: rgba(55, 53, 47, 0.16);
+  }
+}

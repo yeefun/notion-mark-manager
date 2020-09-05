@@ -73,6 +73,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  const exportCheckboxHtml = `
+    <label>
+      <input type="checkbox" />
+      <div>
+        <div class="checkbox">
+          <svg class="checked-icon" viewBox="0 0 14 14">
+            <polygon points="5.5 11.9993304 14 3.49933039 12.5 2 5.5 8.99933039 1.5 4.9968652 0 6.49933039"></polygon>
+          </svg>
+          <svg class="unchecked-icon" viewBox="0 0 16 16">
+            <path d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z"></path>
+          </svg>
+        </div>
+      </div>
+    </label>
+  `;
+
   function sendMessageToGetColoredTexts() {
     sendMessageToContentscript(
       { action: 'get colored texts' },
@@ -104,11 +120,14 @@ document.addEventListener('DOMContentLoaded', () => {
         var hasDivWrapper = wrapperNodeName === 'DIV';
 
         return `
-          <div
-            class="block colored-text ${hasDivWrapper ? colorName : ''}"
-            data-block-id="${id}"
-          >
-            ${contentHtml}
+          <div class="wrapper">
+            ${exportCheckboxHtml}
+            <div
+              class="block colored-text ${hasDivWrapper ? colorName : ''}"
+              data-block-id="${id}"
+            >
+              ${contentHtml}
+            </div>
           </div>
         `;
       }
@@ -138,7 +157,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return blocks.map(constructCommentHtml).join('');
 
       function constructCommentHtml({ id, contentHtml }) {
-        return `<div class="block comment" data-block-id="${id}">${contentHtml}</div>`;
+        return `
+          <div class="wrapper">
+            ${exportCheckboxHtml}
+            <div class="block comment" data-block-id="${id}">${contentHtml}</div>
+          </div>
+        `;
       }
     }
   }
