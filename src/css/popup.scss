@@ -1,6 +1,5 @@
 @import './reset';
 @import './checkbox';
-@import './radio';
 @import './button';
 
 $font-colors-light: (
@@ -77,10 +76,33 @@ body {
   color: rgb(55, 53, 47);
   position: relative;
   line-height: 1.25;
+  padding-top: 43px;
+  padding-bottom: 43px;
 
   &.dark {
     background-color: rgb(47, 52, 55);
     color: rgba(255, 255, 255, 0.9);
+  }
+
+  &.export {
+    padding-bottom: 104px;
+
+    .blocks-container {
+      // 600 - 14 * 2 - 104 - 43
+      height: 425px;
+
+      label {
+        display: flex;
+      }
+    }
+
+    .menu ul {
+      display: none;
+    }
+
+    .export-container {
+      display: block;
+    }
   }
 }
 
@@ -96,45 +118,41 @@ nav {
   opacity: 0;
   transition: all 200ms ease-out;
 
+  ul {
+    display: flex;
+  }
+
+  .tab {
+    width: 50%;
+    text-align: center;
+    font-size: 16px;
+    line-height: 42px;
+    transition: background-color 120ms ease-in;
+    cursor: pointer;
+    user-select: none;
+  
+    &:hover,
+    &.active {
+      background-color: rgba(55, 53, 47, 0.08);
+    }
+  
+    &:active {
+      background-color: rgba(55, 53, 47, 0.16);
+    }
+  }
+
   &.shown {
     opacity: 1;
     transform: translateY(0);
   }
-
-  ul {
-    list-style: none;
-    padding-left: 0;
-    display: flex;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-}
-
-.tab {
-  width: 50%;
-  text-align: center;
-  font-size: 16px;
-  line-height: 28px;
-  transition: background-color 120ms ease-in;
-  cursor: pointer;
-  padding-top: 6px;
-  padding-bottom: 8px;
-  user-select: none;
-
-  &:hover,
-  &.active {
-    // = background-color: rgba(55, 53, 47, 0.08);
-    background-color: rgb(239, 239, 239);
-  }
-
-  &:active {
-    // = background-color: rgba(55, 53, 47, 0.16);
-    background-color: rgb(223, 223, 222);
-  }
 }
 
 .blocks-container {
-  padding: 56px 8px 55px;
+  padding: 14px 8px;
+  // 600 - 14 * 2 - 43 * 2
+  height: 486px;
+
+  overflow-y: auto;
   box-sizing: border-box;
   line-height: 1.5;
   word-break: break-word;
@@ -239,7 +257,7 @@ nav {
   }
 }
 
-.export-container {
+.menu {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -247,50 +265,70 @@ nav {
   z-index: 49;
   background-color: #fff;
 
-  label {
+  ul {
+    box-shadow: 0 -1px 0 rgba(55, 53, 47, 0.09);
+  }
+
+  .tab {
     display: flex;
     align-items: center;
-    user-select: none;
+    justify-content: center;
+    transition: background-color 20ms ease-in;
     cursor: pointer;
+    user-select: none;
+    line-height: 42px;
+
+    &:hover {
+      background-color: rgba(55, 53, 47, 0.08);
+    }
+  
+    &:active {
+      background-color: rgba(55, 53, 47, 0.16);
+    }
+
+    svg {
+      margin-right: 8px;
+    }
   }
+}
+
+.export-container {
+  display: none;
 }
 
 .export-options {
-  display: flex;
-  align-items: center;
+  padding: 14px 16px;
   box-shadow: 0 -1px 0 rgba(55, 53, 47, 0.09);
-  padding: 12px 16px;
 
-  p {
-    font-weight: 500;
-    width: calc(100% / 3);
-  }
+  label {
+    width: fit-content;
+    display: flex;
+    align-items: center;
 
-  label:last-child {
-    margin-left: auto;
+    span {
+      line-height: 1;
+      margin-left: 8px;
+    }
   }
 }
 
-.export-status {
+.export-btns {
+  padding: 14px 16px;
   box-shadow: 0 -1px 0 rgba(55, 53, 47, 0.09);
   display: flex;
-  align-items: center;
-  padding: 16px;
-  display: none;
-
-  label > div {
-    margin-right: 8px;
-  }
-
-  span {
-    line-height: 1;
-  }
-
-  .btns {
-    margin-left: auto;
-  }
+  margin-top: 1px;
 
   .secondary {
+    margin-right: auto;
+  }
+
+  button:last-child {
     margin-left: 12px;
   }
+}
+
+.export-icon {
+  fill: rgb(55, 53, 47);
+  width: 16px;
+  height: 16px;
 }

@@ -10,8 +10,9 @@ import { DEFAULT_TAB_ACTIVATED_FIRST } from './data/default-options.js';
 document.addEventListener('DOMContentLoaded', () => {
   setTheme();
   loadBlocks();
-  listenTabClicked();
+  listenNavTabClicked();
   listenScrollToToggleNavbar();
+  listenMenuTabClicked();
 
   if (inProdEnv) {
     loadGa();
@@ -29,8 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add(theme);
   }
 
-  function listenTabClicked() {
-    var tabElems = document.querySelectorAll('.tab');
+  function listenNavTabClicked() {
+    var tabElems = document.querySelectorAll('#navbar .tab');
 
     bindClickEvtListeners(tabElems, handleClickTab);
 
@@ -188,6 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       beforeScrollY = currentScrollY;
     }
+  }
+
+  function listenMenuTabClicked() {
+    document
+      .querySelector('.menu .tab')
+      .addEventListener('click', function handleClickTab() {
+        document.body.classList.add('export');
+      });
   }
 
   function bindClickEvtListenerToScroll(selectors, callback) {

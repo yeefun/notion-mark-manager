@@ -14,28 +14,26 @@ html(lang="en")
 
     section#blocks-container.blocks-container
 
-    section.export-container
-      .export-status
-        label
-          input(type="checkbox")
-          div
-            .checkbox
-              svg.checked-icon(viewBox="0 0 14 14")
-                polygon(points="5.5 11.9993304 14 3.49933039 12.5 2 5.5 8.99933039 1.5 4.9968652 0 6.49933039")
-              svg.unchecked-icon(viewBox="0 0 16 16")
-                path(d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z")
-          span Select All
-        .btns
-          button.primary(type="button") Download
+    section.menu
+      ul
+        li.tab
+          svg.export-icon(preserveaspectratio='xMidYMid meet', viewbox='0 0 24 24')
+            path(d='M8.71 7.71L11 5.41V15a1 1 0 0 0 2 0V5.41l2.29 2.3a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42l-4-4a1 1 0 0 0-.33-.21a1 1 0 0 0-.76 0a1 1 0 0 0-.33.21l-4 4a1 1 0 1 0 1.42 1.42zM21 14a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-4a1 1 0 0 0-2 0v4a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-4a1 1 0 0 0-1-1z')
+          p Export
+      .export-container
+        .export-options
+          label
+            input(type="checkbox")
+            div
+              .checkbox
+                svg.checked-icon(viewBox="0 0 14 14")
+                  polygon(points="5.5 11.9993304 14 3.49933039 12.5 2 5.5 8.99933039 1.5 4.9968652 0 6.49933039")
+                svg.unchecked-icon(viewBox="0 0 16 16")
+                  path(d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z")
+            span Select All
+        .export-btns
           button.secondary(type="button") Cancel
-
-      .export-options
-        p Export:
-        label
-          input(type="radio", name="export-option", value="copy")
-          span copy
-        label
-          input(type="radio", name="export-option", value="download")
-          span download
+          button.primary(type="button") Copy
+          button.primary(type="button") Download
 
     script(src="js/popup.js")
