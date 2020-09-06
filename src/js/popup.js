@@ -1,3 +1,5 @@
+import menu from './feature/menu.js';
+
 import {
   inProdEnv,
   getChromeStorage,
@@ -12,7 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
   loadBlocks();
   listenNavTabClicked();
   listenScrollToToggleNavbar();
-  listenMenuTabClicked();
+
+  menu.listenTabClicked();
+  menu.listenExportBtnsClicked();
 
   if (inProdEnv) {
     loadGa();
@@ -189,14 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       beforeScrollY = currentScrollY;
     }
-  }
-
-  function listenMenuTabClicked() {
-    document
-      .querySelector('.menu .tab')
-      .addEventListener('click', function handleClickTab() {
-        document.body.classList.add('export');
-      });
   }
 
   function bindClickEvtListenerToScroll(selectors, callback) {
