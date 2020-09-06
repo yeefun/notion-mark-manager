@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
   listenScrollToToggleNavbar();
 
   menu.listenTabClicked();
-  menu.listenExportBtnsClicked();
+  menu.exporter.listenOptionsClicked();
+  menu.exporter.listenBtnsClicked();
 
   if (inProdEnv) {
     loadGa();
