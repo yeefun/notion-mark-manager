@@ -10,6 +10,8 @@ import {
 import { DEFAULT_TAB_ACTIVATED_FIRST } from './data/default-options.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  var blocksContainerElem = document.getElementById('blocks-container');
+
   setTheme();
   loadBlocks();
   listenNavTabClicked();
@@ -174,16 +176,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function listenScrollToToggleNavbar() {
-    window.addEventListener('scroll', toggleNavbar);
+    blocksContainerElem.addEventListener('scroll', toggleNavbar);
 
     var navbarElem = document.getElementById('navbar');
-    var beforeScrollY = window.pageYOffset;
+    var beforeScrollTop = blocksContainerElem.scrollTop;
 
     function toggleNavbar() {
-      const currentScrollY = this.pageYOffset;
+      const currentScrollTop = this.scrollTop;
 
       {
-        const delta = currentScrollY - beforeScrollY;
+        const delta = currentScrollTop - beforeScrollTop;
 
         if (delta > 0) {
           navbarElem.classList.remove('shown');
@@ -192,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      beforeScrollY = currentScrollY;
+      beforeScrollTop = currentScrollTop;
     }
   }
 
@@ -240,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  var blocksContainerElem = document.getElementById('blocks-container');
   function setHtmlForBlocksContainer(html) {
     blocksContainerElem.innerHTML = html;
   }

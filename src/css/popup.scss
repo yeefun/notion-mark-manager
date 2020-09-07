@@ -69,14 +69,13 @@ $background-colors-dark: (
 }
 
 body {
-  width: 338px;
+  width: 300px;
   font-size: 14px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
     'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
   color: rgb(55, 53, 47);
   position: relative;
   line-height: 1.25;
-  padding-top: 43px;
   padding-bottom: 43px;
 
   &.dark {
@@ -85,6 +84,7 @@ body {
   }
 
   &.export {
+    width: 338px;
     padding-bottom: 104px;
 
     .blocks-container {
@@ -149,8 +149,9 @@ nav {
 
 .blocks-container {
   padding: 14px 8px;
-  // 600 - 14 * 2 - 43 * 2
-  height: 486px;
+  padding-top: 57px;
+  // 600 - 14 * 2 - 43
+  height: 529px;
 
   overflow-y: auto;
   box-sizing: border-box;
