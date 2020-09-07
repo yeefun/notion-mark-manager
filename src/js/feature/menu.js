@@ -4,7 +4,7 @@ function listenTabClicked() {
   document
     .querySelector('.menu .tab')
     .addEventListener('click', function handleClickTab() {
-      document.body.classList.add('export');
+      document.body.classList.add('exported');
     });
 }
 
@@ -34,7 +34,7 @@ const exporter = (function createExporter() {
     document
       .getElementById('cancel')
       .addEventListener('click', function handleCancel() {
-        document.body.classList.remove('export');
+        document.body.classList.remove('exported');
       });
 
     listenCopyClicked();

@@ -17,11 +17,11 @@ html(lang="en")
     section.menu
       ul
         li.tab
-          svg.export-icon(preserveaspectratio='xMidYMid meet', viewbox='0 0 24 24')
+          svg.exporter-icon(preserveaspectratio='xMidYMid meet', viewbox='0 0 24 24')
             path(d='M8.71 7.71L11 5.41V15a1 1 0 0 0 2 0V5.41l2.29 2.3a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42l-4-4a1 1 0 0 0-.33-.21a1 1 0 0 0-.76 0a1 1 0 0 0-.33.21l-4 4a1 1 0 1 0 1.42 1.42zM21 14a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-4a1 1 0 0 0-2 0v4a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-4a1 1 0 0 0-1-1z')
           p Export
-      .export-container
-        .export-options
+      .exporter-container
+        .exporter-options
           label
             input#select-all(type="checkbox")
             div
@@ -31,7 +31,7 @@ html(lang="en")
                 svg.unchecked-icon(viewBox="0 0 16 16")
                   path(d="M1.5,1.5 L1.5,14.5 L14.5,14.5 L14.5,1.5 L1.5,1.5 Z M0,0 L16,0 L16,16 L0,16 L0,0 Z")
             span Select All
-        .export-btns
+        .exporter-btns
           button#cancel.secondary(type="button") Cancel
           button#copy.primary(type="button") Copy
           button.primary(type="button") Download

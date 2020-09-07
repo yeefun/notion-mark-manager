@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const exportCheckboxHtml = `
+  const exportedCheckboxHtml = `
     <label>
       <input type="checkbox" />
       <div>
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return `
           <div class="wrapper">
-            ${exportCheckboxHtml}
+            ${exportedCheckboxHtml}
             <div
               class="block colored-text ${hasDivWrapper ? colorName : ''}"
               data-block-id="${id}"
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
       function constructCommentHtml({ id, contentHtml }) {
         return `
           <div class="wrapper">
-            ${exportCheckboxHtml}
+            ${exportedCheckboxHtml}
             <div class="block comment" data-block-id="${id}">${contentHtml}</div>
           </div>
         `;
