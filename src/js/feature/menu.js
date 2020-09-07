@@ -1,4 +1,5 @@
-import Clipboard from 'clipboard';
+import clipboard from 'clipboard';
+import { saveAs } from 'file-saver';
 
 var inputsBlock;
 var btnsWrapperElem = document.getElementById('exporter-btns-wrapper');
@@ -25,6 +26,10 @@ function listenInputsBlockClicked() {
         totalCheckedBlocks += 1;
 
         btnsWrapperElem.classList.add('shown');
+
+        if (inputsBlock === undefined) {
+          inputsBlock = document.querySelectorAll('#blocks-container input');
+        }
 
         if (totalCheckedBlocks === inputsBlock.length) {
           inputSelectAll.checked = true;
@@ -79,29 +84,44 @@ const exporter = (function createExporter() {
       });
 
     listenCopyClicked();
+    listenDownloadClicked();
   }
 
   function listenCopyClicked() {
-    new Clipboard('#copy', {
-      text: function copyCheckedBlocksText() {
-        const inputsBlockChecked = Array.from(
-          document.querySelectorAll('#blocks-container input:checked')
-        );
-
-        return inputsBlockChecked
-          .map(getClosestWrapperElem)
-          .map(extractText)
-          .join('\n\r');
-
-        function getClosestWrapperElem(elem) {
-          return elem.closest('.wrapper');
-        }
-
-        function extractText(elem) {
-          return elem.innerText;
-        }
-      },
+    new clipboard('#copy', {
+      text: getCheckedBlocksText,
     });
+  }
+
+  function listenDownloadClicked() {
+    document
+      .getElementById('download')
+      .addEventListener('click', function handleDownload() {
+        var blob = new Blob([getCheckedBlocksText()], {
+          type: 'text/plain;charset=utf-8',
+        });
+
+        saveAs(blob, 'nmm-export.txt');
+      });
+  }
+
+  function getCheckedBlocksText() {
+    const inputsBlockChecked = Array.from(
+      document.querySelectorAll('#blocks-container input:checked')
+    );
+
+    return inputsBlockChecked
+      .map(getClosestWrapperElem)
+      .map(extractText)
+      .join('\n\r');
+
+    function getClosestWrapperElem(elem) {
+      return elem.closest('.wrapper');
+    }
+
+    function extractText(elem) {
+      return elem.innerText;
+    }
   }
 })();
 
