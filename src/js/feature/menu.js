@@ -1,10 +1,43 @@
 import Clipboard from 'clipboard';
 
+var inputsBlock;
+var btnsWrapperElem = document.getElementById('exporter-btns-wrapper');
+var inputSelectAll = document.getElementById('select-all');
+var totalCheckedBlocks = 0;
+
 function listenTabClicked() {
   document
     .querySelector('.menu .tab')
     .addEventListener('click', function handleClickTab() {
       document.body.classList.add('exported');
+    });
+}
+
+function listenInputsBlockClicked() {
+  document
+    .getElementById('blocks-container')
+    .addEventListener('click', function handleClick(evt) {
+      if (evt.target.nodeName !== 'INPUT') {
+        return;
+      }
+
+      if (evt.target.checked) {
+        totalCheckedBlocks += 1;
+
+        btnsWrapperElem.classList.add('shown');
+
+        if (totalCheckedBlocks === inputsBlock.length) {
+          inputSelectAll.checked = true;
+        }
+      } else {
+        totalCheckedBlocks -= 1;
+
+        if (totalCheckedBlocks === 0) {
+          btnsWrapperElem.classList.remove('shown');
+        }
+
+        inputSelectAll.checked = false;
+      }
     });
 }
 
@@ -15,19 +48,27 @@ const exporter = (function createExporter() {
   };
 
   function listenOptionsClicked() {
-    document
-      .getElementById('select-all')
-      .addEventListener('change', function handleSelectAll(evt) {
-        var selectAllInput = evt.currentTarget;
+    inputSelectAll.addEventListener('change', function handleSelectAll() {
+      if (inputsBlock === undefined) {
+        inputsBlock = document.querySelectorAll('#blocks-container input');
+      }
 
-        document
-          .querySelectorAll('.blocks-container input')
-          .forEach(toggleInput);
+      inputsBlock.forEach(toggleInput);
 
-        function toggleInput(input) {
-          input.checked = selectAllInput.checked;
-        }
-      });
+      if (inputSelectAll.checked) {
+        btnsWrapperElem.classList.add('shown');
+
+        totalCheckedBlocks = inputsBlock.length;
+      } else {
+        btnsWrapperElem.classList.remove('shown');
+
+        totalCheckedBlocks = 0;
+      }
+
+      function toggleInput(input) {
+        input.checked = inputSelectAll.checked;
+      }
+    });
   }
 
   function listenBtnsClicked() {
@@ -43,11 +84,11 @@ const exporter = (function createExporter() {
   function listenCopyClicked() {
     new Clipboard('#copy', {
       text: function copyCheckedBlocksText() {
-        const checkedInputs = Array.from(
-          document.querySelectorAll('.blocks-container input:checked')
+        const inputsBlockChecked = Array.from(
+          document.querySelectorAll('#blocks-container input:checked')
         );
 
-        return checkedInputs
+        return inputsBlockChecked
           .map(getClosestWrapperElem)
           .map(extractText)
           .join('\n\r');
@@ -66,5 +107,6 @@ const exporter = (function createExporter() {
 
 export default {
   listenTabClicked,
+  listenInputsBlockClicked,
   exporter,
 };

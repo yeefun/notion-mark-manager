@@ -328,6 +328,14 @@ nav {
   }
 }
 
+#exporter-btns-wrapper {
+  display: none;
+
+  &.shown {
+    display: block;
+  }
+}
+
 .exporter-icon {
   fill: rgb(55, 53, 47);
   width: 16px;

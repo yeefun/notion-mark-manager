@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   listenScrollToToggleNavbar();
 
   menu.listenTabClicked();
+  menu.listenInputsBlockClicked();
   menu.exporter.listenOptionsClicked();
   menu.exporter.listenBtnsClicked();
 
