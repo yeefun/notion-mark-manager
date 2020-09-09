@@ -87,9 +87,9 @@ body {
     width: 338px;
     padding-bottom: 104px;
 
-    .blocks-container {
+    #blocks {
       // 600 - 14 * 2 - 104 - 43
-      height: 425px;
+      max-height: 425px;
 
       label {
         display: flex;
@@ -147,11 +147,11 @@ nav {
   }
 }
 
-.blocks-container {
+#blocks {
   padding: 14px 8px;
   padding-top: 57px;
   // 600 - 14 * 2 - 43
-  height: 529px;
+  max-height: 529px;
 
   overflow-y: auto;
   box-sizing: border-box;
@@ -167,11 +167,20 @@ nav {
   }
 
   label {
-    display: flex;
     align-items: center;
     padding-right: 16px;
     padding-left: 8px;
     display: none;
+    flex: 0 0 auto;
+  }
+}
+
+#colored-texts-container,
+#comments-container {
+  display: none;
+
+  &.shown {
+    display: block;
   }
 }
 
@@ -182,6 +191,7 @@ nav {
   cursor: pointer;
   position: relative;
   color: rgba(55, 53, 47, 0.16);
+  flex: 1 1 auto;
 
   span {
     color: rgb(55, 53, 47);

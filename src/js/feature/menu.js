@@ -1,10 +1,18 @@
 import clipboard from 'clipboard';
 import { saveAs } from 'file-saver';
 
-var inputsBlock;
-var btnsWrapperElem = document.getElementById('exporter-btns-wrapper');
+import nav from '../store/nav.js';
+
+var inputsBlock = {
+  'colored-texts': undefined,
+  comments: undefined,
+};
+var btnsWrapper = document.getElementById('exporter-btns-wrapper');
 var inputSelectAll = document.getElementById('select-all');
-var totalCheckedBlocks = 0;
+var totalCheckedBlocks = {
+  'colored-texts': 0,
+  comments: 0,
+};
 
 function listenTabClicked() {
   document
@@ -16,29 +24,37 @@ function listenTabClicked() {
 
 function listenInputsBlockClicked() {
   document
-    .getElementById('blocks-container')
+    .getElementById('blocks')
     .addEventListener('click', function handleClick(evt) {
       if (evt.target.nodeName !== 'INPUT') {
         return;
       }
 
       if (evt.target.checked) {
-        totalCheckedBlocks += 1;
+        totalCheckedBlocks[nav.state.tab] += 1;
 
-        btnsWrapperElem.classList.add('shown');
-
-        if (inputsBlock === undefined) {
-          inputsBlock = document.querySelectorAll('#blocks-container input');
+        if (!btnsWrapper.classList.contains('shown')) {
+          btnsWrapper.classList.add('shown');
         }
 
-        if (totalCheckedBlocks === inputsBlock.length) {
-          inputSelectAll.checked = true;
+        {
+          const currentInputsBlock = getCurrentInputsBlock();
+          const areAllBlocksChecked =
+            totalCheckedBlocks[nav.state.tab] === currentInputsBlock.length;
+
+          if (areAllBlocksChecked) {
+            inputSelectAll.checked = true;
+          }
         }
       } else {
-        totalCheckedBlocks -= 1;
+        totalCheckedBlocks[nav.state.tab] -= 1;
 
-        if (totalCheckedBlocks === 0) {
-          btnsWrapperElem.classList.remove('shown');
+        {
+          const areNoBlocksChecked = totalCheckedBlocks[nav.state.tab] === 0;
+
+          if (areNoBlocksChecked) {
+            btnsWrapper.classList.remove('shown');
+          }
         }
 
         inputSelectAll.checked = false;
@@ -54,37 +70,36 @@ const exporter = (function createExporter() {
 
   function listenOptionsClicked() {
     inputSelectAll.addEventListener('change', function handleSelectAll() {
-      if (inputsBlock === undefined) {
-        inputsBlock = document.querySelectorAll('#blocks-container input');
-      }
+      var currentInputsBlock = getCurrentInputsBlock();
 
-      inputsBlock.forEach(toggleInput);
+      currentInputsBlock.forEach(function toggleInput(input) {
+        input.checked = inputSelectAll.checked;
+      });
 
       if (inputSelectAll.checked) {
-        btnsWrapperElem.classList.add('shown');
+        btnsWrapper.classList.add('shown');
 
-        totalCheckedBlocks = inputsBlock.length;
+        totalCheckedBlocks[nav.state.tab] = currentInputsBlock.length;
       } else {
-        btnsWrapperElem.classList.remove('shown');
+        btnsWrapper.classList.remove('shown');
 
-        totalCheckedBlocks = 0;
-      }
-
-      function toggleInput(input) {
-        input.checked = inputSelectAll.checked;
+        totalCheckedBlocks[nav.state.tab] = 0;
       }
     });
   }
 
   function listenBtnsClicked() {
+    listenCancelClicked();
+    listenCopyClicked();
+    listenDownloadClicked();
+  }
+
+  function listenCancelClicked() {
     document
       .getElementById('cancel')
       .addEventListener('click', function handleCancel() {
         document.body.classList.remove('exported');
       });
-
-    listenCopyClicked();
-    listenDownloadClicked();
   }
 
   function listenCopyClicked() {
@@ -107,7 +122,7 @@ const exporter = (function createExporter() {
 
   function getCheckedBlocksText() {
     const inputsBlockChecked = Array.from(
-      document.querySelectorAll('#blocks-container input:checked')
+      document.querySelectorAll(`#${nav.state.tab}-container input:checked`)
     );
 
     return inputsBlockChecked
@@ -125,8 +140,26 @@ const exporter = (function createExporter() {
   }
 })();
 
+function changeInputSelectAll() {
+  var currentInputsBlock = getCurrentInputsBlock();
+
+  inputSelectAll.checked =
+    totalCheckedBlocks[nav.state.tab] === currentInputsBlock.length;
+}
+
+function getCurrentInputsBlock() {
+  if (inputsBlock[nav.state.tab] === undefined) {
+    return (inputsBlock[nav.state.tab] = document.querySelectorAll(
+      `#${nav.state.tab}-container input`
+    ));
+  }
+
+  return inputsBlock[nav.state.tab];
+}
+
 export default {
   listenTabClicked,
   listenInputsBlockClicked,
   exporter,
+  changeInputSelectAll,
 };

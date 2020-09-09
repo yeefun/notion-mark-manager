@@ -1,21 +1,37 @@
 import menu from './feature/menu.js';
+import nav from './store/nav.js';
 
 import {
-  inProdEnv,
   getChromeStorage,
+  sendMessageToContentscript,
+  inProdEnv,
   loadGa,
   sendGaPageview,
   sendGaEvt,
 } from './utils/index.js';
 import { DEFAULT_TAB_ACTIVATED_FIRST } from './data/default-options.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  var blocksContainerElem = document.getElementById('blocks-container');
+document.addEventListener('DOMContentLoaded', async () => {
+  var blocks = document.getElementById('blocks');
+  var coloredTextsContainer = document.getElementById(
+    'colored-texts-container'
+  );
+  var commentsContainer = document.getElementById('comments-container');
+  var blocksContainers = [coloredTextsContainer, commentsContainer];
+
+  var isLoadingBlocks = false;
+
+  var coloredTextsHtml = '';
+  var commentsHtml = '';
 
   setTheme();
+
+  await initNav();
   loadBlocks();
+
+  listenBlockClicked();
   listenNavTabClicked();
-  listenScrollToToggleNavbar();
+  listenScrollToToggleNav();
 
   menu.listenTabClicked();
   menu.listenInputsBlockClicked();
@@ -32,57 +48,124 @@ document.addEventListener('DOMContentLoaded', () => {
 
     {
       const getTheme = getChromeStorage({ theme: 'light' });
+
       ({ theme } = await getTheme());
     }
 
     document.body.classList.add(theme);
   }
 
-  function listenNavTabClicked() {
-    var tabElems = document.querySelectorAll('#navbar .tab');
+  async function initNav() {
+    await setTab();
+    activateTab(nav.state.tab);
 
-    bindClickEvtListeners(tabElems, handleClickTab);
+    async function setTab() {
+      var tabActivatedFirst;
 
-    function handleClickTab() {
-      activateItem(tabElems, this);
+      {
+        const getTabActivatedFirst = getChromeStorage({
+          tabActivatedFirst: DEFAULT_TAB_ACTIVATED_FIRST,
+        });
 
-      var { tab } = this.dataset;
-
-      if (tab == 'colored-texts') {
-        sendMessageToGetColoredTexts();
-      } else {
-        sendMessageToGetComments();
+        ({ tabActivatedFirst } = await getTabActivatedFirst());
       }
 
-      sendGaEvt('tabs', 'click', tab);
+      nav.setTab(tabActivatedFirst);
     }
-  }
-
-  async function loadBlocks() {
-    var tab;
-
-    {
-      const getTabActivated = getChromeStorage({
-        tabActivatedFirst: DEFAULT_TAB_ACTIVATED_FIRST,
-      });
-
-      ({ tabActivatedFirst: tab } = await getTabActivated());
-    }
-
-    if (tab == 'colored-texts') {
-      sendMessageToGetColoredTexts();
-    } else {
-      sendMessageToGetComments();
-    }
-
-    activateTab(tab);
 
     function activateTab(name) {
       document.querySelector(`[data-tab="${name}"]`).classList.add('active');
     }
   }
 
-  const exportedCheckboxHtml = `
+  function listenBlockClicked() {
+    blocks.addEventListener('click', function handleClickBlock(evt) {
+      if (!evt.target.classList.contains('block')) {
+        return;
+      }
+
+      var action = '';
+
+      {
+        const block = evt.target;
+        let blocks;
+
+        {
+          const isColoredText = block.classList.contains('colored-text');
+          action = isColoredText
+            ? 'scroll to the colored text'
+            : 'scroll to the comment';
+          blocks = document.querySelectorAll(
+            isColoredText ? '.colored-text' : '.comment'
+          );
+        }
+
+        {
+          let scrollToTheBlock;
+
+          {
+            const { blockId } = block.dataset;
+
+            scrollToTheBlock = sendMessageToContentscript({
+              action,
+              blockId,
+            });
+          }
+
+          scrollToTheBlock();
+        }
+
+        focusItem(block, blocks);
+      }
+
+      sendGaEvt('marks', 'scroll', action.split('scroll to the ')[1]);
+    });
+  }
+
+  async function loadBlocks() {
+    isLoadingBlocks = true;
+
+    if (nav.state.tab === 'colored-texts') {
+      await loadColoredTexts();
+      showBlocksContainer(coloredTextsContainer);
+    } else {
+      await loadComments();
+      showBlocksContainer(commentsContainer);
+    }
+
+    isLoadingBlocks = false;
+  }
+
+  function listenNavTabClicked() {
+    var tabs = document.querySelectorAll('#nav .tab');
+
+    bindClickEvtListeners(tabs, async function handleClickTab() {
+      if (isLoadingBlocks || this.dataset.tab === nav.state.tab) {
+        return;
+      }
+
+      activateItem(this, tabs);
+      nav.setTab(this.dataset.tab);
+
+      if (coloredTextsHtml === '') {
+        await loadColoredTexts();
+      } else if (commentsHtml === '') {
+        await loadComments();
+      }
+
+      showBlocksContainer(
+        nav.state.tab === 'colored-texts'
+          ? coloredTextsContainer
+          : commentsContainer
+      );
+
+      menu.changeInputSelectAll();
+
+      sendGaEvt('tabs', 'click', nav.state.tab);
+    });
+  }
+
+  var exportedCheckboxHtml = `
     <label>
       <input type="checkbox" />
       <div>
@@ -98,24 +181,22 @@ document.addEventListener('DOMContentLoaded', () => {
     </label>
   `;
 
-  function sendMessageToGetColoredTexts() {
-    sendMessageToContentscript(
-      { action: 'get colored texts' },
-      handleGetColoredTextsResponse
-    );
-  }
+  async function loadColoredTexts() {
+    var response = [];
 
-  function handleGetColoredTextsResponse(response = []) {
+    {
+      const getColoredTexts = sendMessageToContentscript({
+        action: 'get colored texts',
+      });
+      response = await getColoredTexts();
+    }
+
     if (response.length == 0) {
       return;
     }
 
-    {
-      const coloredTextsHtml = constructColoredTextsHtml(response);
-      setHtmlForBlocksContainer(coloredTextsHtml);
-    }
-
-    bindClickEvtListenerToScroll('.colored-text', handleClickBlock);
+    coloredTextsHtml = constructColoredTextsHtml(response);
+    setHtml(coloredTextsContainer, coloredTextsHtml);
 
     function constructColoredTextsHtml(blocks) {
       return blocks.map(constructColoredTextHtml).join('');
@@ -143,24 +224,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function sendMessageToGetComments() {
-    sendMessageToContentscript(
-      { action: 'get comments' },
-      handleGetCommentsResponse
-    );
-  }
+  async function loadComments() {
+    var response = [];
 
-  function handleGetCommentsResponse(response = []) {
+    {
+      const getComments = sendMessageToContentscript({
+        action: 'get comments',
+      });
+      response = await getComments();
+    }
+
     if (response.length == 0) {
       return;
     }
 
-    {
-      const commentsHtml = constructCommentsHtml(response);
-      setHtmlForBlocksContainer(commentsHtml);
-    }
-
-    bindClickEvtListenerToScroll('.comment', handleClickBlock);
+    commentsHtml = constructCommentsHtml(response);
+    setHtml(commentsContainer, commentsHtml);
 
     function constructCommentsHtml(blocks) {
       return blocks.map(constructCommentHtml).join('');
@@ -176,85 +255,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function listenScrollToToggleNavbar() {
-    blocksContainerElem.addEventListener('scroll', toggleNavbar);
+  function listenScrollToToggleNav() {
+    var nav = document.getElementById('nav');
+    var beforeScrollTop = blocks.scrollTop;
 
-    var navbarElem = document.getElementById('navbar');
-    var beforeScrollTop = blocksContainerElem.scrollTop;
-
-    function toggleNavbar() {
-      const currentScrollTop = this.scrollTop;
+    blocks.addEventListener('scroll', function toggleNav() {
+      var currentScrollTop = this.scrollTop;
 
       {
         const delta = currentScrollTop - beforeScrollTop;
 
         if (delta > 0) {
-          navbarElem.classList.remove('shown');
+          nav.classList.remove('shown');
         } else {
-          navbarElem.classList.add('shown');
+          nav.classList.add('shown');
         }
       }
 
       beforeScrollTop = currentScrollTop;
-    }
-  }
-
-  function bindClickEvtListenerToScroll(selectors, callback) {
-    var blockElems = document.querySelectorAll(selectors);
-    var action =
-      selectors === '.colored-text'
-        ? 'scroll to the colored text'
-        : 'scroll to the comment';
-
-    bindClickEvtListeners(blockElems, (evt) => {
-      callback(evt, action, blockElems);
     });
   }
 
-  function handleClickBlock(evt, action, blocks) {
-    {
-      const currentBlock = evt.currentTarget;
-      const { blockId } = currentBlock.dataset;
-
-      sendMessageToContentscript({
-        action,
-        blockId,
-      });
-
-      focusItem(blocks, currentBlock);
-    }
-
-    sendGaEvt('marks', 'scroll', action.split('scroll to the ')[1]);
-  }
-
-  function sendMessageToContentscript(message, handleResponse) {
-    chrome.tabs.query({ active: true, currentWindow: true }, handleQueriedTabs);
-
-    function handleQueriedTabs(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, message, handleResponse);
-    }
-  }
-
   function bindClickEvtListeners(elems, handleClick) {
-    elems.forEach(bindClickEvtListener);
-
-    function bindClickEvtListener(elem) {
+    elems.forEach(function bindClickEvtListener(elem) {
       elem.addEventListener('click', handleClick);
-    }
+    });
   }
 
-  function setHtmlForBlocksContainer(html) {
-    blocksContainerElem.innerHTML = html;
+  function setHtml(elem, html) {
+    elem.innerHTML = html;
   }
 
-  function activateItem(items, currentItem) {
+  function showBlocksContainer(container) {
+    removeClassNames('shown', blocksContainers);
+    addClassName('shown', container);
+  }
+
+  function activateItem(item, items) {
     removeClassNames('active', items);
-    addClassName('active', currentItem);
+    addClassName('active', item);
   }
 
-  function focusItem(items, currentItem) {
+  function focusItem(item, items) {
     removeClassNames('focused', items);
-    addClassName('focused', currentItem);
+    addClassName('focused', item);
   }
 
   function removeClassNames(className, elems) {

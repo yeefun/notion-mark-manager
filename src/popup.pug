@@ -7,12 +7,14 @@ html(lang="en")
     link(rel="stylesheet", href="css/popup.scss")
 
   body
-    nav#navbar.shown
+    nav#nav.shown
       ul
         li.tab(data-tab="colored-texts") Colored Texts
         li.tab(data-tab="comments") Comments
 
-    section#blocks-container.blocks-container
+    section#blocks
+      #colored-texts-container
+      #comments-container
 
     section.menu
       ul
