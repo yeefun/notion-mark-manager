@@ -1,4 +1,8 @@
-import { getChromeStorage, setChromeStorage } from './utils/index.js';
+import {
+  getChromeStorage,
+  setChromeStorage,
+  removeFalsy,
+} from './utils/index.js';
 import {
   DEFAULT_COLOR_NAMES,
   DEFAULT_DISPLAYED_TIMES,
@@ -299,10 +303,6 @@ import COLORS from './data/colors.js';
 
   function removeDuplicate(item, idx, arr) {
     return arr.indexOf(item) === idx;
-  }
-
-  function removeFalsy(value) {
-    return value;
   }
 
   function getBlockElem(id) {

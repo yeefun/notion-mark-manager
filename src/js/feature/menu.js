@@ -2,6 +2,7 @@ import clipboard from 'clipboard';
 import { saveAs } from 'file-saver';
 
 import nav from '../store/nav.js';
+import { removeFalsy } from '../utils/index.js';
 
 var inputsBlock = {
   'colored-texts': undefined,
@@ -99,7 +100,35 @@ const exporter = (function createExporter() {
       .getElementById('cancel')
       .addEventListener('click', function handleCancel() {
         document.body.classList.remove('exported');
+
+        reset();
       });
+
+    function reset() {
+      totalCheckedBlocks['colored-texts'] = 0;
+      totalCheckedBlocks.comments = 0;
+
+      getAllInputsBlock().forEach(function uncheck(input) {
+        input.checked = false;
+      });
+
+      inputSelectAll.checked = false;
+
+      btnsWrapper.classList.remove('shown');
+    }
+
+    function getAllInputsBlock() {
+      return Object.values(inputsBlock)
+        .filter(removeFalsy)
+        .map(unary(Array.from))
+        .flat();
+
+      function unary(func) {
+        return function onlyOneArg(arg) {
+          return func(arg);
+        };
+      }
+    }
   }
 
   function listenCopyClicked() {

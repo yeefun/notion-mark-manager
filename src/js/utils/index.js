@@ -4,4 +4,8 @@ export { loadGa, sendGaPageview, sendGaEvt } from './ga.js';
 
 const inProdEnv = process.env.NODE_ENV === 'production';
 
-export { inProdEnv };
+function removeFalsy(value) {
+  return value;
+}
+
+export { inProdEnv, removeFalsy };
