@@ -6,10 +6,8 @@ label {
     transition: background-color 200ms ease-out;
   }
 
-  &:hover {
-    .checkbox {
-      background-color: rgba(55, 53, 47, 0.08);
-    }
+  &:hover .checkbox {
+    background-color: rgba(55, 53, 47, 0.08);
   }
 
   &:active .checkbox {
@@ -51,4 +49,20 @@ label {
 .unchecked-icon {
   width: 14px;
   height: 14px;
+}
+
+.dark {
+  label {
+    &:hover .checkbox {
+      background-color: rgb(71, 76, 80);
+    }
+
+    &:active .checkbox {
+      background-color: rgb(63, 68, 71);
+    }
+  }
+
+  .unchecked-icon {
+    fill: rgba(#fff, 0.9);
+  }
 }

@@ -80,7 +80,7 @@ body {
 
   &.dark {
     background-color: rgb(47, 52, 55);
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(#fff, 0.9);
   }
 
   &.exported {
@@ -226,7 +226,7 @@ nav {
     color: rgb(71, 76, 80);
 
     span {
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(#fff, 0.9);
     }
 
     &:hover,
@@ -235,7 +235,7 @@ nav {
     }
 
     &:hover {
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(#fff, 0.9);
     }
 
     &:active {
@@ -243,20 +243,34 @@ nav {
     }
   }
 
-  nav {
+  nav,
+  .menu {
     background-color: rgb(47, 52, 55);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07);
+
+    .tab {
+      &.active,
+      &:hover {
+        background-color: rgb(71, 76, 80);
+      }
+
+      &:active {
+        background-color: rgb(63, 68, 71);
+      }
+    }
   }
 
-  .tab {
-    &.active,
-    &:hover {
-      background-color: rgb(71, 76, 80);
-    }
+  nav {
+    box-shadow: 0 1px 0 rgba(#fff, 0.07);
+  }
 
-    &:active {
-      background-color: rgb(63, 68, 71);
+  .menu {
+    ul {
+      box-shadow: 0 -1px 0 rgba(#fff, 0.07);
     }
+  }
+
+  .exporter-icon {
+    fill: rgba(#fff, 0.9);
   }
 
   @each $color, $value in $font-colors-dark {
