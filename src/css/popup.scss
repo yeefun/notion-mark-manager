@@ -273,6 +273,10 @@ nav {
     fill: rgba(#fff, 0.9);
   }
 
+  #status {
+    color: rgba(#fff, 0.6);
+  }
+
   @each $color, $value in $font-colors-dark {
     @include colored-text-color('font', $color, $value);
   }
@@ -324,17 +328,28 @@ nav {
 .exporter-options {
   padding: 14px 16px;
   box-shadow: 0 -1px 0 rgba(55, 53, 47, 0.09);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   label {
     width: fit-content;
     display: flex;
     align-items: center;
+    flex: 0 0 auto;
 
     span {
       line-height: 1;
       margin-left: 8px;
     }
   }
+}
+
+#status {
+  color: rgba(55, 53, 47, 0.6);
+  font-size: 14px;
+  margin-left: 10px;
+  line-height: 1;
 }
 
 .exporter-btns {

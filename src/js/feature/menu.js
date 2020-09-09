@@ -1,4 +1,4 @@
-import clipboard from 'clipboard';
+import Clipboard from 'clipboard';
 import { saveAs } from 'file-saver';
 
 import nav from '../store/nav.js';
@@ -10,6 +10,7 @@ var inputsBlock = {
 };
 var btnsWrapper = document.getElementById('exporter-btns-wrapper');
 var inputSelectAll = document.getElementById('select-all');
+var status = document.getElementById('status');
 var totalCheckedBlocks = {
   'colored-texts': 0,
   comments: 0,
@@ -132,8 +133,13 @@ const exporter = (function createExporter() {
   }
 
   function listenCopyClicked() {
-    new clipboard('#copy', {
+    var clipboard = new Clipboard('#copy', {
       text: getCheckedBlocksText,
+    });
+
+    clipboard.on('success', function showStatus() {
+      setStatus('Successfully copied!');
+      setTimeout(clearStatus, 3000);
     });
   }
 
@@ -146,6 +152,9 @@ const exporter = (function createExporter() {
         });
 
         saveAs(blob, 'nmm-export.txt');
+
+        setStatus('Successfully downloaded!');
+        setTimeout(clearStatus, 3000);
       });
   }
 
@@ -166,6 +175,14 @@ const exporter = (function createExporter() {
     function extractText(elem) {
       return elem.innerText;
     }
+  }
+
+  function setStatus(content) {
+    status.textContent = content;
+  }
+
+  function clearStatus() {
+    setStatus('');
   }
 })();
 
