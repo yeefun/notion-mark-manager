@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function handleSubmit(evt) {
       evt.preventDefault();
 
+      var formStatusElem = document.getElementById('form-status');
+
       var newOptions = getNewOptions();
 
       await setOptions(newOptions);
@@ -104,7 +106,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return setChromeStorage(options);
       }
 
-      var formStatusElem = document.getElementById('form-status');
       function setFormStatus(content) {
         formStatusElem.textContent = content;
       }
