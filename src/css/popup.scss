@@ -277,6 +277,19 @@ nav {
     color: rgba(#fff, 0.6);
   }
 
+  #help {
+    background-color: rgb(80, 85, 88);
+    box-shadow: rgba(15, 15, 15, 0.2) 0 0 0 1px, rgba(15, 15, 15, 0.2) 0 2px 4px;
+
+    &:hover {
+      background-color: rgb(98, 102, 104);
+    }
+
+    &:active {
+      background-color: rgb(120, 123, 123);
+    }
+  }
+
   @each $color, $value in $font-colors-dark {
     @include colored-text-color('font', $color, $value);
   }
@@ -379,4 +392,31 @@ nav {
   fill: rgb(55, 53, 47);
   width: 16px;
   height: 16px;
+}
+
+#help {
+  user-select: none;
+  transition: color 700ms ease;
+  cursor: pointer;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  bottom: 74px;
+  right: 31px;
+  width: 36px;
+  height: 36px;
+  border-radius: 100%;
+  font-size: 20px;
+  box-shadow: rgba(15, 15, 15, 0.1) 0 0 0 1px, rgba(15, 15, 15, 0.1) 0 2px 4px;
+  z-index: 149;
+
+  &:hover {
+    background-color: rgb(239, 239, 238);
+  }
+
+  &:active {
+    background-color: rgb(223, 223, 222);
+  }
 }
