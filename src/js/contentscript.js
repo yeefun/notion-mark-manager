@@ -9,8 +9,25 @@ import {
 } from './data/default-options.js';
 import COLORS from './data/colors.js';
 
-(async function iife() {
-  var theme = document.querySelector('.notion-light-theme') ? 'light' : 'dark';
+(async function init() {
+  var notionAppInner = undefined;
+
+  await (function resolveWhenNotionAppInnerExist() {
+    return new Promise((resolve) => {
+      var intervalId = setInterval(function detectExistNotionAppInner() {
+        notionAppInner = document.querySelector('.notion-app-inner');
+
+        if (notionAppInner) {
+          resolve(undefined);
+          clearInterval(intervalId);
+        }
+      }, 16);
+    });
+  })();
+
+  var theme = notionAppInner.classList.contains('notion-light-theme')
+    ? 'light'
+    : 'dark';
 
   {
     const getUserOptions = getChromeStorage({
@@ -48,6 +65,7 @@ import COLORS from './data/colors.js';
           break;
 
         case 'scroll to the colored text':
+          console.log(message.blockId);
           scrollToTheColoredText(message.blockId);
           break;
         case 'scroll to the comment':
@@ -79,7 +97,7 @@ import COLORS from './data/colors.js';
   function listenThemeChanged() {
     var mutationObserver = new MutationObserver(handleMutate);
 
-    mutationObserver.observe(document.querySelector('.notion-app-inner'), {
+    mutationObserver.observe(notionAppInner, {
       attributes: true,
     });
 
@@ -103,8 +121,9 @@ import COLORS from './data/colors.js';
 
     {
       if (shouldDisplayOnce) {
-        blocks = checkedColors
-          .map(getColoredTextElem)
+        blocks = checkedColors.map(getColoredTextElem);
+        // console.log(blocks)
+        blocks = blocks
           .flatMap(constructBlock)
           .filter(removeFalsy)
           .reduce(moveBlockHavingDivWrapperForward, [])
