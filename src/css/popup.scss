@@ -102,6 +102,10 @@ body {
     .exporter-container {
       display: block;
     }
+
+    #help {
+      bottom: 120px;
+    }
   }
 }
 
@@ -270,6 +274,10 @@ nav {
     background-color: rgb(80, 85, 88);
     box-shadow: rgba(15, 15, 15, 0.2) 0 0 0 1px, rgba(15, 15, 15, 0.2) 0 2px 4px;
 
+    svg {
+      fill: rgba(#fff, 0.9);;
+    }
+
     &:hover {
       background-color: rgb(98, 102, 104);
     }
@@ -392,14 +400,19 @@ nav {
   align-items: center;
   justify-content: center;
   background-color: #fff;
-  bottom: 74px;
-  right: 31px;
+  bottom: 59px;
+  right: 16px;
   width: 36px;
   height: 36px;
   border-radius: 100%;
-  font-size: 20px;
   box-shadow: rgba(15, 15, 15, 0.1) 0 0 0 1px, rgba(15, 15, 15, 0.1) 0 2px 4px;
   z-index: 149;
+
+  svg {
+    fill: #37352f;
+    width: 18px;
+    height: 18px;
+  }
 
   &:hover {
     background-color: rgb(239, 239, 238);
