@@ -181,6 +181,13 @@ nav {
   }
 }
 
+#comments-container {
+  [style*='rgb(255, 212, 0)'],
+  [style*='rgb(255,212,0)'] {
+    color: rgb(55, 53, 47);
+  }
+}
+
 .block {
   padding: 6px 8px;
   transition: all 60ms ease-in;
