@@ -260,13 +260,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function listenScrollToToggleNav() {
     var nav = document.getElementById('nav');
-    var beforeScrollTop = blocks.scrollTop;
+    var beforeScrollY = window.pageYOffset;
 
-    blocks.addEventListener('scroll', function toggleNav() {
-      var currentScrollTop = this.scrollTop;
+    window.addEventListener('scroll', function toggleNav() {
+      var currentScrollY = this.pageYOffset;
 
       {
-        const delta = currentScrollTop - beforeScrollTop;
+        const delta = currentScrollY - beforeScrollY;
 
         if (delta > 0) {
           nav.classList.remove('shown');
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
 
-      beforeScrollTop = currentScrollTop;
+      beforeScrollY = currentScrollY;
     });
   }
 
