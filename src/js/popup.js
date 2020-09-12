@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       response = await getColoredTexts();
     }
 
-    if (response.length == 0) {
+    if (response.length === 0) {
       return;
     }
 
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       response = await getComments();
     }
 
-    if (response.length == 0) {
+    if (response.length === 0) {
       return;
     }
 

@@ -46,7 +46,7 @@ import COLORS from './data/colors.js';
   function setUpMessageListener(options) {
     chrome.runtime.onMessage.addListener(handleMessage);
 
-    var shouldDisplayOnce = options.displayedTimes == 'once';
+    var shouldDisplayOnce = options.displayedTimes === 'once';
 
     function handleMessage(message, sender, sendResponse) {
       switch (message.action) {
@@ -180,7 +180,9 @@ import COLORS from './data/colors.js';
     }
 
     function moveBlockHavingDivWrapperForward(acc, block) {
-      return block.wrapperNodeName == 'DIV' ? [block, ...acc] : [...acc, block];
+      return block.wrapperNodeName === 'DIV'
+        ? [block, ...acc]
+        : [...acc, block];
     }
 
     function removeDuplicateBlock({ id }, idx, blocks) {
@@ -192,7 +194,7 @@ import COLORS from './data/colors.js';
     }
 
     function modifyWrapperNodeNameAndColorName(block, idx, blocks) {
-      if (block.wrapperNodeName == 'DIV') {
+      if (block.wrapperNodeName === 'DIV') {
         return;
       }
 
@@ -201,7 +203,7 @@ import COLORS from './data/colors.js';
           .filter(hasDivWrapper)
           .find(doesIdEqual);
 
-        if (blockHavingEqualWrapper == undefined) {
+        if (blockHavingEqualWrapper === undefined) {
           return;
         }
 
@@ -210,12 +212,12 @@ import COLORS from './data/colors.js';
       }
 
       function doesIdEqual(blockHavingDivWrapper) {
-        return block.id == blockHavingDivWrapper.id;
+        return block.id === blockHavingDivWrapper.id;
       }
     }
 
     function hasDivWrapper(block) {
-      return block.wrapperNodeName == 'DIV';
+      return block.wrapperNodeName === 'DIV';
     }
   }
 
@@ -225,7 +227,7 @@ import COLORS from './data/colors.js';
     {
       const commentIconElems = document.querySelectorAll('.speechBubble');
 
-      if (commentIconElems.length == 0) {
+      if (commentIconElems.length === 0) {
         return [];
       }
 
