@@ -1,0 +1,46 @@
+{
+  "name": "__MSG_name__",
+  "short_name": "__MSG_shortName__",
+  "default_locale": "en",
+  "description": "__MSG_description__",
+  "author": "Yeefun",
+  "version": "1.1.0",
+  "manifest_version": 2,
+  "permissions": ["storage"],
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "page_action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
+    "default_title": "__MSG_shortName__",
+    "default_popup": "popup.html",
+    "show_matches": ["*://www.notion.so/*"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.notion.so/*"],
+      "js": ["js/contentscript.js"]
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
+  "applications": {
+    "gecko": {
+      "id": "{9fe40df8-7553-4091-b55a-181349add549}"
+    }
+  }
+}
