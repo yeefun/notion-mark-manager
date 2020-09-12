@@ -193,10 +193,6 @@ nav {
   color: rgba(55, 53, 47, 0.16);
   flex: 1 1 auto;
 
-  span {
-    color: rgb(55, 53, 47);
-  }
-
   &:hover,
   &.focused {
     box-shadow: 0 0 16px 1px rgba(55, 53, 47, 0.16);
