@@ -80,42 +80,45 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function listenBlockClicked() {
     blocks.addEventListener('click', function handleClickBlock(evt) {
-      if (!evt.target.classList.contains('block')) {
-        return;
-      }
-
       var action = '';
 
       {
-        const block = evt.target;
-        let blocks;
+        const block = evt.target.closest('.block');
 
-        {
-          const isColoredText = block.classList.contains('colored-text');
-          action = isColoredText
-            ? 'scroll to the colored text'
-            : 'scroll to the comment';
-          blocks = document.querySelectorAll(
-            isColoredText ? '.colored-text' : '.comment'
-          );
+        if (!block) {
+          return;
         }
 
         {
-          let scrollToTheBlock;
+          let blocks;
 
           {
-            const { blockId } = block.dataset;
-
-            scrollToTheBlock = sendMessageToContentscript({
-              action,
-              blockId,
-            });
+            const isColoredText = block.classList.contains('colored-text');
+            action = isColoredText
+              ? 'scroll to the colored text'
+              : 'scroll to the comment';
+            blocks = document.querySelectorAll(
+              isColoredText ? '.colored-text' : '.comment'
+            );
           }
 
-          scrollToTheBlock();
-        }
+          {
+            let scrollToTheBlock;
 
-        focusItem(block, blocks);
+            {
+              const { blockId } = block.dataset;
+
+              scrollToTheBlock = sendMessageToContentscript({
+                action,
+                blockId,
+              });
+            }
+
+            scrollToTheBlock();
+          }
+
+          focusItem(block, blocks);
+        }
       }
 
       sendGaEvt('marks', 'scroll', action.split('scroll to the ')[1]);
