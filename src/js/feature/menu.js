@@ -18,7 +18,7 @@ var totalCheckedBlocks = {
 
 function listenTabClicked() {
   document
-    .querySelector('.menu .tab')
+    .querySelector('#menu .tab')
     .addEventListener('click', function handleClickTab() {
       document.body.classList.add('exported');
     });
@@ -193,6 +193,14 @@ function changeInputSelectAll() {
     totalCheckedBlocks[nav.state.tab] === currentInputsBlock.length;
 }
 
+function hide() {
+  document.body.classList.remove('menu');
+}
+
+function show() {
+  document.body.classList.add('menu');
+}
+
 function getCurrentInputsBlock() {
   if (inputsBlock[nav.state.tab] === undefined) {
     return (inputsBlock[nav.state.tab] = document.querySelectorAll(
@@ -206,6 +214,8 @@ function getCurrentInputsBlock() {
 export default {
   listenTabClicked,
   listenInputsBlockClicked,
+  show,
+  hide,
   exporter,
   changeInputSelectAll,
 };

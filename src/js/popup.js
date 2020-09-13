@@ -368,10 +368,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (hasAnyBlocks === true) {
       prompt.classList.remove('shown');
+      menu.show();
     } else {
       prompt.classList.add('shown');
       emptyBlocks.textContent =
         nav.state.tab === 'colored-texts' ? 'colored texts' : 'comments';
+      menu.hide();
     }
   }
 

@@ -93,7 +93,7 @@ body {
       display: flex;
     }
 
-    .menu ul {
+    #menu ul {
       display: none;
     }
 
@@ -101,8 +101,18 @@ body {
       display: block;
     }
 
-    #support {
+    &.menu #support {
       bottom: 120px;
+    }
+  }
+
+  &.menu {
+    #menu {
+      display: block;
+    }
+
+    #support {
+      bottom: 59px;
     }
   }
 }
@@ -152,8 +162,8 @@ nav {
   padding: 14px 8px;
   line-height: 1.5;
   word-break: break-word;
-  // 477 + 28 - 43 * 2
-  min-height: 419px;
+  // 483 + 28 - 43 * 2
+  min-height: 425px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -243,7 +253,7 @@ nav {
   }
 
   nav,
-  .menu {
+  #menu {
     background-color: rgb(47, 52, 55);
 
     .tab {
@@ -262,7 +272,7 @@ nav {
     box-shadow: 0 1px 0 rgba(#fff, 0.07);
   }
 
-  .menu ul,
+  #menu ul,
   .exporter-options,
   .exporter-btns {
     box-shadow: 0 -1px 0 rgba(#fff, 0.07);
@@ -329,7 +339,8 @@ nav {
   }
 }
 
-.menu {
+#menu {
+  display: none;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -432,7 +443,7 @@ nav {
   align-items: center;
   justify-content: center;
   background-color: #fff;
-  bottom: 59px;
+  bottom: 16px;
   right: 16px;
   width: 36px;
   height: 36px;
