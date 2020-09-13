@@ -13,13 +13,14 @@ import { DEFAULT_TAB_ACTIVATED_FIRST } from './data/default-options.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   var blocks = document.getElementById('blocks');
+  var loadingSpinner = document.getElementById('loading-spinner');
+  var prompt = document.getElementById('prompt');
+  var emptyBlocks = document.getElementById('empty-blocks');
   var coloredTextsContainer = document.getElementById(
     'colored-texts-container'
   );
   var commentsContainer = document.getElementById('comments-container');
   var blocksContainers = [coloredTextsContainer, commentsContainer];
-
-  var isLoadingBlocks = false;
 
   var coloredTextsHtml = '';
   var commentsHtml = '';
@@ -127,45 +128,62 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function loadBlocks() {
-    isLoadingBlocks = true;
+    var hasAnyBlocks = true;
+
+    loading();
 
     if (nav.state.tab === 'colored-texts') {
-      await loadColoredTexts();
+      hasAnyBlocks = await loadColoredTexts();
+
       showBlocksContainer(coloredTextsContainer);
     } else {
-      await loadComments();
+      hasAnyBlocks = await loadComments();
       showBlocksContainer(commentsContainer);
     }
 
-    isLoadingBlocks = false;
+    loaded(hasAnyBlocks);
   }
 
   function listenNavTabClicked() {
     var tabs = document.querySelectorAll('#nav .tab');
 
     bindClickEvtListeners(tabs, async function handleClickTab() {
-      if (isLoadingBlocks || this.dataset.tab === nav.state.tab) {
+      var { tab: currentTab } = this.dataset;
+
+      if (isLoading() || currentTab === nav.state.tab) {
         return;
       }
 
-      activateItem(this, tabs);
-      nav.setTab(this.dataset.tab);
+      {
+        let hasAnyBlocks = true;
 
-      if (coloredTextsHtml === '') {
-        await loadColoredTexts();
-      } else if (commentsHtml === '') {
-        await loadComments();
+        loading();
+
+        activateItem(this, tabs);
+        nav.setTab(currentTab);
+
+        if (currentTab === 'colored-texts') {
+          if (coloredTextsHtml === '') {
+            hasAnyBlocks = await loadColoredTexts();
+          }
+        } else {
+          if (commentsHtml === '') {
+            hasAnyBlocks = await loadComments();
+          }
+        }
+
+        showBlocksContainer(
+          currentTab === 'colored-texts'
+            ? coloredTextsContainer
+            : commentsContainer
+        );
+
+        menu.changeInputSelectAll();
+
+        loaded(hasAnyBlocks);
       }
 
-      showBlocksContainer(
-        nav.state.tab === 'colored-texts'
-          ? coloredTextsContainer
-          : commentsContainer
-      );
-
-      menu.changeInputSelectAll();
-
-      sendGaEvt('tabs', 'click', nav.state.tab);
+      sendGaEvt('tabs', 'click', currentTab);
     });
   }
 
@@ -192,15 +210,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       const getColoredTexts = sendMessageToContentscript({
         action: 'get colored texts',
       });
-      response = await getColoredTexts();
+      response = (await getColoredTexts()) || [];
     }
 
     if (response.length === 0) {
-      return;
+      return false;
     }
 
     coloredTextsHtml = constructColoredTextsHtml(response);
     setHtml(coloredTextsContainer, coloredTextsHtml);
+
+    return true;
 
     function constructColoredTextsHtml(blocks) {
       return blocks.map(constructColoredTextHtml).join('');
@@ -235,15 +255,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       const getComments = sendMessageToContentscript({
         action: 'get comments',
       });
-      response = await getComments();
+      response = (await getComments()) || [];
     }
 
     if (response.length === 0) {
-      return;
+      return false;
     }
 
     commentsHtml = constructCommentsHtml(response);
     setHtml(commentsContainer, commentsHtml);
+
+    return true;
 
     function constructCommentsHtml(blocks) {
       return blocks.map(constructCommentHtml).join('');
@@ -329,5 +351,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function addClassName(className, elem) {
     elem.classList.add(className);
+  }
+
+  function loading() {
+    loadingSpinner.classList.add('shown');
+
+    prompt.classList.remove('shown');
+  }
+
+  function loaded(hasAnyBlocks = true) {
+    loadingSpinner.classList.remove('shown');
+
+    if (hasAnyBlocks === true) {
+      prompt.classList.remove('shown');
+    } else {
+      prompt.classList.add('shown');
+      emptyBlocks.textContent =
+        nav.state.tab === 'colored-texts' ? 'colored texts' : 'comments';
+    }
+  }
+
+  function isLoading() {
+    return loadingSpinner.classList.contains('shown');
   }
 });
