@@ -12,6 +12,10 @@ import {
 import { DEFAULT_TAB_ACTIVATED_FIRST } from './data/default-options.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  if (/firefox/i.test(navigator.userAgent)) {
+    document.body.style.width = 'auto';
+  }
+
   var blocks = document.getElementById('blocks');
   var loadingSpinner = document.getElementById('loading-spinner');
   var prompt = document.getElementById('prompt');
