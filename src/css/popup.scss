@@ -228,10 +228,6 @@ nav {
   .block {
     color: rgb(71, 76, 80);
 
-    span {
-      color: rgba(#fff, 0.9);
-    }
-
     &:hover,
     &.focused {
       box-shadow: 0 0 16px 1px rgb(71, 76, 80);
@@ -294,6 +290,33 @@ nav {
 
     &:active {
       background-color: rgb(120, 123, 123);
+    }
+  }
+
+  #support-info {
+    .wrapper {
+      background-color: rgb(47, 52, 55);
+      box-shadow: rgba(15, 15, 15, 0.1) 0 0 0 1px, rgba(15, 15, 15, 0.2) 0 5px 10px, rgba(15, 15, 15, 0.4) 0 15px 40px;
+    }
+
+    a {
+      border-bottom-color: rgba(#fff, 0.4);
+      color: rgba(#fff, 0.9);
+  
+      &:hover {
+        border-bottom-color: rgba(#fff, 0.9);
+      }
+    }
+  }
+
+  #prompt {
+    color: rgba(#fff, 0.4);
+  }
+
+  #comments-container {
+    [style*='rgb(255, 212, 0)'],
+    [style*='rgb(255,212,0)'] {
+      color: rgba(255, 255, 255, 0.9);
     }
   }
 
@@ -479,6 +502,10 @@ nav {
     > div {
       margin-top: 1px;
       margin-bottom: 1px;
+
+      &:last-child {
+        margin-top: 7px;
+      }
     }
   }
 
@@ -492,7 +519,7 @@ nav {
 
     &:hover {
       opacity: 1;
-      border-color: rgb(55, 53, 47);
+      border-bottom-color: rgb(55, 53, 47);
     }
   }
 }
