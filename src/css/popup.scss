@@ -103,7 +103,7 @@ body {
       display: block;
     }
 
-    #help {
+    #support {
       bottom: 120px;
     }
   }
@@ -277,7 +277,7 @@ nav {
     color: rgba(#fff, 0.6);
   }
 
-  #help {
+  #support {
     background-color: rgb(80, 85, 88);
     box-shadow: rgba(15, 15, 15, 0.2) 0 0 0 1px, rgba(15, 15, 15, 0.2) 0 2px 4px;
 
@@ -398,9 +398,8 @@ nav {
   height: 16px;
 }
 
-#help {
+#support {
   user-select: none;
-  transition: color 700ms ease;
   cursor: pointer;
   position: fixed;
   display: flex;
@@ -427,5 +426,102 @@ nav {
 
   &:active {
     background-color: rgb(223, 223, 222);
+  }
+}
+
+#support-info {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(15, 15, 15, 0);
+  position: fixed;
+  z-index: 499;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.5;
+  font-size: 16px;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  transition: background-color 120ms ease-out, opacity 120ms ease-out, visibility 120ms ease-out;
+
+  &.shown {
+    opacity: 1;
+    background-color: rgba(15, 15, 15, 0.6);
+    visibility: visible;
+    transition: background-color 300ms ease-out, opacity 0s, visibility 300ms ease-out;
+
+    .wrapper {
+      transform: scale(1);
+      transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  }
+
+  .wrapper {
+    box-shadow: rgba(15, 15, 15, 0.05) 0 0 0 1px, rgba(15, 15, 15, 0.1) 0 5px 10px, rgba(15, 15, 15, 0.2) 0 15px 40px;
+    border-radius: 3px;
+    background-color: #fff;
+    width: calc(100% - 28px);
+    padding: 6px 14px;
+    box-sizing: border-box;
+    cursor: auto;
+    transform: scale(0.9);
+    transition: transform 120ms ease-out;
+
+    > div {
+      margin-top: 1px;
+      margin-bottom: 1px;
+    }
+  }
+
+  a {
+    cursor: pointer;
+    border-bottom: 0.05em solid rgba(55, 53, 47, 0.4);
+    opacity: 0.7;
+    transition: border-color 100ms ease-in, opacity 100ms ease-in;
+    text-decoration: none;
+    color: rgb(55, 53, 47);
+
+    &:hover {
+      opacity: 1;
+      border-color: rgb(55, 53, 47);
+    }
+  }
+}
+
+strong {
+  font-weight: 600;
+}
+
+.text {
+  padding: 3px 2px;
+}
+
+.bulleted-list {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 2px;
+
+  .text {
+    flex: 1 1 0;
+  }
+}
+
+.bullet {
+  margin-right: 2px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-height: calc(1.5em + 6px);
+
+  div {
+    font-size: 1.5em;
+    line-height: 1;
+    margin-bottom: 0.1em;
   }
 }

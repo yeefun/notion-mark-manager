@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   listenBlockClicked();
   listenNavTabClicked();
   listenScrollToToggleNav();
+  listenSupportClick();
 
   menu.listenTabClicked();
   menu.listenInputsBlockClicked();
@@ -276,6 +277,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       beforeScrollY = currentScrollY;
+    });
+  }
+
+  function listenSupportClick() {
+    var supportInfo = document.getElementById('support-info');
+
+    document
+      .getElementById('support')
+      .addEventListener('click', function showSupportInfo() {
+        supportInfo.classList.add('shown');
+      });
+
+    supportInfo.addEventListener('click', function hideSupportInfo(evt) {
+      if (evt.target === evt.currentTarget) {
+        supportInfo.classList.remove('shown');
+      }
     });
   }
 
