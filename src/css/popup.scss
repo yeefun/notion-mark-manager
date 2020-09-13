@@ -169,6 +169,10 @@ nav {
   justify-content: center;
   align-items: center;
 
+  > * {
+    flex: 1 1 auto;
+  }
+
   .wrapper {
     display: flex;
 
@@ -594,6 +598,7 @@ strong {
 
 #prompt {
   display: none;
+  width: 100%;
   font-size: 30px;
   padding-left: 8px;
   padding-right: 8px;
