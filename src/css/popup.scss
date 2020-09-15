@@ -196,6 +196,7 @@ nav {
 #colored-texts-container,
 #comments-container {
   display: none;
+  align-self: flex-start;
 
   &.shown {
     display: block;
@@ -525,6 +526,28 @@ nav {
         margin-top: 7px;
       }
     }
+
+    .intro {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    
+      div {
+        position: relative;
+        top: 1px;
+      }
+    }
+  }
+  
+  .me {
+    width: 48px;
+    height: auto;
+    margin-right: 8px;
+    opacity: 0.86;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
 
   a {
