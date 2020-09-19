@@ -59,7 +59,7 @@ $background-colors-dark: (
   } @else {
     .background-#{$color} {
       background-color: $value;
-      color: rgb(55, 53, 47);
+      color: inherit;
     }
   }
 }
