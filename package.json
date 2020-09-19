@@ -3,13 +3,13 @@
   "version": "2.0.0",
   "description": "Manage your colored texts and comments effectively in Notion.",
   "keywords": [
-    "chrome",
-    "extension",
+    "chrome-extension",
+    "firefox-addon",
     "notion",
-    "productivity"
+    "productivity-tool"
   ],
-  "author": "Yeefun Lin",
-  "private": true,
+  "author": "Yeefun Lin <szyeefun@gmail.com> (https://yeefun.github.io/)",
+  "license": "GPL",
   "scripts": {
     "predev:f": "rimraf dist && mkdir dist && cp manifest.firefox.json dist/manifest.json && cp -R static/* dist/",
     "dev:f": "parcel watch src/* src/**/* --no-source-maps --no-hmr",
