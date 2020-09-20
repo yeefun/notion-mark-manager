@@ -2,12 +2,14 @@
 
 > Manage your colored texts and comments efficiently in [Notion](https://www.notion.so/).
 
-![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
-![GitHub](https://img.shields.io/github/license/yeefun/notion-mark-manager?style=plastic)
+![Chrome Web Store version](https://img.shields.io/chrome-web-store/v/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
+![GitHub license](https://img.shields.io/github/license/yeefun/notion-mark-manager?style=plastic)
+
+![marquee](./promotion/marquee.png)
 
 ## Installation
 
-- Get the [Chrome Extension](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
+- Get the [Chrome Extension](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) ![Chrome Web Store users](https://img.shields.io/chrome-web-store/users/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
 
 ## Intro
 
@@ -41,7 +43,7 @@ Now, feel free to highlight, take notes, and leave a message on Notion—Mark Ma
 
 ## Support
 
-To develop a free, open-source extension takes a lot of effort. Your support will encourage me to continue upgrading the product. There are a few things you can do:
+To develop a free, open-source extension takes a lot of effort. **Your support** will encourage me to continue upgrading the product. There are a few things you can do:
 
 - Tell your friends about it
 - Leave a review on the [Chrome](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) store
