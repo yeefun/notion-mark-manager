@@ -49,6 +49,7 @@ To develop a free, open-source extension takes a lot of effort. **Your suppor
 - Leave a review on the [Chrome](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) store
 - Give me a star on GitHub [![GitHub stars](https://img.shields.io/github/stars/yeefun/notion-mark-manager?style=social)](https://github.com/yeefun/notion-mark-manager/stargazers)
 - Report bugs or request features via [GitHub Issues](https://github.com/yeefun/notion-mark-manager/issues/new) or this [form](https://docs.google.com/forms/d/e/1FAIpQLSdc8JGkmEpyjVbut57cd4fHMJGXEk4HITjmUGYo87f4jN-4zQ/viewform?usp=sf_link)
+- [Donate me](https://pay.ecpay.com.tw/CreditPayment/ExpressCredit?MerchantID=3220361&Enn=e)
 
 Thank you! 🙌
 
