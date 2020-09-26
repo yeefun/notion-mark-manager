@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   var coloredTextsHtml = '';
   var commentsHtml = '';
 
+  localize();
   setTheme();
 
   await initNav();
@@ -45,6 +46,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     sendGaPageview('/popup.html');
   }
 
+  function localize() {
+    const uiLang = chrome.i18n.getUILanguage();
+    if (uiLang === 'zh-TW' || uiLang === 'zh-CN') {
+      addClassName(document.body, 'zh');
+    }
+
+    document
+      .querySelectorAll('[data-i18n]')
+      .forEach(function setLocalizedString(paragraph) {
+        setHtml(paragraph, chrome.i18n.getMessage(paragraph.dataset.i18n));
+      });
+  }
+
   async function setTheme() {
     var theme;
 
@@ -54,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       ({ theme } = await getTheme());
     }
 
-    document.body.classList.add(theme);
+    addClassName(document.body, theme);
   }
 
   async function initNav() {
@@ -76,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function activateTab(name) {
-      document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+      addClassName(document.querySelector(`[data-tab="${name}"]`), 'active');
     }
   }
 
@@ -292,9 +306,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const delta = currentScrollY - beforeScrollY;
 
         if (delta > 0) {
-          nav.classList.remove('shown');
+          removeClassName(nav, 'shown');
         } else {
-          nav.classList.add('shown');
+          addClassName(nav, 'shown');
         }
       }
 
@@ -308,12 +322,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     document
       .getElementById('support')
       .addEventListener('click', function showSupportInfo() {
-        supportInfo.classList.add('shown');
+        addClassName(supportInfo, 'shown');
       });
 
     supportInfo.addEventListener('click', function hideSupportInfo(evt) {
       if (evt.target === evt.currentTarget) {
-        supportInfo.classList.remove('shown');
+        removeClassName(supportInfo, 'shown');
       }
     });
   }
@@ -329,44 +343,47 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function showBlocksContainer(container) {
-    removeClassNames('shown', blocksContainers);
-    addClassName('shown', container);
+    removeClassNames(blocksContainers, 'shown');
+    addClassName(container, 'shown');
   }
 
   function activateItem(item, items) {
-    removeClassNames('active', items);
-    addClassName('active', item);
+    removeClassNames(items, 'active');
+    addClassName(item, 'active');
   }
 
   function focusItem(item, items) {
-    removeClassNames('focused', items);
-    addClassName('focused', item);
+    removeClassNames(items, 'focused');
+    addClassName(item, 'focused');
   }
 
-  function removeClassNames(className, elems) {
+  function removeClassNames(elems, className) {
     elems.forEach((elem) => {
-      elem.classList.remove(className);
+      removeClassName(elem, className);
     });
   }
 
-  function addClassName(className, elem) {
+  function addClassName(elem, className) {
     elem.classList.add(className);
   }
 
-  function loading() {
-    loadingSpinner.classList.add('shown');
+  function removeClassName(elem, className) {
+    elem.classList.remove(className);
+  }
 
-    prompt.classList.remove('shown');
+  function loading() {
+    addClassName(loadingSpinner, 'shown');
+    removeClassName(prompt, 'shown');
   }
 
   function loaded(hasAnyBlocks = true) {
-    loadingSpinner.classList.remove('shown');
+    removeClassName(loadingSpinner, 'shown');
 
     if (hasAnyBlocks === true) {
-      prompt.classList.remove('shown');
+      removeClassName(prompt, 'shown');
       menu.show();
     } else {
-      prompt.classList.add('shown');
+      addClassName(prompt, 'shown');
       emptyBlocks.textContent =
         nav.state.tab === 'colored-texts' ? 'colored texts' : 'comments';
       menu.hide();

@@ -138,8 +138,8 @@ const exporter = (function createExporter() {
     });
 
     clipboard.on('success', function showStatus() {
-      setStatus('Successfully copied!');
-      setTimeout(clearStatus, 3000);
+      setStatus(chrome.i18n.getMessage('exportStatusCopy'));
+      setTimeout(clearStatus, 1500);
     });
   }
 
@@ -153,8 +153,8 @@ const exporter = (function createExporter() {
 
         saveAs(blob, 'nmm-export.txt');
 
-        setStatus('Successfully downloaded!');
-        setTimeout(clearStatus, 3000);
+        setStatus(chrome.i18n.getMessage('exportStatusDownload'));
+        setTimeout(clearStatus, 1500);
       });
   }
 

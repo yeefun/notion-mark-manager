@@ -7,5 +7,50 @@
   },
   "description": {
     "message": "高效管理 Notion 的顏色文字與註解。"
+  },
+  "export": {
+    "message": "導出"
+  },
+  "selectAll": {
+    "message": "全選"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "copy": {
+    "message": "複製"
+  },
+  "download": {
+    "message": "下載"
+  },
+  "exportStatusCopy": {
+    "message": "複製成功！"
+  },
+  "exportStatusDownload": {
+    "message": "下載成功！"
+  },
+  "intro": {
+    "message": "👋 嗨你好，我是 Yeefun，Notion+ 標記管理器的作者。"
+  },
+  "support_1": {
+    "message": "開發一個免費、<a href='https://github.com/yeefun/notion-mark-manager' target='_blank'>開源</a>的擴充套件需耗費許多時間與心力，<strong>你的支持</strong>，是我持續把產品變得更好的動力。如果你喜歡 Mark Manager，可以做以下幾件事情："
+  },
+  "support_2": {
+    "message": "推薦給你的朋友"
+  },
+  "support_3": {
+    "message": "在 <a href='https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc' target='_blank'>Chrome</a> 或 Firefox 商店留下評論"
+  },
+  "support_4": {
+    "message": "幫我的 <a href='https://github.com/yeefun/notion-mark-manager' target='_blank'>GitHub repo</a> 打星星"
+  },
+  "support_5": {
+    "message": "透過 <a href='https://github.com/yeefun/notion-mark-manager/issues/new' target='_blank'>GitHub Issues</a> 或<a href='https://docs.google.com/forms/d/e/1FAIpQLSdc8JGkmEpyjVbut57cd4fHMJGXEk4HITjmUGYo87f4jN-4zQ/viewform?usp=sf_link' target='_blank'>表單</a>回報錯誤、許願新功能"
+  },
+  "support_6": {
+    "message": "<a href='https://pay.ecpay.com.tw/CreditPayment/ExpressCredit?MerchantID=3220361' target='_blank'>贊助我</a>"
+  },
+  "support_7": {
+    "message": "謝謝你！🙌"
   }
 }

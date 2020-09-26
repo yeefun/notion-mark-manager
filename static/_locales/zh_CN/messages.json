@@ -1,0 +1,56 @@
+{
+  "name": {
+    "message": "Notion+ 标记管理器"
+  },
+  "shortName": {
+    "message": "管理 Notion 标记"
+  },
+  "description": {
+    "message": "高效管理 Notion 的颜色文字与注解。"
+  },
+  "export": {
+    "message": "导出"
+  },
+  "selectAll": {
+    "message": "全选"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "copy": {
+    "message": "复制"
+  },
+  "download": {
+    "message": "下载"
+  },
+  "exportStatusCopy": {
+    "message": "复制成功！"
+  },
+  "exportStatusDownload": {
+    "message": "下载成功！"
+  },
+  "intro": {
+    "message": "👋 嗨你好，我是 Yeefun，Notion+ 标记管理器的作者。"
+  },
+  "support_1": {
+    "message": "开发一个免费、<a href='https://github.com/yeefun/notion-mark-manager' target='_blank'>开源</a>的扩充套件需耗费许多时间与心力，<strong>你的支持</strong>，是我持续把产品变得更好的动力。如果你喜欢 Mark Manager，可以做以下几件事情："
+  },
+  "support_2": {
+    "message": "推荐给你的朋友"
+  },
+  "support_3": {
+    "message": "在 <a href='https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc' target='_blank'>Chrome</a> 或 Firefox 商店留下评论"
+  },
+  "support_4": {
+    "message": "帮我的 <a href='https://github.com/yeefun/notion-mark-manager' target='_blank'>GitHub repo</a> 打星星"
+  },
+  "support_5": {
+    "message": "透过 <a href='https://github.com/yeefun/notion-mark-manager/issues/new' target='_blank'>GitHub Issues</a> 或<a href='https://docs.google.com/forms/d/e/1FAIpQLSdc8JGkmEpyjVbut57cd4fHMJGXEk4HITjmUGYo87f4jN-4zQ/viewform?usp=sf_link' target='_blank'>表单</a>回报错误、许愿新功能"
+  },
+  "support_6": {
+    "message": "<a href='https://pay.ecpay.com.tw/CreditPayment/ExpressCredit?MerchantID=3220361&Enn=c' target='_blank'>赞助我</a>"
+  },
+  "support_7": {
+    "message": "谢谢你！🙌"
+  }
+}

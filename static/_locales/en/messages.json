@@ -7,5 +7,50 @@
   },
   "description": {
     "message": "Manage your colored texts and comments efficiently in Notion."
+  },
+  "export": {
+    "message": "Export"
+  },
+  "selectAll": {
+    "message": "Select All"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "copy": {
+    "message": "Copy"
+  },
+  "download": {
+    "message": "Download"
+  },
+  "exportStatusCopy": {
+    "message": "Successfully copied!"
+  },
+  "exportStatusDownload": {
+    "message": "Successfully downloaded!"
+  },
+  "intro": {
+    "message": "👋 Hi, I'm Yeefun, the creator of Notion+ Mark Manager."
+  },
+  "support_1": {
+    "message": "To develop a free, <a href='https://github.com/yeefun/notion-mark-manager' target='_blank'>open-source</a> extension takes a lot of effort. <strong>Your support</strong> will encourage me to continue upgrading the product. There are a few things you can do:"
+  },
+  "support_2": {
+    "message": "Tell your friends about it"
+  },
+  "support_3": {
+    "message": "Leave a review on the <a href='https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc' target='_blank'>Chrome</a> or Firefox store"
+  },
+  "support_4": {
+    "message": "Give me a star on <a href='https://github.com/yeefun/notion-mark-manager' target='_blank'>GitHub</a>"
+  },
+  "support_5": {
+    "message": "Report bugs or request features via <a href='https://github.com/yeefun/notion-mark-manager/issues/new' target='_blank'>GitHub Issues</a> or this <a href='https://docs.google.com/forms/d/e/1FAIpQLSdc8JGkmEpyjVbut57cd4fHMJGXEk4HITjmUGYo87f4jN-4zQ/viewform?usp=sf_link' target='_blank'>form</a>"
+  },
+  "support_6": {
+    "message": "<a href='https://pay.ecpay.com.tw/CreditPayment/ExpressCredit?MerchantID=3220361&Enn=e' target='_blank'>Donate me</a>"
+  },
+  "support_7": {
+    "message": "Thank you! 🙌"
   }
 }

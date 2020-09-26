@@ -118,6 +118,16 @@ body {
       bottom: 59px;
     }
   }
+
+  &.zh {
+    #support-info {
+      font-size: 15px;
+
+      .me {
+        margin-right: 10px;
+      }
+    }
+  }
 }
 
 nav {
@@ -165,8 +175,8 @@ nav {
   padding: 14px 8px;
   line-height: 1.5;
   word-break: break-word;
-  // 483 + 28 - 43 * 2
-  min-height: 425px;
+  // 485 + 28 - 43 * 2
+  min-height: 427px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -530,13 +540,12 @@ nav {
     .intro {
       display: flex;
       align-items: center;
-      font-size: 13px;
+      font-size: 13.5px;
       margin-top: 4px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     
       div {
-        position: relative;
-        top: 1px;
+        transform: translateY(1px);
       }
     }
   }

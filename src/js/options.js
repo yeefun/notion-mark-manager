@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       await setOptions(newOptions);
 
       setFormStatus('Your options have been saved!');
-      setTimeout(clearFormStatus, 3000);
+      setTimeout(clearFormStatus, 1500);
 
       {
         const {
