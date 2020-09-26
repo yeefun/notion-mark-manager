@@ -7,6 +7,9 @@
 
 ![marquee](./promotion/marquee.png)
 
+## Translation
+- [繁體中文](./README.zh.md)
+
 ## Installation
 
 - Get the [Chrome Extension](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) ![Chrome Web Store users](https://img.shields.io/chrome-web-store/users/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
