@@ -8,6 +8,7 @@
 ![marquee](./promotion/marquee.png)
 
 ## Translation
+
 - [繁體中文](./README.zh.md)
 
 ## Installation
@@ -58,5 +59,38 @@ To develop a free, open-source extension takes a lot of effort. **Your suppor
 
 Thank you! 🙌
 
+## Development
+
+### Setup
+
+After cloning the repository, install the dependencies:
+
+```shell
+npm install
+```
+
+Launch the project with:
+
+```shell
+# for Chrome
+npm run dev:c
+
+# for Firefox
+npm run dev:f
+```
+
+### Build
+
+To build the extension you have to run:
+
+```shell
+# for Chrome
+npm run build:c
+
+# for Firefox
+npm run build:f
+```
+
 ## License
+
 [GPL-3.0](./LICENSE)

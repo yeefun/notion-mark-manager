@@ -8,6 +8,7 @@
 ![marquee](./promotion/marquee.png)
 
 ## 翻譯
+
 - [English](./README.md)
 
 ## 安裝
@@ -59,4 +60,5 @@ Notion 的顏色文字（colored text）與註解（comment）用途多樣，能
 謝謝你！🙌
 
 ## 授權條款
+
 [GPL-3.0](./LICENSE)
