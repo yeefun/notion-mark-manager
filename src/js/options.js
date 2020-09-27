@@ -1,11 +1,4 @@
-import {
-  inProdEnv,
-  getChromeStorage,
-  setChromeStorage,
-  loadGa,
-  sendGaPageview,
-  sendGaEvt,
-} from './utils/index.js';
+import { getChromeStorage, setChromeStorage } from './utils/index.js';
 import DEFAULT_OPTIONS from './data/default-options.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -16,11 +9,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   checkInputs();
 
   listenOptionsSaved();
-
-  if (inProdEnv) {
-    loadGa();
-    sendGaPageview('/options.html');
-  }
 
   function checkInputs() {
     var { colorNames, tabActivatedFirst, displayedTimes } = currentOptions;
@@ -46,33 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       setFormStatus('Your options have been saved!');
       setTimeout(clearFormStatus, 1500);
-
-      {
-        const {
-          tabActivatedFirst: oldTabActivatedFirst,
-          displayedTimes: oldDisplayedTimes,
-        } = currentOptions;
-        const {
-          tabActivatedFirst: newTabActivatedFirst,
-          displayedTimes: newDisplayedTimes,
-        } = newOptions;
-
-        if (newTabActivatedFirst !== oldTabActivatedFirst) {
-          sendGaEvt(
-            'options',
-            'checked',
-            `tab activated first: ${newTabActivatedFirst}`
-          );
-        }
-
-        if (newDisplayedTimes !== oldDisplayedTimes) {
-          sendGaEvt(
-            'options',
-            'checked',
-            `displayed times: ${newDisplayedTimes}`
-          );
-        }
-      }
 
       currentOptions = newOptions;
 

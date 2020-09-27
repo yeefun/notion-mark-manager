@@ -1,14 +1,7 @@
 import menu from './feature/menu.js';
 import nav from './store/nav.js';
 
-import {
-  getChromeStorage,
-  sendMessageToContentscript,
-  inProdEnv,
-  loadGa,
-  sendGaPageview,
-  sendGaEvt,
-} from './utils/index.js';
+import { getChromeStorage, sendMessageToContentscript } from './utils/index.js';
 import { DEFAULT_TAB_ACTIVATED_FIRST } from './data/default-options.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -40,11 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   menu.listenInputsBlockClicked();
   menu.exporter.listenOptionsClicked();
   menu.exporter.listenBtnsClicked();
-
-  if (inProdEnv) {
-    loadGa();
-    sendGaPageview('/popup.html');
-  }
 
   function localize() {
     const uiLang = chrome.i18n.getUILanguage();
@@ -136,8 +124,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           focusItem(block, blocks);
         }
       }
-
-      sendGaEvt('marks', 'scroll', action.split('scroll to the ')[1]);
     });
   }
 
@@ -196,8 +182,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         loaded(hasAnyBlocks);
       }
-
-      sendGaEvt('tabs', 'click', currentTab);
     });
   }
 
