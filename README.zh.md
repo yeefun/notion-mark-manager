@@ -16,6 +16,8 @@
 
 ## 介紹
 
+[示範影片](https://youtu.be/XRHQ2zVmziI)
+
 Notion 的顏色文字（colored text）與註解（comment）用途多樣，能劃重點、做筆記、留言……但這些標記日後卻難以查找，只淪為畫面上的點綴。
 
 該如何更有效率地使用並管理這些標記呢？Mark Manager，是這個問題的最佳解：
@@ -50,8 +52,8 @@ Notion 的顏色文字（colored text）與註解（comment）用途多樣，能
 
 - 推薦給你的朋友
 - 在 [Chrome](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) 商店留下評論
-- 幫我的 GitHub repo 打星星 [![GitHub stars](https://img.shields.io/github/stars/yeefun/notion-mark-manager?style=social)](https://github.com/yeefun/notion-mark-manager/stargazers)
-- 透過 [GitHub Issues](https://github.com/yeefun/notion-mark-manager/issues/new) 或 [表單](https://docs.google.com/forms/d/e/1FAIpQLSdc8JGkmEpyjVbut57cd4fHMJGXEk4HITjmUGYo87f4jN-4zQ/viewform?usp=sf_link) 回報錯誤、許願新功能
+- 幫我的 [GitHub repo](https://github.com/yeefun/notion-mark-manager) 打星星 [![GitHub stars](https://img.shields.io/github/stars/yeefun/notion-mark-manager?style=social)](https://github.com/yeefun/notion-mark-manager/stargazers)
+- 透過 [GitHub Issues](https://github.com/yeefun/notion-mark-manager/issues/new) 或[表單](https://docs.google.com/forms/d/e/1FAIpQLSdc8JGkmEpyjVbut57cd4fHMJGXEk4HITjmUGYo87f4jN-4zQ/viewform?usp=sf_link)回報錯誤、許願新功能
 - [贊助我](https://pay.ecpay.com.tw/CreditPayment/ExpressCredit?MerchantID=3220361)
 
 謝謝你！🙌
