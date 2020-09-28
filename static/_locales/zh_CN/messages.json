@@ -39,7 +39,7 @@
     "message": "推荐给你的朋友"
   },
   "support_3": {
-    "message": "在 <a href='https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc' target='_blank'>Chrome</a> 或 Firefox 商店留下评论"
+    "message": "在 <a href='https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc' target='_blank'>Chrome</a> 或 <a href='https://addons.mozilla.org/addon/notion-mark-manager/' target='_blank'>Firefox</a> 商店留下评论"
   },
   "support_4": {
     "message": "帮我的 <a href='https://github.com/yeefun/notion-mark-manager' target='_blank'>GitHub repo</a> 打星星"

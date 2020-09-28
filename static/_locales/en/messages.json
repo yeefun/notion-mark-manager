@@ -39,7 +39,7 @@
     "message": "Tell your friends about it"
   },
   "support_3": {
-    "message": "Leave a review on the <a href='https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc' target='_blank'>Chrome</a> or Firefox store"
+    "message": "Leave a review on the <a href='https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc' target='_blank'>Chrome</a> or <a href='https://addons.mozilla.org/addon/notion-mark-manager/' target='_blank'>Firefox</a> store"
   },
   "support_4": {
     "message": "Give me a star on <a href='https://github.com/yeefun/notion-mark-manager' target='_blank'>GitHub</a>"
