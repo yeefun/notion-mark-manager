@@ -3,6 +3,7 @@
 > Manage your colored texts and comments efficiently in [Notion](https://www.notion.so/).
 
 ![Chrome Web Store version](https://img.shields.io/chrome-web-store/v/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
+![Mozilla Add-on](https://img.shields.io/amo/v/notion-mark-manager?style=plastic)
 ![GitHub license](https://img.shields.io/github/license/yeefun/notion-mark-manager?style=plastic)
 
 ![marquee](./promotion/marquee.png)
@@ -14,10 +15,11 @@
 ## Installation
 
 - Get the [Chrome Extension](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) ![Chrome Web Store users](https://img.shields.io/chrome-web-store/users/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
+- Get the [Firefox Add-On](https://addons.mozilla.org/addon/notion-mark-manager/) ![Mozilla Add-on](https://img.shields.io/amo/users/notion-mark-manager?style=plastic) ![Mozilla Add-on](https://img.shields.io/amo/stars/notion-mark-manager?style=plastic)
 
 ## Intro
 
-[Demo Video](https://youtu.be/XRHQ2zVmziI)
+📹 [Demo Video](https://youtu.be/XRHQ2zVmziI)
 
 Notion's colored text and comment are multifunctional tools, capable of highlighting texts, taking notes, leaving a message, etc. However, these marks are difficult to organize and file.
 
@@ -52,7 +54,7 @@ Now, feel free to highlight, take notes, and leave a message on Notion—Mark Ma
 To develop a free, open-source extension takes a lot of effort. **Your support** will encourage me to continue upgrading the product. There are a few things you can do:
 
 - Tell your friends about it
-- Leave a review on the [Chrome](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) store
+- Leave a review on the [Chrome](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) or [Firefox](https://addons.mozilla.org/addon/notion-mark-manager/) store
 - Give me a star on [GitHub](https://github.com/yeefun/notion-mark-manager) [![GitHub stars](https://img.shields.io/github/stars/yeefun/notion-mark-manager?style=social)](https://github.com/yeefun/notion-mark-manager/stargazers)
 - Report bugs or request features via [GitHub Issues](https://github.com/yeefun/notion-mark-manager/issues/new) or this [form](https://docs.google.com/forms/d/e/1FAIpQLSdc8JGkmEpyjVbut57cd4fHMJGXEk4HITjmUGYo87f4jN-4zQ/viewform?usp=sf_link)
 - [Donate me](https://pay.ecpay.com.tw/CreditPayment/ExpressCredit?MerchantID=3220361&Enn=e)

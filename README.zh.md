@@ -3,6 +3,7 @@
 > 高效管理 [Notion](https://www.notion.so/) 的顏色文字與註解。
 
 ![Chrome Web Store version](https://img.shields.io/chrome-web-store/v/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
+![Mozilla Add-on](https://img.shields.io/amo/v/notion-mark-manager?style=plastic)
 ![GitHub license](https://img.shields.io/github/license/yeefun/notion-mark-manager?style=plastic)
 
 ![marquee](./promotion/marquee.png)
@@ -13,11 +14,12 @@
 
 ## 安裝
 
-- 取得 [Chrome 擴充功能](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) ![Chrome Web Store users](https://img.shields.io/chrome-web-store/users/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
+- 獲取 [Chrome 擴充功能](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) ![Chrome Web Store users](https://img.shields.io/chrome-web-store/users/hipgmnlpnimedfepbfbfiaobohhffcfc?style=plastic)
+- 獲取 [Firefox 擴充套件](https://addons.mozilla.org/addon/notion-mark-manager/) ![Mozilla Add-on](https://img.shields.io/amo/users/notion-mark-manager?style=plastic) ![Mozilla Add-on](https://img.shields.io/amo/stars/notion-mark-manager?style=plastic)
 
 ## 介紹
 
-[示範影片](https://youtu.be/XRHQ2zVmziI)
+📹 [示範影片](https://youtu.be/XRHQ2zVmziI)
 
 Notion 的顏色文字（colored text）與註解（comment）用途多樣，能劃重點、做筆記、留言……但這些標記日後卻難以查找，只淪為畫面上的點綴。
 
@@ -52,7 +54,7 @@ Notion 的顏色文字（colored text）與註解（comment）用途多樣，能
 開發一個免費、開源的擴充套件需耗費許多時間與心力，**你的支持**，是我持續把產品變得更好的動力。如果你喜歡 Mark Manager，可以做以下幾件事情：
 
 - 推薦給你的朋友
-- 在 [Chrome](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) 商店留下評論
+- 在 [Chrome](https://chrome.google.com/webstore/detail/notion%20-mark-manager/hipgmnlpnimedfepbfbfiaobohhffcfc) 或 [Firefox](https://addons.mozilla.org/addon/notion-mark-manager/) 商店留下評論
 - 幫我的 [GitHub repo](https://github.com/yeefun/notion-mark-manager) 打星星 [![GitHub stars](https://img.shields.io/github/stars/yeefun/notion-mark-manager?style=social)](https://github.com/yeefun/notion-mark-manager/stargazers)
 - 透過 [GitHub Issues](https://github.com/yeefun/notion-mark-manager/issues/new) 或[表單](https://docs.google.com/forms/d/e/1FAIpQLSdc8JGkmEpyjVbut57cd4fHMJGXEk4HITjmUGYo87f4jN-4zQ/viewform?usp=sf_link)回報錯誤、許願新功能
 - [贊助我](https://pay.ecpay.com.tw/CreditPayment/ExpressCredit?MerchantID=3220361)
