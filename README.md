@@ -6,7 +6,7 @@
 ![Mozilla Add-on](https://img.shields.io/amo/v/notion-mark-manager?style=plastic)
 ![GitHub license](https://img.shields.io/github/license/yeefun/notion-mark-manager?style=plastic)
 
-![marquee](./promotion/marquee.png)
+![](./promotion/small-tile.png)
 
 ## Translation
 
@@ -27,21 +27,31 @@ How to use and organize these marks more efficiently? Mark Manager is the best s
 
 ### IMPORT ALL MARKS WITH ONE CLICK.
 
+![](./promotion/import.gif)
+
 All you need is a simple click. Just hit the icon of Mark Manager at the top-right corner while using a Notion page, and Mark Manager will instantly import all the colored texts and comments, orderly sorting them into categories according to their colors.
 
 ### SCROLL TO THE CONTEXT OF MARKS.
+
+![](./promotion/scroll.gif)
 
 If you click one of the marks on Mark Manager, the Notion page will automatically scroll to the context of this mark. If the mark is a comment, the Notion page will not only scroll but also show the comment.
 
 ### EXPORT MULTIPLE MARKS QUICKLY.
 
+![](./promotion/export.gif)
+
 If you want to use the marks elsewhere, don’t bother selecting, copying, and pasting them one by one—Mark Manager can help you copy or download to export multiple marks at the same time.
 
 ### FILTER THE MARKS AS YOU WISH.
 
+![](./promotion/options.gif)
+
 If you want to review only particular colored texts, just right-click Mark Manager icon, choose “Options”, and select the colors you would like to import.
 
 ### SUPPORT DARK MODE.
+
+![](./promotion/dark.gif)
 
 When you switch Notion to “Dark Mode”, the interface of Mark Manager will automatically shift without reloading the page.
 

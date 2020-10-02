@@ -6,7 +6,7 @@
 ![Mozilla Add-on](https://img.shields.io/amo/v/notion-mark-manager?style=plastic)
 ![GitHub license](https://img.shields.io/github/license/yeefun/notion-mark-manager?style=plastic)
 
-![marquee](./promotion/marquee.png)
+![](./promotion/small-tile.png)
 
 ## 翻譯
 
@@ -27,21 +27,31 @@ Notion 的顏色文字（colored text）與註解（comment）用途多樣，能
 
 ### 一鍵導入頁面所有標記
 
+![](./promotion/import.gif)
+
 只需輕輕一點右上角的 Mark Manager 圖示，當前 Notion 頁面的顏色文字與註解，都會瞬間導入套件，分門別類、依序呈現，讓你快速獲知當頁所有重點與留言。
 
 ### 捲至標記所在段落
+
+![](./promotion/scroll.gif)
 
 只要點擊被導入 Mark Manager 的顏色文字或註解，Notion 頁面便會自動捲到該標記所在的段落，讓你知道它的上下文是什麼。如果你點的是註解，頁面除了捲動，還會跳出註解上的留言──是不是很方便呢？
 
 ### 快速導出多個標記
 
+![](./promotion/export.gif)
+
 你可能想在其它地方使用這些標記，但一個個選取、複製、貼上實在是很麻煩。Mark Manager 擁有「導出」功能，能讓你同時複製、下載多個標記。
 
 ### 選擇你想導入的標記
 
+![](./promotion/options.gif)
+
 你可能只想在 Mark Manager 中檢視某類顏色的文字──沒問題，對套件圖示按下右鍵，點擊「選項」，你就可以決定哪種顏色的文字該被導入套件。
 
 ### 支援夜間模式（Dark Mode）
+
+![](./promotion/dark.gif)
 
 如果你是夜間模式的重度用戶，別擔心，Mark Manager 通通都支援！當你切換模式，套件的介面顏色便會隨之變換，你甚至不用重新整理頁面。
 
