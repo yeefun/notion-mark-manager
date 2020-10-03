@@ -65,7 +65,6 @@ import COLORS from './data/colors.js';
           break;
 
         case 'scroll to the colored text':
-          console.log(message.blockId);
           scrollToTheColoredText(message.blockId);
           break;
         case 'scroll to the comment':
@@ -121,9 +120,8 @@ import COLORS from './data/colors.js';
 
     {
       if (shouldDisplayOnce) {
-        blocks = checkedColors.map(getColoredTextElem);
-        // console.log(blocks)
-        blocks = blocks
+        blocks = checkedColors
+          .map(getColoredTextElem)
           .flatMap(constructBlock)
           .filter(removeFalsy)
           .reduce(moveBlockHavingDivWrapperForward, [])
