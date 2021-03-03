@@ -33,7 +33,7 @@
     "parcel-bundler": "^1.12.4",
     "prettier": "2.0.5",
     "pretty-quick": "^3.0.0",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "rimraf": "^3.0.2",
     "sass": "^1.26.10",
     "stylelint": "^13.6.1",
