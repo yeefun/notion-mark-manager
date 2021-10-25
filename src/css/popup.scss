@@ -11,7 +11,7 @@ $font-colors-light: (
   'blue': rgb(11, 110, 153),
   'purple': rgb(105, 64, 165),
   'pink': rgb(173, 26, 114),
-  'red': rgb(224, 62, 62)
+  'red': rgb(224, 62, 62),
 );
 $background-colors-light: (
   'gray': rgb(235, 236, 237),
@@ -22,7 +22,7 @@ $background-colors-light: (
   'blue': rgb(221, 235, 241),
   'purple': rgb(234, 228, 242),
   'pink': rgb(244, 223, 235),
-  'red': rgb(251, 228, 228)
+  'red': rgb(251, 228, 228),
 );
 $font-colors-dark: (
   'gray': rgba(151, 154, 155, 0.95),
@@ -33,7 +33,7 @@ $font-colors-dark: (
   'blue': rgb(82, 156, 202),
   'purple': rgb(154, 109, 215),
   'pink': rgb(226, 85, 161),
-  'red': rgb(255, 115, 105)
+  'red': rgb(255, 115, 105),
 );
 $background-colors-dark: (
   'gray': rgb(69, 75, 78),
@@ -44,7 +44,7 @@ $background-colors-dark: (
   'blue': rgb(54, 73, 84),
   'purple': rgb(68, 63, 87),
   'pink': rgb(83, 59, 76),
-  'red': rgb(89, 65, 65)
+  'red': rgb(89, 65, 65),
 );
 
 @mixin colored-text-color($type, $color, $value) {
@@ -154,12 +154,12 @@ nav {
     transition: background-color 120ms ease-in;
     cursor: pointer;
     user-select: none;
-  
+
     &:hover,
     &.active {
       background-color: rgba(55, 53, 47, 0.08);
     }
-  
+
     &:active {
       background-color: rgba(55, 53, 47, 0.16);
     }
@@ -304,7 +304,7 @@ nav {
     box-shadow: rgba(15, 15, 15, 0.2) 0 0 0 1px, rgba(15, 15, 15, 0.2) 0 2px 4px;
 
     svg {
-      fill: rgba(#fff, 0.9);;
+      fill: rgba(#fff, 0.9);
     }
 
     &:hover {
@@ -319,13 +319,14 @@ nav {
   #support-info {
     .wrapper {
       background-color: rgb(47, 52, 55);
-      box-shadow: rgba(15, 15, 15, 0.1) 0 0 0 1px, rgba(15, 15, 15, 0.2) 0 5px 10px, rgba(15, 15, 15, 0.4) 0 15px 40px;
+      box-shadow: rgba(15, 15, 15, 0.1) 0 0 0 1px,
+        rgba(15, 15, 15, 0.2) 0 5px 10px, rgba(15, 15, 15, 0.4) 0 15px 40px;
     }
 
     a {
       border-bottom-color: rgba(#fff, 0.4);
       color: rgba(#fff, 0.9);
-  
+
       &:hover {
         border-bottom-color: rgba(#fff, 0.9);
       }
@@ -377,7 +378,7 @@ nav {
     &:hover {
       background-color: rgba(55, 53, 47, 0.08);
     }
-  
+
     &:active {
       background-color: rgba(55, 53, 47, 0.16);
     }
@@ -495,13 +496,15 @@ nav {
   cursor: pointer;
   visibility: hidden;
   opacity: 0;
-  transition: background-color 120ms ease-out, opacity 120ms ease-out, visibility 120ms ease-out;
+  transition: background-color 120ms ease-out, opacity 120ms ease-out,
+    visibility 120ms ease-out;
 
   &.shown {
     opacity: 1;
     background-color: rgba(15, 15, 15, 0.6);
     visibility: visible;
-    transition: background-color 300ms ease-out, opacity 0s, visibility 300ms ease-out;
+    transition: background-color 300ms ease-out, opacity 0s,
+      visibility 300ms ease-out;
 
     .wrapper {
       transform: scale(1);
@@ -510,7 +513,8 @@ nav {
   }
 
   .wrapper {
-    box-shadow: rgba(15, 15, 15, 0.05) 0 0 0 1px, rgba(15, 15, 15, 0.1) 0 5px 10px, rgba(15, 15, 15, 0.2) 0 15px 40px;
+    box-shadow: rgba(15, 15, 15, 0.05) 0 0 0 1px,
+      rgba(15, 15, 15, 0.1) 0 5px 10px, rgba(15, 15, 15, 0.2) 0 15px 40px;
     border-radius: 3px;
     background-color: #fff;
     width: 100%;
@@ -538,13 +542,13 @@ nav {
       font-size: 13.5px;
       margin-top: 4px;
       margin-bottom: 6px;
-    
+
       div {
         transform: translateY(1px);
       }
     }
   }
-  
+
   .me {
     width: 48px;
     height: auto;
